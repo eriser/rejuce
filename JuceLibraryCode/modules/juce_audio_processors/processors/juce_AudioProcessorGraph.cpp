@@ -1490,7 +1490,7 @@ bool AudioProcessorGraph::AudioGraphIOProcessor::isInput() const   { return type
 bool AudioProcessorGraph::AudioGraphIOProcessor::isOutput() const  { return type == audioOutputNode || type == midiOutputNode; }
 
 bool AudioProcessorGraph::AudioGraphIOProcessor::hasEditor() const                  { return false; }
-void* AudioProcessorGraph::AudioGraphIOProcessor::createEditor()					{ return nullptr; }
+AudioProcessorEditor* AudioProcessorGraph::AudioGraphIOProcessor::createEditor()    { return nullptr; }
 
 int AudioProcessorGraph::AudioGraphIOProcessor::getNumParameters()                  { return 0; }
 const String AudioProcessorGraph::AudioGraphIOProcessor::getParameterName (int)     { return String::empty; }

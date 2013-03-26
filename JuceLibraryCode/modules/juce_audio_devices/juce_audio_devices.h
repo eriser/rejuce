@@ -40,9 +40,7 @@
     info about this.
 */
 #ifndef JUCE_ASIO
-#ifdef _WINDOWS
- #define JUCE_ASIO 1
-#endif
+ #define JUCE_ASIO 0
 #endif
 
 /** Config: JUCE_WASAPI
