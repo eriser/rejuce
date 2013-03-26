@@ -363,7 +363,7 @@ public:
 
         @see hasEditor
     */
-    virtual AudioProcessorEditor* createEditor() = 0;
+    virtual void* createEditor() = 0;
 
     /** Your filter must override this and return true if it can create an editor component.
         @see createEditor
@@ -374,12 +374,12 @@ public:
     /** Returns the active editor, if there is one.
         Bear in mind this can return nullptr, even if an editor has previously been opened.
     */
-    AudioProcessorEditor* getActiveEditor() const noexcept             { return activeEditor; }
+    void* getActiveEditor() const noexcept             { return activeEditor; }
 
     /** Returns the active editor, or if there isn't one, it will create one.
         This may call createEditor() internally to create the component.
     */
-    AudioProcessorEditor* createEditorIfNeeded();
+    void* createEditorIfNeeded();
 
     //==============================================================================
     /** This must return the correct value immediately after the object has been
@@ -568,7 +568,7 @@ public:
 
     //==============================================================================
     /** Not for public use - this is called before deleting an editor component. */
-    void editorBeingDeleted (AudioProcessorEditor*) noexcept;
+    void editorBeingDeleted (void*) noexcept;
 
     /** Not for public use - this is called to initialise the processor before playing. */
     void setPlayConfigDetails (int numIns, int numOuts, double sampleRate, int blockSize) noexcept;
@@ -623,7 +623,7 @@ protected:
 
 private:
     Array <AudioProcessorListener*> listeners;
-    Component::SafePointer<AudioProcessorEditor> activeEditor;
+    void* activeEditor;
     double sampleRate;
     int blockSize, numInputChannels, numOutputChannels, latencySamples;
     bool suspended, nonRealtime;

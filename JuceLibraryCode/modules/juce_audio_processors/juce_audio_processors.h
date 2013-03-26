@@ -74,17 +74,11 @@ namespace juce
 #ifndef __JUCE_AUDIOPROCESSOR_JUCEHEADER__
  #include "processors/juce_AudioProcessor.h"
 #endif
-#ifndef __JUCE_AUDIOPROCESSOREDITOR_JUCEHEADER__
- #include "processors/juce_AudioProcessorEditor.h"
-#endif
 #ifndef __JUCE_AUDIOPROCESSORGRAPH_JUCEHEADER__
  #include "processors/juce_AudioProcessorGraph.h"
 #endif
 #ifndef __JUCE_AUDIOPROCESSORLISTENER_JUCEHEADER__
  #include "processors/juce_AudioProcessorListener.h"
-#endif
-#ifndef __JUCE_GENERICAUDIOPROCESSOREDITOR_JUCEHEADER__
- #include "processors/juce_GenericAudioProcessorEditor.h"
 #endif
 #ifndef __JUCE_PLUGINDESCRIPTION_JUCEHEADER__
  #include "processors/juce_PluginDescription.h"
@@ -108,15 +102,7 @@ namespace juce
 #ifndef __JUCE_VSTPLUGINFORMAT_JUCEHEADER__
  #include "format_types/juce_VSTPluginFormat.h"
 #endif
-#ifndef __JUCE_KNOWNPLUGINLIST_JUCEHEADER__
- #include "scanning/juce_KnownPluginList.h"
-#endif
-#ifndef __JUCE_PLUGINDIRECTORYSCANNER_JUCEHEADER__
- #include "scanning/juce_PluginDirectoryScanner.h"
-#endif
-#ifndef __JUCE_PLUGINLISTCOMPONENT_JUCEHEADER__
- #include "scanning/juce_PluginListComponent.h"
-#endif
+
 // END_AUTOINCLUDE
 
 }

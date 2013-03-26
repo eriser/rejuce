@@ -11,6 +11,14 @@
                        isDebug="0" optimisation="2" targetName="rejuce"/>
       </CONFIGURATIONS>
     </VS2010>
+    <LINUX_MAKE targetFolder="Builds/Linux" juceFolder="juce\modules">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
+                       targetName="rejuce"/>
+        <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
+                       targetName="rejuce"/>
+      </CONFIGURATIONS>
+    </LINUX_MAKE>
   </EXPORTFORMATS>
   <MAINGROUP id="cK43Lx" name="rejuce">
     <GROUP id="{354E82E3-319E-CCEA-985D-999C79E9E1A1}" name="Source">
@@ -26,6 +34,7 @@
     <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="1"/>
     <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="1"/>
     <MODULE id="juce_events" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="1"/>
   </MODULES>
   <JUCEOPTIONS/>
 </JUCERPROJECT>

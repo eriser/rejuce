@@ -326,7 +326,7 @@ public:
         bool producesMidi() const;
 
         bool hasEditor() const;
-        AudioProcessorEditor* createEditor();
+        void* createEditor();
 
         int getNumParameters();
         const String getParameterName (int);
@@ -374,7 +374,7 @@ public:
     bool producesMidi() const;
 
     bool hasEditor() const                          { return false; }
-    AudioProcessorEditor* createEditor()            { return nullptr; }
+    void* createEditor()            { return nullptr; }
 
     int getNumParameters()                          { return 0; }
     const String getParameterName (int)             { return String::empty; }

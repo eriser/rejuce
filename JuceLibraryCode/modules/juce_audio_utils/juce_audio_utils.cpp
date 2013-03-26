@@ -43,10 +43,6 @@ namespace juce
 {
 
 // START_AUTOINCLUDE gui/*.cpp, players/*.cpp
-#include "gui/juce_AudioDeviceSelectorComponent.cpp"
-#include "gui/juce_AudioThumbnail.cpp"
-#include "gui/juce_AudioThumbnailCache.cpp"
-#include "gui/juce_MidiKeyboardComponent.cpp"
 #include "players/juce_AudioProcessorPlayer.cpp"
 // END_AUTOINCLUDE
 
