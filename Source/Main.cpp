@@ -10,6 +10,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include "GenericSynth.h"
+
 //==============================================================================
 
 
@@ -44,24 +46,54 @@ int main (int argc, char* argv[])
 	AudioDeviceManager::AudioDeviceSetup ds;
 	ds.outputDeviceName = "M-Audio Delta ASIO";
 
-	// midi setup
-	adm.setMidiInputEnabled("4- PCR MIDI IN",true);
-
-	adm.setAudioDeviceSetup(ds, true);
+	String error = adm.setAudioDeviceSetup(ds, true);
+	if (error.isNotEmpty())
+	{
+		DBG(error);
+	}
 	adm.playTestSound();
 
+	// midi setup
+	adm.setMidiInputEnabled("4- PCR MIDI IN",true);
+	if (!adm.isMidiInputEnabled("4- PCR MIDI IN"))
+	{
+		DBG("no midi input");
+	}
 
 	////////////////////////////////////////////////////////////////
 
+	// create player and processor
+	ScopedPointer<AudioProcessor> gs = (AudioProcessor*)new GenericSynth();
 	AudioProcessorPlayer app;
+	app.setProcessor(gs);
 
-
-
+	// hookup to callbacks
+	adm.addMidiInputCallback("4- PCR MIDI IN",&app);
+	adm.addAudioCallback(&app);
 
 	// wait
-	std::cout <<"enter..\n";
-	char s[10];
-	std::cin >> s;
+	std::cout <<"q to quit..\n";
+	char s[10];s[0]='\0';
+	while (s[0]!='q')
+	{
+		std::cin >> s;
+
+		if (s[0]=='a')
+		{
+			MidiMessage m(0x80,0x60,0x80,Time::getMillisecondCounterHiRes());
+			app.getMidiMessageCollector().addMessageToQueue(m);
+		}
+		if (s[0]=='b')
+		{
+			MidiMessage m(0x90,0x60,0x80,Time::getMillisecondCounterHiRes());
+			app.getMidiMessageCollector().addMessageToQueue(m);
+		}
+	}
+
+	// cleanup
+	app.setProcessor(nullptr);
+	adm.removeAudioCallback(&app);
+	adm.removeMidiInputCallback("4- PCR MIDI IN",&app);
 
 	CoUninitialize();
     return 0;

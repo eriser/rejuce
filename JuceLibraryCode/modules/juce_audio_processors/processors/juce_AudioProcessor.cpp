@@ -39,7 +39,8 @@ AudioProcessor::AudioProcessor()
       numOutputChannels (0),
       latencySamples (0),
       suspended (false),
-      nonRealtime (false)
+      nonRealtime (false),
+	  activeEditor(nullptr)
 {
 }
 
