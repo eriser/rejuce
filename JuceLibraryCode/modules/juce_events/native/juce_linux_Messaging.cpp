@@ -38,8 +38,8 @@ typedef void (*SelectionRequestCallback) (XSelectionRequestEvent&);
 SelectionRequestCallback handleSelectionRequest = nullptr;
 
 //==============================================================================
-ScopedXLock::ScopedXLock()       { XLockDisplay (display); }
-ScopedXLock::~ScopedXLock()      { XUnlockDisplay (display); }
+ScopedXLock::ScopedXLock()       {/* XLockDisplay (display); */}
+ScopedXLock::~ScopedXLock()      {/* XUnlockDisplay (display);*/ }
 
 //==============================================================================
 class InternalMessageQueue
@@ -99,6 +99,7 @@ public:
     // Wait for an event (either XEvent, or an internal Message)
     bool sleepUntilEvent (const int timeoutMs)
     {
+    	/*
         if (! isEmpty())
             return true;
 
@@ -129,6 +130,8 @@ public:
 
         const int ret = select (fdmax + 1, &readset, 0, 0, &tv);
         return (ret > 0); // ret <= 0 if error or timeout
+        */
+        return true;
     }
 
     //==============================================================================
@@ -155,7 +158,7 @@ private:
 
     static bool dispatchNextXEvent()
     {
-        if (display == 0)
+        /*if (display == 0)
             return false;
 
         XEvent evt;
@@ -173,7 +176,7 @@ private:
             handleSelectionRequest (evt.xselectionrequest);
         else if (evt.xany.window != juce_messageWindowHandle && dispatchWindowMessage != nullptr)
             dispatchWindowMessage (evt);
-
+         */
         return true;
     }
 
@@ -237,6 +240,7 @@ namespace LinuxErrorHandling
 
     int errorHandler (Display* display, XErrorEvent* event)
     {
+    	/*
        #if JUCE_DEBUG_XERRORS
         char errorStr[64] = { 0 };
         char requestStr[64] = { 0 };
@@ -245,24 +249,27 @@ namespace LinuxErrorHandling
         XGetErrorDatabaseText (display, "XRequest", String (event->request_code).toUTF8(), "Unknown", requestStr, 64);
         DBG ("ERROR: X returned " << errorStr << " for operation " << requestStr);
        #endif
+       */
 
         return 0;
     }
 
     void installXErrorHandlers()
     {
+    	/*
         oldIOErrorHandler = XSetIOErrorHandler (ioErrorHandler);
         oldErrorHandler = XSetErrorHandler (errorHandler);
+        */
     }
 
     void removeXErrorHandlers()
     {
         if (JUCEApplicationBase::isStandaloneApp())
         {
-            XSetIOErrorHandler (oldIOErrorHandler);
+            //XSetIOErrorHandler (oldIOErrorHandler);
             oldIOErrorHandler = 0;
 
-            XSetErrorHandler (oldErrorHandler);
+            //XSetErrorHandler (oldErrorHandler);
             oldErrorHandler = 0;
         }
     }
@@ -289,7 +296,7 @@ namespace LinuxErrorHandling
 //==============================================================================
 void MessageManager::doPlatformSpecificInitialisation()
 {
-    if (JUCEApplicationBase::isStandaloneApp())
+  /*  if (JUCEApplicationBase::isStandaloneApp())
     {
         // Initialise xlib for multiple thread support
         static bool initThreadCalled = false;
@@ -337,11 +344,12 @@ void MessageManager::doPlatformSpecificInitialisation()
                                                   DefaultVisual (display, screen),
                                                   CWEventMask, &swa);
     }
+    */
 }
 
 void MessageManager::doPlatformSpecificShutdown()
 {
-    InternalMessageQueue::deleteInstance();
+  /*  InternalMessageQueue::deleteInstance();
 
     if (display != 0 && ! LinuxErrorHandling::errorOccurred)
     {
@@ -352,7 +360,7 @@ void MessageManager::doPlatformSpecificShutdown()
         display = nullptr;
 
         LinuxErrorHandling::removeXErrorHandlers();
-    }
+    }*/
 }
 
 bool MessageManager::postMessageToSystemQueue (MessageManager::MessageBase* const message)

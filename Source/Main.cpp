@@ -15,13 +15,13 @@
 //==============================================================================
 
 
-#include <Windows.h>
+//#include <Windows.h>
 #include <iostream>
 
 //==============================================================================
 int main (int argc, char* argv[])
 {
-	CoInitialize(NULL);
+//	CoInitialize(NULL);
 
 	// setup audio and midi in
 	AudioDeviceManager adm;	
@@ -63,7 +63,7 @@ int main (int argc, char* argv[])
 	////////////////////////////////////////////////////////////////
 
 	// create player and processor
-	ScopedPointer<AudioProcessor> gs = (AudioProcessor*)new GenericSynth();
+	ScopedPointer<GenericSynth> gs (new GenericSynth());
 	AudioProcessorPlayer app;
 	app.setProcessor(gs);
 
@@ -95,6 +95,6 @@ int main (int argc, char* argv[])
 	adm.removeAudioCallback(&app);
 	adm.removeMidiInputCallback("4- PCR MIDI IN",&app);
 
-	CoUninitialize();
+//	CoUninitialize();
     return 0;
 }
