@@ -98,7 +98,6 @@ clean:
 	
 $(OBJDIR)/Main_90ebc5c2.o:
 	echo $(SOURCES)
-	echo 
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling Main.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"

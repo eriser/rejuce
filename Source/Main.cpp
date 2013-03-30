@@ -25,6 +25,7 @@ int main (int argc, char* argv[])
 
 	// setup audio and midi in
 	AudioDeviceManager adm;	
+	DBG("list audio device types");
 	for (int n=0;n<adm.getAvailableDeviceTypes().size();n++)
 	{
 		AudioIODeviceType* dt = adm.getAvailableDeviceTypes().getUnchecked(n);
@@ -36,15 +37,16 @@ int main (int argc, char* argv[])
 		}
 	}
 
+	DBG("list midi devices");
 	for (int n=0;n<MidiInput::getDevices().size();n++)
 	{
 		DBG("midi IO device name "<<MidiInput::getDevices()[n]);
 	}
 
 	// audio setup (ASIO, M-Audio Delta ASIO)
-	adm.setCurrentAudioDeviceType("ASIO",true);
+	adm.setCurrentAudioDeviceType("ALSA",true);
 	AudioDeviceManager::AudioDeviceSetup ds;
-	ds.outputDeviceName = "M-Audio Delta ASIO";
+	ds.outputDeviceName = "Intel 82801AA-ICH";
 
 	String error = adm.setAudioDeviceSetup(ds, true);
 	if (error.isNotEmpty())
