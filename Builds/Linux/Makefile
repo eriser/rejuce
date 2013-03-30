@@ -20,7 +20,7 @@ ifeq ($(CONFIG),Debug)
   CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0
   CXXFLAGS += $(CFLAGS) 
-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -ldl -lfreetype -lpthread -lrt -lX11 -lGL -lGLU -lXinerama -lasound -lXext 
+  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -ldl -lpthread -lrt -lasound
   LDDEPS :=
   RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
   TARGET := rejuce
@@ -42,8 +42,29 @@ ifeq ($(CONFIG),Release)
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
 endif
 
+## Customizable Section: adapt those variables to suit your program.
+##==========================================================================
+
+MAINPATH = ../../Source
+SRCDIRS = ${shell find $(MAINPATH) -type d -print}
+HFOLDERS = $(patsubst %,-I%,$(FOLDERS))
+
+# The source file types (headers excluded).
+# .c indicates C source files, and others C++ ones.
+SRCEXTS = .c .C .cc .cpp .CPP .c++ .cxx .cp
+
+# The header file types.
+HDREXTS = .h .H .hh .hpp .HPP .h++ .hxx .hp
+
+SOURCES = $(foreach d,$(SRCDIRS),$(wildcard $(addprefix $(d)/*,$(SRCEXTS))))
+HEADERS = $(foreach d,$(SRCDIRS),$(wildcard $(addprefix $(d)/*,$(HDREXTS))))
+SRC_CXX = $(filter-out %.c,$(SOURCES))
+OBJS    = $(addsuffix .o, $(basename $(SOURCES)))
+DEPS    = $(OBJS:.o=.d)
+
+##==========================================================================
+
 OBJECTS := \
-  $(OBJDIR)/Main_90ebc5c2.o \
   $(OBJDIR)/juce_audio_basics_2442e4ea.o \
   $(OBJDIR)/juce_audio_devices_a4c8a728.o \
   $(OBJDIR)/juce_audio_formats_d349f0c8.o \
@@ -52,6 +73,7 @@ OBJECTS := \
   $(OBJDIR)/juce_core_aff681cc.o \
   $(OBJDIR)/juce_data_structures_bdd6d488.o \
   $(OBJDIR)/juce_events_79b2840.o \
+  $(OBJS)
 
 .PHONY: clean
 
@@ -68,7 +90,15 @@ clean:
 	-@rm -rf $(OBJDIR)/*
 	-@rm -rf $(OBJDIR)
 
-$(OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
+
+# generic rule for non juce stuff
+%.o:%.cpp
+	@echo "Compiling $(<)"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+	
+$(OBJDIR)/Main_90ebc5c2.o:
+	echo $(SOURCES)
+	echo 
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling Main.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
