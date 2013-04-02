@@ -10,7 +10,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-#include "GenericSynth.h"
+#include "Noisemaker/TalCore.h"
 
 //==============================================================================
 
@@ -56,8 +56,8 @@ int main (int argc, char* argv[])
 	adm.playTestSound();
 
 	// midi setup
-	adm.setMidiInputEnabled("4- PCR MIDI IN",true);
-	if (!adm.isMidiInputEnabled("4- PCR MIDI IN"))
+	adm.setMidiInputEnabled("VMPK Output",true);
+	if (!adm.isMidiInputEnabled("VMPK Output"))
 	{
 		DBG("no midi input");
 	}
@@ -65,12 +65,12 @@ int main (int argc, char* argv[])
 	////////////////////////////////////////////////////////////////
 
 	// create player and processor
-	ScopedPointer<GenericSynth> gs (new GenericSynth());
+	ScopedPointer<TalCore> gs (new TalCore());
 	AudioProcessorPlayer app;
 	app.setProcessor(gs);
 
 	// hookup to callbacks
-	adm.addMidiInputCallback("4- PCR MIDI IN",&app);
+	adm.addMidiInputCallback("VMPK Output",&app);
 	adm.addAudioCallback(&app);
 
 	// wait
@@ -80,16 +80,22 @@ int main (int argc, char* argv[])
 	{
 		std::cin >> s;
 
-		if (s[0]=='a')
+		if (s[0]=='b')
 		{
 			MidiMessage m(0x80,0x60,0x80,Time::getMillisecondCounterHiRes());
 			app.getMidiMessageCollector().addMessageToQueue(m);
 		}
-		if (s[0]=='b')
+		if (s[0]=='a')
 		{
 			MidiMessage m(0x90,0x60,0x80,Time::getMillisecondCounterHiRes());
 			app.getMidiMessageCollector().addMessageToQueue(m);
 		}
+		if (s[0]=='p')
+		{
+			int a = atoi(&s[1]);
+			gs->setCurrentProgram(jlimit(0,127,a));
+		}
+		memset(s,10,1);
 	}
 
 	// cleanup

@@ -308,4 +308,64 @@
  ../../Source/../JuceLibraryCode/modules/juce_data_structures/app_properties/juce_ApplicationProperties.h \
  ../../Source/../JuceLibraryCode/modules/juce_data_structures/app_properties/juce_PropertiesFile.h \
  ../../Source/../JuceLibraryCode/modules/juce_events/juce_events.h \
- ../../Source/GenericSynth.h
+ ../../Source/Noisemaker/TalCore.h \
+ ../../Source/Noisemaker/./Engine/AudioUtils.h \
+ ../../Source/Noisemaker/./Engine/Params.h \
+ ../../Source/Noisemaker/./Engine/SynthEngine.h \
+ ../../Source/Noisemaker/./Engine/AudioUtils.h \
+ ../../Source/Noisemaker/./Engine/SynthVoice.h \
+ ../../Source/Noisemaker/./Engine/Vco.h \
+ ../../Source/Noisemaker/./Engine/Osc.h \
+ ../../Source/Noisemaker/./Engine/OscSaw.h \
+ ../../Source/Noisemaker/./Engine/BlepData.h \
+ ../../Source/Noisemaker/./Engine/OscPulse.h \
+ ../../Source/Noisemaker/./Engine/OscTriangle.h \
+ ../../Source/Noisemaker/./Engine/OscSin.h \
+ ../../Source/Noisemaker/./Engine/OscNoise.h \
+ ../../Source/Noisemaker/./Engine/LfoHandler1.h \
+ ../../Source/Noisemaker/./Engine/LfoHandler.h \
+ ../../Source/Noisemaker/./Engine/Lfo.h \
+ ../../Source/Noisemaker/./Engine/LfoHandler2.h \
+ ../../Source/Noisemaker/./Engine/AdsrHandler.h \
+ ../../Source/Noisemaker/./Engine/Adsr.h \
+ ../../Source/Noisemaker/./Engine/FilterHandler.h \
+ ../../Source/Noisemaker/./Engine/Decimator.h \
+ ../../Source/Noisemaker/./Engine/Interpolatorlinear.h \
+ ../../Source/Noisemaker/./Engine/FilterLp24db.h \
+ ../../Source/Noisemaker/./Engine/FilterLp18db.h \
+ ../../Source/Noisemaker/./Engine/FilterLp12db.h \
+ ../../Source/Noisemaker/./Engine/FilterLp06db.h \
+ ../../Source/Noisemaker/./Engine/FilterHp24db.h \
+ ../../Source/Noisemaker/./Engine/FilterBp24db.h \
+ ../../Source/Noisemaker/./Engine/FilterN24db.h \
+ ../../Source/Noisemaker/./Engine/FilterStateVariable12db.h \
+ ../../Source/Noisemaker/./Engine/FilterMoog24.h \
+ ../../Source/Noisemaker/./Engine/Portamento.h \
+ ../../Source/Noisemaker/./Engine/PitchwheelHandler.h \
+ ../../Source/Noisemaker/./Engine/VelocityHandler.h \
+ ../../Source/Noisemaker/./Engine/HighPass.h \
+ ../../Source/Noisemaker/./Engine/VoiceManager.h \
+ ../../Source/Noisemaker/./Engine/ParamChangeUtil.h \
+ ../../Source/Noisemaker/./Engine/StereoPan.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Chorus/ChorusEngine.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Chorus/Chorus.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Chorus/../../Engine/Lfo.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Chorus/OnePoleLP.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Chorus/../../Engine/Params.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Chorus/DCBlock.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Delay/DelayEngine.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Delay/Delay.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Delay/TalEq.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Delay/Filter6dB.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Delay/HighPass.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Delay/../../Engine/AudioUtils.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Reverb/ReverbEngine.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Reverb/TalReverb.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Reverb/AllPassFilter.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Reverb/../../Engine/AudioUtils.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Reverb/CombFilter.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Reverb/NoiseGenerator.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Reverb/Filter.h \
+ ../../Source/Noisemaker/./Engine/../Effects/Reverb/../../Engine/Params.h \
+ ../../Source/Noisemaker/./Engine/Params.h \
+ ../../Source/Noisemaker/TalPreset.h
