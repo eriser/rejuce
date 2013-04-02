@@ -80,14 +80,14 @@ int main (int argc, char* argv[])
 	{
 		std::cin >> s;
 
-		if (s[0]=='b')
-		{
-			MidiMessage m(0x80,0x60,0x80,Time::getMillisecondCounterHiRes());
-			app.getMidiMessageCollector().addMessageToQueue(m);
-		}
 		if (s[0]=='a')
 		{
 			MidiMessage m(0x90,0x60,0x80,Time::getMillisecondCounterHiRes());
+			app.getMidiMessageCollector().addMessageToQueue(m);
+		}
+		if (s[0]=='b')
+		{
+			MidiMessage m(0x80,0x60,0x80,Time::getMillisecondCounterHiRes());
 			app.getMidiMessageCollector().addMessageToQueue(m);
 		}
 		if (s[0]=='p')
@@ -95,7 +95,7 @@ int main (int argc, char* argv[])
 			int a = atoi(&s[1]);
 			gs->setCurrentProgram(jlimit(0,127,a));
 		}
-		memset(s,10,1);
+		memset(s,0,10);
 	}
 
 	// cleanup
