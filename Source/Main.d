@@ -368,4 +368,5 @@
  ../../Source/Noisemaker/./Engine/../Effects/Reverb/Filter.h \
  ../../Source/Noisemaker/./Engine/../Effects/Reverb/../../Engine/Params.h \
  ../../Source/Noisemaker/./Engine/Params.h \
- ../../Source/Noisemaker/TalPreset.h
+ ../../Source/Noisemaker/TalPreset.h ../../Source/Sequencer/Phrase.h \
+ ../../Source/Sequencer/../../JuceLibraryCode/JuceHeader.h

@@ -12,11 +12,37 @@
 
 #include "Noisemaker/TalCore.h"
 
+#include "Sequencer/Phrase.h"
+
 //==============================================================================
 
 
 //#include <Windows.h>
 #include <iostream>
+
+class GlobalMidi: public  MidiInputCallback
+{
+public:
+	GlobalMidi() {
+		_p=nullptr;
+	}
+
+	 void handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message)
+	 {
+		 std::cout<<"got 1"<<endl;
+//		 if (_p)
+//		 {
+//			 _p->AddEvent(message, (int)Time::getMillisecondCounterHiRes());
+//		 }
+	 }
+
+	 void setPhrase(Phrase* p) {
+		 _p = p;
+	 }
+
+private:
+	 Phrase* _p;
+};
 
 //==============================================================================
 int main (int argc, char* argv[])
@@ -71,7 +97,52 @@ int main (int argc, char* argv[])
 
 	// hookup to callbacks
 	adm.addMidiInputCallback("VMPK Output",&app);
+	GlobalMidi gm;
+	adm.addMidiInputCallback("VMPK Output",&gm);
 	adm.addAudioCallback(&app);
+
+
+	{
+		Phrase phrase(&app.getMidiMessageCollector(),1);
+		gm.setPhrase(&phrase);
+
+		std::cout << "recording.."<<endl;
+		int start = (int)Time::getMillisecondCounterHiRes();
+		{
+			MidiMessage m(0x90,0x60,0x80,start);
+			phrase.AddEvent(m);
+		}
+		Time::waitForMillisecondCounter(start+200);
+		{
+			MidiMessage m(0x80,0x60,0x80,start+200);
+			phrase.AddEvent(m);
+		}
+		Time::waitForMillisecondCounter(start+700);
+		{
+			MidiMessage m(0x90,0x60,0x80,start+700);
+			phrase.AddEvent(m);
+		}
+		Time::waitForMillisecondCounter(start+1200);
+		{
+			MidiMessage m(0x80,0x60,0x80,start+1200);
+			phrase.AddEvent(m);
+		}
+		phrase.Stop();
+		std::cout << "done.."<<endl;
+
+		phrase.Debug();
+
+		std::cout << "playing.."<<endl;
+		start = (int)Time::getMillisecondCounterHiRes();
+		phrase.Play(start);
+		while ((int)Time::getMillisecondCounterHiRes() - start < 5000)
+		{
+			phrase.Tick((int)Time::getMillisecondCounterHiRes());
+			pthread_yield();
+		}
+		std::cout << "done.."<<endl;
+	}
+
 
 	// wait
 	std::cout <<"q to quit..\n";
@@ -95,7 +166,11 @@ int main (int argc, char* argv[])
 			int a = atoi(&s[1]);
 			gs->setCurrentProgram(jlimit(0,127,a));
 		}
-		memset(s,0,10);
+
+		if (s[0]!='q')
+		{
+			memset(s,0,10);
+		}
 	}
 
 	// cleanup
