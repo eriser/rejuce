@@ -29,11 +29,10 @@ public:
 
 	 void handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message)
 	 {
-		 std::cout<<"got 1"<<endl;
-//		 if (_p)
-//		 {
-//			 _p->AddEvent(message, (int)Time::getMillisecondCounterHiRes());
-//		 }
+		 if (_p)
+		 {
+			 _p->AddEvent(message);
+		 }
 	 }
 
 	 void setPhrase(Phrase* p) {
@@ -97,51 +96,52 @@ int main (int argc, char* argv[])
 
 	// hookup to callbacks
 	adm.addMidiInputCallback("VMPK Output",&app);
-	GlobalMidi gm;
-	adm.addMidiInputCallback("VMPK Output",&gm);
 	adm.addAudioCallback(&app);
 
+	AudioDeviceManager::AudioDeviceSetup setup;
+	adm.getAudioDeviceSetup(setup);
+	app.getMidiMessageCollector().reset(setup.sampleRate);
 
-	{
-		Phrase phrase(&app.getMidiMessageCollector(),1);
-		gm.setPhrase(&phrase);
+	Phrase phrase(&app.getMidiMessageCollector(),1);
 
+	GlobalMidi gm;
+	adm.addMidiInputCallback("VMPK Output",&gm);
+	gm.setPhrase(&phrase);
+
+	/*{
 		std::cout << "recording.."<<endl;
 		int start = (int)Time::getMillisecondCounterHiRes();
-		{
-			MidiMessage m(0x90,0x60,0x80,start);
-			phrase.AddEvent(m);
-		}
-		Time::waitForMillisecondCounter(start+200);
-		{
-			MidiMessage m(0x80,0x60,0x80,start+200);
-			phrase.AddEvent(m);
-		}
-		Time::waitForMillisecondCounter(start+700);
-		{
-			MidiMessage m(0x90,0x60,0x80,start+700);
-			phrase.AddEvent(m);
-		}
-		Time::waitForMillisecondCounter(start+1200);
-		{
-			MidiMessage m(0x80,0x60,0x80,start+1200);
-			phrase.AddEvent(m);
-		}
+		phrase.Play(start);
+
+		phrase.AddEvent(MidiMessage(0x90,0x60,0x80,start));
+		Time::waitForMillisecondCounter(start+=500);
+
+		phrase.AddEvent(MidiMessage(0x80,0x60,0x80,start));
+		Time::waitForMillisecondCounter(start+=500);
+
+		phrase.AddEvent(MidiMessage(0x90,0x60,0x80,start));
+		Time::waitForMillisecondCounter(start+=500);
+
+		phrase.AddEvent(MidiMessage(0x80,0x60,0x80,start));
+
 		phrase.Stop();
 		std::cout << "done.."<<endl;
 
 		phrase.Debug();
+	}
 
+	{
 		std::cout << "playing.."<<endl;
-		start = (int)Time::getMillisecondCounterHiRes();
+		int start = (int)Time::getMillisecondCounterHiRes();
 		phrase.Play(start);
-		while ((int)Time::getMillisecondCounterHiRes() - start < 5000)
+		while ((int)Time::getMillisecondCounterHiRes() - start < 3000)
 		{
 			phrase.Tick((int)Time::getMillisecondCounterHiRes());
 			pthread_yield();
 		}
+		phrase.Stop();
 		std::cout << "done.."<<endl;
-	}
+	}*/
 
 
 	// wait
@@ -151,26 +151,36 @@ int main (int argc, char* argv[])
 	{
 		std::cin >> s;
 
-		if (s[0]=='a')
+		if (s[0]=='a')//start note
 		{
 			MidiMessage m(0x90,0x60,0x80,Time::getMillisecondCounterHiRes());
 			app.getMidiMessageCollector().addMessageToQueue(m);
 		}
-		if (s[0]=='b')
+		if (s[0]=='b')//end note
 		{
 			MidiMessage m(0x80,0x60,0x80,Time::getMillisecondCounterHiRes());
 			app.getMidiMessageCollector().addMessageToQueue(m);
 		}
-		if (s[0]=='p')
+		if (s[0]=='t') //patch
 		{
 			int a = atoi(&s[1]);
 			gs->setCurrentProgram(jlimit(0,127,a));
 		}
 
-		if (s[0]!='q')
+		if (s[0]=='p')//play
 		{
-			memset(s,0,10);
+			double start = Time::getMillisecondCounterHiRes();
+			printf("play...\n");
+			phrase.Play(start);
+			while (Time::getMillisecondCounterHiRes() - start < 3000)
+			{
+				phrase.Tick((int)Time::getMillisecondCounterHiRes());
+				pthread_yield();
+			}
+			phrase.Stop();
+			printf("stopped\n");
 		}
+
 	}
 
 	// cleanup

@@ -29,6 +29,13 @@ Phrase::~Phrase() {
 	}
 }
 
+void _DebugEvent(int p,MidiMessage m)
+{
+	printf("%d: %02x %02x %02x %02x\n",
+					p,
+					m.getRawData()[0],m.getRawData()[0],m.getRawData()[1],m.getRawData()[2],m.getRawData()[3]);
+}
+
 void Phrase::Debug()
 {
 	std::cout<<"Debug dump phrase, channel "<<_channel<<std::endl;
@@ -39,7 +46,7 @@ void Phrase::Debug()
 	int p;
 	while (_pseqIter->getNextEvent(m,p))
 	{
-		std::cout<<p<<" : "<<m.getRawData()[0]<<m.getRawData()[1]<<m.getRawData()[2]<<m.getRawData()[3]<<std::endl;
+		_DebugEvent(p,m);
 	}
 
 	_pseqIter->setNextSamplePosition(0);
@@ -60,7 +67,7 @@ void Phrase::Tick(double time)
 			if (_haveEvent)
 			{
 				// is it in the future?
-				if (_curMessage.getTimeStamp() > pos)
+				if (_curMessagePos > pos)
 				{
 					// yes, so bail
 					return;
@@ -72,6 +79,8 @@ void Phrase::Tick(double time)
 					m.setTimeStamp(time);
 					_pCollector->addMessageToQueue(m);
 					_haveEvent = false;
+
+					_DebugEvent(0,m);
 				}
 			}
 
@@ -81,7 +90,7 @@ void Phrase::Tick(double time)
 				_haveEvent = true;
 
 				// is it in the future?
-				if (_curMessage.getTimeStamp() > pos)
+				if (_curMessagePos > pos)
 				{
 					// yes, so bail
 					return;
@@ -93,6 +102,8 @@ void Phrase::Tick(double time)
 					m.setTimeStamp(time);
 					_pCollector->addMessageToQueue(m);
 					_haveEvent = false;
+
+					_DebugEvent(0,m);
 				}
 			}
 		}// seq is empty
@@ -103,11 +114,16 @@ void Phrase::Tick(double time)
 
 void Phrase::MergeScratchBuffer()
 {
+	Debug();
+
 	if (!_scratch.isEmpty())
 	{
 		_seq.addEvents(_scratch,0,-1,0);
 		_scratch.clear();
 	}
+
+	printf("after merge\n");
+	Debug();
 }
 
 void Phrase::Play(double time)
@@ -143,5 +159,9 @@ void Phrase::Pause()
 
 void Phrase::AddEvent(MidiMessage m)
 {
-	_scratch.addEvent(m,_scratch.getNumEvents()+1);
+	m.setTimeStamp(m.getTimeStamp()-_origin);
+
+	_scratch.addEvent(m,m.getTimeStamp());
+
+	_DebugEvent(m.getTimeStamp(),m);
 }
