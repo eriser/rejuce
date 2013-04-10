@@ -9,24 +9,44 @@
 
 Phrase::Phrase(MidiMessageCollector* pCollector,int channel)
 {
-	_origin = 0.0f;
 	_channel = channel;
 	_state = PHRASE_STOPPED;
 	_pCollector = pCollector;
 	_lengthBars = 1;
 	_timeSigNumerator = 4;
 	_timeSigDenominator = 4;
-	_pseqIter = new MidiBuffer::Iterator(_seq);
 
-	_curMessagePos =0;
+	_curMessageClock =0;
 	_haveEvent = false;
+	_clock =0;
+
+	setTimeSignature(4,4);
+	setLengthBars(1);
+}
+
+void Phrase::setLengthBars(int bars)
+{
+	_lengthBars= bars;
+
+	int beatsPerBar = _timeSigNumerator;
+	int clocksPerBeat = ( _timeSigDenominator / 4.0f ) * PHRASE_CLOCKS;
+
+	_lengthClocks = beatsPerBar * clocksPerBeat;
+
+	_scratch.reset(_lengthClocks);
+	_seq.reset(_lengthClocks);
+}
+
+void Phrase::setTimeSignature(int numerator,int denominator)
+{
+	_timeSigNumerator = numerator;
+	_timeSigDenominator = denominator;
+
+	setLengthBars(_lengthBars);
 }
 
 Phrase::~Phrase() {
-	if (_pseqIter)
-	{
-		delete _pseqIter;
-	}
+
 }
 
 void _DebugEvent(int p,MidiMessage m)
@@ -53,68 +73,67 @@ void Phrase::Debug()
 
 }
 
-void Phrase::Tick(double time)
+int Phrase::Tick()
 {
-
 	if (_state == PHRASE_PLAYING)
 	{
 		// at least some events?
 		if (!_seq.isEmpty())
 		{
-			double pos = time - _origin;
-
 			//do we have an event leftover from last time?
 			if (_haveEvent)
 			{
 				// is it in the future?
-				if (_curMessagePos > pos)
-				{
-					// yes, so bail
-					return;
-				}
-				else
+				if (_curMessageClock == _clock)
 				{
 					// its not in the future, so get it in the queue
 					MidiMessage m(_curMessage);
-					m.setTimeStamp(time);
 					_pCollector->addMessageToQueue(m);
 					_haveEvent = false;
 
-					_DebugEvent(0,m);
+					_DebugEvent(_clock,m);
 				}
 			}
 
 			// now keep getting events, until we get one that is in the future.
-			while (_pseqIter->getNextEvent(_curMessage,_curMessagePos))
+			while (_pseqIter->getNextEvent(_curMessage,_curMessageClock))
 			{
 				_haveEvent = true;
 
 				// is it in the future?
-				if (_curMessagePos > pos)
+				if (_curMessageClock > _clock)
 				{
 					// yes, so bail
-					return;
+					break;
 				}
-				else
+				else if (_curMessageClock == _clock)
 				{
 					// its not in the future, so get it in the queue
 					MidiMessage m(_curMessage);
-					m.setTimeStamp(time);
 					_pCollector->addMessageToQueue(m);
 					_haveEvent = false;
 
-					_DebugEvent(0,m);
+					_DebugEvent(_clock,m);
 				}
 			}
 		}// seq is empty
 
 	}// state==playing
 
+	int ret = _clock;
+
+	// inc clock
+	if (_clock < _lengthClocks-1)
+		_clock++;
+	else
+		_clock=0;
+
+	return ret;
 }
 
 void Phrase::MergeScratchBuffer()
 {
-	Debug();
+	//Debug();
 
 	if (!_scratch.isEmpty())
 	{
@@ -122,17 +141,16 @@ void Phrase::MergeScratchBuffer()
 		_scratch.clear();
 	}
 
-	printf("after merge\n");
-	Debug();
+	//printf("after merge\n");
+	//Debug();
 }
 
-void Phrase::Play(double time)
+void Phrase::Play()
 {
 	// are we coming from stopped, or pause?
 	if (_state == PHRASE_STOPPED)
 	{
-		// reset origin to now
-		_origin = time;
+		_clock =0;
 
 		// clear record buffer
 		_scratch.clear();
@@ -159,9 +177,7 @@ void Phrase::Pause()
 
 void Phrase::AddEvent(MidiMessage m)
 {
-	m.setTimeStamp(m.getTimeStamp()-_origin);
+	_scratch.addEvent(m,_clock);
 
-	_scratch.addEvent(m,m.getTimeStamp());
-
-	_DebugEvent(m.getTimeStamp(),m);
+	_DebugEvent(_clock,m);
 }

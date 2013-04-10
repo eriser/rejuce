@@ -171,11 +171,35 @@ int main (int argc, char* argv[])
 		{
 			double start = Time::getMillisecondCounterHiRes();
 			printf("play...\n");
-			phrase.Play(start);
+			phrase.Play();
 			while (Time::getMillisecondCounterHiRes() - start < 3000)
 			{
-				phrase.Tick((int)Time::getMillisecondCounterHiRes());
-				pthread_yield();
+				double i = Time::getMillisecondCounterHiRes();
+
+				int tick = phrase.Tick();
+				//if (tick%24==0) printf(".\n");
+				//if (tick%96==0) printf("----\n");
+
+				Time::waitForMillisecondCounter(i+PHRASE_DELAY_MSEC(120));
+			}
+			phrase.Stop();
+			printf("stopped\n");
+		}
+
+		if (s[0]=='d')//play
+		{
+			double start = Time::getMillisecondCounterHiRes();
+			printf("play...\n");
+			phrase.Play();
+			while (true)
+			{
+				double i = Time::getMillisecondCounterHiRes();
+
+				int tick = phrase.Tick();
+				//if (tick%24==0) printf(".\n");
+				//if (tick%96==0) printf("----\n");
+
+				Time::waitForMillisecondCounter(i+PHRASE_DELAY_MSEC(120));
 			}
 			phrase.Stop();
 			printf("stopped\n");
