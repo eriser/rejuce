@@ -10,8 +10,6 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 
-#include "MidiSequence.h"
-
 #define PHRASE_CLOCKS 24	/* resolution in beat */
 #define PHRASE_DELAY_MSEC(bpm) (1000 / ((bpm*PHRASE_CLOCKS)/60) )
 
@@ -30,19 +28,20 @@ public:
 	virtual ~Phrase();
 
 	// operations
-	void Play();
-	void Stop();
-	void Pause();
+	void play();
+	void stop();
+	void pause();
 
 	void setLengthBars(int bars);
 	void setTimeSignature(int numerator,int denominator);
 
-	void AddEvent(MidiMessage m); // new events merged on next Play or Stop
+	void addEvent(MidiMessage m); // new events merged on next Play or Stop
+	void clear();
 
 	// has to be called on time
-	int Tick();
+	int tick();
 
-	void Debug();
+	void debug();
 
 private:
 	void MergeScratchBuffer();
@@ -51,8 +50,9 @@ private:
 	int _channel;
 	PhraseState _state;
 
-	MidiSequence _seq;
-	MidiSequence _scratch;
+	MidiBuffer _seq;
+	MidiBuffer _scratch;
+	MidiBuffer::Iterator *_pseqIter;
 
 	MidiMessage _curMessage;
 	int _curMessageClock;
