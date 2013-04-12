@@ -7,7 +7,17 @@
 
 #include "Phrase.h"
 
+Phrase::Phrase()
+{
+	init(nullptr,0);
+}
+
 Phrase::Phrase(MidiMessageCollector* pCollector,int channel)
+{
+	init(pCollector,channel);
+}
+
+void Phrase::init(MidiMessageCollector* pCollector,int channel)
 {
 	_channel = channel;
 	_state = PHRASE_STOPPED;
@@ -42,6 +52,16 @@ void Phrase::setLengthBars(int bars)
 		delete _pseqIter;
 	}
 	_pseqIter = new MidiBuffer::Iterator(_seq);
+}
+
+int Phrase::getLengthBars()
+{
+	return _lengthBars;
+}
+
+int Phrase::getLengthClocks()
+{
+	return _lengthClocks;
 }
 
 void Phrase::setTimeSignature(int numerator,int denominator)

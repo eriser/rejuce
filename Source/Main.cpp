@@ -31,7 +31,7 @@ public:
 	 {
 		 if (_p)
 		 {
-			 _p->addEvent(message);
+			// _p->addEvent(message);
 		 }
 	 }
 
@@ -172,16 +172,16 @@ int main (int argc, char* argv[])
 			double start = Time::getMillisecondCounterHiRes();
 			printf("play...\n");
 			phrase.debug();
-			phrase.play();
+	//		phrase.play();
 			while (Time::getMillisecondCounterHiRes() - start < 3000)
 			{
 				double i = Time::getMillisecondCounterHiRes();
 
-				int tick = phrase.tick();
+			//	int tick = phrase.tick();
 
 				Time::waitForMillisecondCounter(i+PHRASE_DELAY_MSEC(120));
 			}
-			phrase.stop();
+//			phrase.stop();
 			printf("stopped\n");
 		}
 
