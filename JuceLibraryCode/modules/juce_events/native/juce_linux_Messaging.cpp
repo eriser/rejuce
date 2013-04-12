@@ -27,19 +27,19 @@
  #define JUCE_DEBUG_XERRORS 1
 #endif
 
-Display* display = nullptr;
-Window juce_messageWindowHandle = None;
-XContext windowHandleXContext;   // This is referenced from Windowing.cpp
+//Display* display = nullptr;
+//Window juce_messageWindowHandle = None;
+//XContext windowHandleXContext;   // This is referenced from Windowing.cpp
 
-typedef bool (*WindowMessageReceiveCallback) (XEvent&);
-WindowMessageReceiveCallback dispatchWindowMessage = nullptr;
-
-typedef void (*SelectionRequestCallback) (XSelectionRequestEvent&);
-SelectionRequestCallback handleSelectionRequest = nullptr;
+//typedef bool (*WindowMessageReceiveCallback) (XEvent&);
+//WindowMessageReceiveCallback dispatchWindowMessage = nullptr;
+//
+//typedef void (*SelectionRequestCallback) (XSelectionRequestEvent&);
+//SelectionRequestCallback handleSelectionRequest = nullptr;
 
 //==============================================================================
-ScopedXLock::ScopedXLock()       {/* XLockDisplay (display); */}
-ScopedXLock::~ScopedXLock()      {/* XUnlockDisplay (display);*/ }
+//ScopedXLock::ScopedXLock()       {/* XLockDisplay (display); */}
+//ScopedXLock::~ScopedXLock()      {/* XUnlockDisplay (display);*/ }
 
 //==============================================================================
 class InternalMessageQueue
@@ -222,23 +222,23 @@ namespace LinuxErrorHandling
 {
     static bool errorOccurred = false;
     static bool keyboardBreakOccurred = false;
-    static XErrorHandler oldErrorHandler = (XErrorHandler) 0;
-    static XIOErrorHandler oldIOErrorHandler = (XIOErrorHandler) 0;
+    //static XErrorHandler oldErrorHandler = (XErrorHandler) 0;
+    //static XIOErrorHandler oldIOErrorHandler = (XIOErrorHandler) 0;
 
     //==============================================================================
     // Usually happens when client-server connection is broken
-    int ioErrorHandler (Display*)
+    int ioErrorHandler (void*)
     {
         DBG ("ERROR: connection to X server broken.. terminating.");
 
-        if (JUCEApplicationBase::isStandaloneApp())
+      /*  if (JUCEApplicationBase::isStandaloneApp())
             MessageManager::getInstance()->stopDispatchLoop();
-
+*/
         errorOccurred = true;
         return 0;
     }
 
-    int errorHandler (Display* display, XErrorEvent* event)
+    int errorHandler (void* display, void* event)
     {
     	/*
        #if JUCE_DEBUG_XERRORS
@@ -267,10 +267,10 @@ namespace LinuxErrorHandling
         if (JUCEApplicationBase::isStandaloneApp())
         {
             //XSetIOErrorHandler (oldIOErrorHandler);
-            oldIOErrorHandler = 0;
+          //  oldIOErrorHandler = 0;
 
             //XSetErrorHandler (oldErrorHandler);
-            oldErrorHandler = 0;
+            //oldErrorHandler = 0;
         }
     }
 
