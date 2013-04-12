@@ -106,6 +106,8 @@ void Phrase::debug()
 
 int Phrase::tick()
 {
+	int ret = _clock;
+
 	if (_state == PHRASE_PLAYING)
 	{
 		// at least some events?
@@ -157,15 +159,13 @@ int Phrase::tick()
 			}
 		}// seq is empty
 
+		// inc clock
+		if (_clock < _lengthClocks-1)
+			_clock++;
+		else
+			_clock=0;
+
 	}// state==playing
-
-	int ret = _clock;
-
-	// inc clock
-	if (_clock < _lengthClocks-1)
-		_clock++;
-	else
-		_clock=0;
 
 	return ret;
 }
@@ -212,4 +212,12 @@ void Phrase::addEvent(MidiMessage m)
 	_scratch.addEvent(m,_clock);
 
 	//_DebugEvent(_clock,m);
+}
+
+void Phrase::clear()
+{
+	if (_state==PHRASE_STOPPED)
+	{
+		_seq.clear();
+	}
 }

@@ -19,19 +19,29 @@ enum PatternState
 	PATTERN_RECORDING
 };
 
+class Song;
+
 class Pattern {
 public:
+	Pattern();
 	Pattern(MidiMessageCollector* collector);
+	void init(MidiMessageCollector* collector);
 	virtual ~Pattern();
 
+	// control/transport
 	void play();
 	void stop();
 	void pause();
 
-	void getLengthBars(int bars);
-
 	void addEvent(MidiMessage m); // new events merged on next Play or Stop
 	void clear();
+
+	bool getIsMuted(int i);
+	void toggleMuteState(int i);
+
+	// info
+	int getLengthBars();
+	int getLengthClocks();
 
 	// has to be called on time
 	int tick();
@@ -43,7 +53,9 @@ public:
 	void checkinActivePhrase();
 
 private:
+	int _clock;
 	Phrase _phrases[16];
+	bool _mutes[16];
 	int _activePhrase;
 	int _checkedOutPhrase;
 
