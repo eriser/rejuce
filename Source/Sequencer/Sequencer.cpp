@@ -24,3 +24,14 @@ int Sequencer::tick()
 
 	return 0;
 }
+
+void Sequencer::start()
+{
+
+}
+
+void Sequencer::stop()
+{
+
+}
+

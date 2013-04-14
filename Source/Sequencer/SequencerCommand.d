@@ -1,5 +1,6 @@
-../../Source/Sequencer/Sequencer.o: ../../Source/Sequencer/Sequencer.cpp \
- ../../Source/Sequencer/Sequencer.h \
+../../Source/Sequencer/SequencerCommand.o: \
+ ../../Source/Sequencer/SequencerCommand.cpp \
+ ../../Source/Sequencer/SequencerCommand.h \
  ../../Source/Sequencer/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Sequencer/../../JuceLibraryCode/AppConfig.h \
  ../../Source/Sequencer/../../JuceLibraryCode/modules/juce_audio_basics/juce_audio_basics.h \
@@ -308,6 +309,4 @@
  ../../Source/Sequencer/../../JuceLibraryCode/modules/juce_data_structures/values/../undomanager/juce_UndoableAction.h \
  ../../Source/Sequencer/../../JuceLibraryCode/modules/juce_data_structures/app_properties/juce_ApplicationProperties.h \
  ../../Source/Sequencer/../../JuceLibraryCode/modules/juce_data_structures/app_properties/juce_PropertiesFile.h \
- ../../Source/Sequencer/../../JuceLibraryCode/modules/juce_events/juce_events.h \
- ../../Source/Sequencer/Phrase.h ../../Source/Sequencer/Pattern.h \
- ../../Source/Sequencer/Song.h ../../Source/Sequencer/SequencerCommand.h
+ ../../Source/Sequencer/../../JuceLibraryCode/modules/juce_events/juce_events.h

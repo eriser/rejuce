@@ -21,7 +21,9 @@ enum SongState
 class Song {
 public:
 
+	Song();
 	Song(MidiMessageCollector* pMessageCollector);
+	void init(MidiMessageCollector* pMessageCollector);
 	virtual ~Song();
 
 	// live operations
@@ -36,9 +38,8 @@ public:
 
 	int tick();
 
-
-
-
+	void addEvent(MidiMessage m); // new events merged on next Play or Stop
+	void clear();
 
 private:
 	Pattern _patterns[16];

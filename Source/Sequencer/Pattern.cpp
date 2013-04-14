@@ -86,7 +86,10 @@ int Pattern::getLengthClocks()
 
 void Pattern::addEvent(MidiMessage m)
 {
-
+	if (_state==PATTERN_PLAYING)
+	{
+		_phrases[_activePhrase].addEvent(m);
+	}
 }
 
 void Pattern::clear()

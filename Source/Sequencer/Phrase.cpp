@@ -209,7 +209,10 @@ void Phrase::pause()
 
 void Phrase::addEvent(MidiMessage m)
 {
-	_scratch.addEvent(m,_clock);
+	if (_state==PHRASE_PLAYING)
+	{
+		_scratch.addEvent(m,_clock);
+	}
 
 	//_DebugEvent(_clock,m);
 }

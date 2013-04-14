@@ -7,7 +7,17 @@
 
 #include "Song.h"
 
+Song::Song()
+{
+	init(nullptr);
+}
+
 Song::Song(MidiMessageCollector* pMessageCollector)
+{
+	init(pMessageCollector);
+}
+
+void Song::init(MidiMessageCollector* pMessageCollector)
 {
 	for (int i=0;i<16;i++)
 	{
@@ -79,9 +89,55 @@ int Song::tick()
 {
 	int ret = _clock;
 
+	if (_state==SONG_PLAYING)
+	{
+		_pCurrentPattern->tick();
 
+		ret = _clock;
+
+		// inc clock
+		if (_clock < _currentPatternLengthClocks-1)
+		{
+			_clock++;
+		}
+		else
+		{
+			// we might need to change pattern.
+			if (_currentPattern != _nextPattern)
+			{
+				_pCurrentPattern->stop();
+
+				_currentPattern = _nextPattern;
+				_pCurrentPattern = &_patterns[_nextPattern];
+
+				_currentPatternLengthClocks = _pCurrentPattern->getLengthClocks();
+			}
+
+			_clock=0;
+		}
+
+	}
 
 	return ret;
+}
+
+void Song::addEvent(MidiMessage m)
+{
+	if (_state==SONG_PLAYING)
+	{
+		_patterns[_currentPattern].addEvent(m);
+	}
+}
+
+void Song::clear()
+{
+	if (_state == SONG_STOPPED)
+	{
+		for (int i=0;i<16;i++)
+		{
+			_patterns[i].clear();
+		}
+	}
 }
 
 
