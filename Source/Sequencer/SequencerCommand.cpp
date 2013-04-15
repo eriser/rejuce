@@ -7,6 +7,21 @@
 
 #include "SequencerCommand.h"
 
+void SequencerCommand::init(SequencerCommand &c)
+{
+	_name = c.getName();
+	_args.clear();
+	for (int i=0;i<c.getArgCount();i++)
+	{
+		_args.add(c.getArg(i));
+	}
+}
+
+SequencerCommand::SequencerCommand(SequencerCommand &c)
+{
+	init(c);
+}
+
 SequencerCommand::SequencerCommand(char* raw)
 {
 	_name =  (SequencerCommandName) (*((int*)raw));

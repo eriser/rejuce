@@ -7,15 +7,26 @@
 
 #include "Sequencer.h"
 
-Sequencer::Sequencer(MidiMessageCollector* collector)
+Sequencer::Sequencer()
 {
-
 
 }
 
 Sequencer::~Sequencer()
 {
+}
 
+void Sequencer::init(MidiMessageCollector* collector)
+{
+	_pMessageCollector = collector;
+}
+
+void Sequencer::run()
+{
+	while (!threadShouldExit())
+	{
+		// wait then command then tick
+	}
 }
 
 int Sequencer::tick()
@@ -34,4 +45,11 @@ void Sequencer::stop()
 {
 
 }
+
+bool Sequencer::command(SequencerCommand c)
+{
+
+}
+
+
 

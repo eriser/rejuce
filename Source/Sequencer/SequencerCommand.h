@@ -36,11 +36,14 @@ enum SequencerCommandName
 
 class SequencerCommand {
 public:
+	SequencerCommand(SequencerCommand &c);
 	SequencerCommand(char* raw);
 	SequencerCommand(SequencerCommandName name,int arg0);
 	SequencerCommand(SequencerCommandName name,int arg0,int arg1);
 	SequencerCommand(SequencerCommandName name,int arg0,int arg1,int arg2);
 	virtual ~SequencerCommand();
+
+	void init(SequencerCommand &c);
 
 	SequencerCommandName getName();
 	int getArg(int i);
