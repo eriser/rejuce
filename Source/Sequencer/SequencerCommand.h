@@ -34,8 +34,14 @@ enum SequencerCommandName
 
 };
 
+struct SequencerCommandRaw
+{
+
+};
+
 class SequencerCommand {
 public:
+	SequencerCommand(){_name=SC_INVALID;};
 	SequencerCommand(SequencerCommand &c);
 	SequencerCommand(char* raw);
 	SequencerCommand(SequencerCommandName name,int arg0);

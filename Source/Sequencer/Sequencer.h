@@ -15,7 +15,7 @@
 #include "Song.h"
 #include "SequencerCommand.h"
 
-class Sequencer: private Thread{
+class Sequencer: private Thread {
 public:
 	Sequencer();
 	virtual ~Sequencer();
@@ -25,18 +25,21 @@ public:
 	void start();
 	void stop();
 
-	bool command(SequencerCommand c);
+	bool command(SequencerCommand& c);
 
 private:
 	void run();
-
 	int tick();
+	void executeCommands();
+	void executeCommand(SequencerCommand* c);
 
 private:
 	MidiMessageCollector* _pMessageCollector;
 	float _bpm;
 	Song _song;
+
 	Array <SequencerCommand> _commandCollector;
+	CriticalSection _commandSection;	// TODO: remove this, use a lockless FIFO command queue
 };
 
 Sequencer* g_sequencer = nullptr;
