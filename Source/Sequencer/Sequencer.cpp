@@ -7,6 +7,28 @@
 
 #include "Sequencer.h"
 
+Sequencer* g_sequencer = nullptr;
+
+Sequencer* getSequencerInstance(MidiMessageCollector* collector)
+{
+	if (!g_sequencer)
+	{
+		g_sequencer = new Sequencer();
+		g_sequencer->init(collector);
+		g_sequencer->start();
+	}
+
+	return g_sequencer;
+}
+
+void freeSequencer()
+{
+	g_sequencer->stop();
+	delete g_sequencer;
+	g_sequencer=nullptr;
+}
+
+
 Sequencer::Sequencer() : Thread ("Sequencer")
 {
 	_bpm = 120.0f;
@@ -21,6 +43,7 @@ Sequencer::~Sequencer()
 void Sequencer::init(MidiMessageCollector* collector)
 {
 	_pMessageCollector = collector;
+	_song.init(collector);
 }
 
 void Sequencer::run()
@@ -58,9 +81,9 @@ void Sequencer::stop()
 	waitForThreadToExit(-1);
 }
 
-bool Sequencer::command(SequencerCommand& c)
+bool Sequencer::command(SequencerCommand c)
 {
-	if (c.getName() != SC_INVALID)
+	if (c.name != SC_INVALID)
 	{
 		_commandSection.enter();
 		_commandCollector.add(c);

@@ -25,7 +25,7 @@ public:
 	void start();
 	void stop();
 
-	bool command(SequencerCommand& c);
+	bool command(SequencerCommand c);
 
 private:
 	void run();
@@ -42,26 +42,7 @@ private:
 	CriticalSection _commandSection;	// TODO: remove this, use a lockless FIFO command queue
 };
 
-Sequencer* g_sequencer = nullptr;
-
-Sequencer* getSequencerInstance(MidiMessageCollector* collector)
-{
-	if (!g_sequencer)
-	{
-		g_sequencer = new Sequencer();
-		g_sequencer->init(collector);
-		g_sequencer->start();
-	}
-
-	return g_sequencer;
-}
-
-void freeSequencer()
-{
-	g_sequencer->stop();
-	delete g_sequencer;
-	g_sequencer=nullptr;
-}
-
+Sequencer* getSequencerInstance(MidiMessageCollector* collector);
+void freeSequencer();
 
 #endif /* GBSEQ_H*_ */

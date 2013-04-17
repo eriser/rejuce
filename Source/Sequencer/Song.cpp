@@ -9,12 +9,7 @@
 
 Song::Song()
 {
-	init(nullptr);
-}
 
-Song::Song(MidiMessageCollector* pMessageCollector)
-{
-	init(pMessageCollector);
 }
 
 void Song::init(MidiMessageCollector* pMessageCollector)

@@ -22,7 +22,6 @@ class Song {
 public:
 
 	Song();
-	Song(MidiMessageCollector* pMessageCollector);
 	void init(MidiMessageCollector* pMessageCollector);
 	virtual ~Song();
 

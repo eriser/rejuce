@@ -30,40 +30,26 @@ enum SequencerCommandName
 
 	// 1 args, 101-200
 	SC_PATTERN_SET_NEXT = SEQUENCERCOMMAND_1_ARGS
-
-
 };
 
-struct SequencerCommandRaw
+struct SequencerCommand
 {
-
+	SequencerCommandName name;
+	int argc;
+	int argv[8];
 };
 
-class SequencerCommand {
+class SequencerCommandFactory {
 public:
-	SequencerCommand(){_name=SC_INVALID;};
-	SequencerCommand(SequencerCommand &c);
-	SequencerCommand(char* raw);
-	SequencerCommand(SequencerCommandName name,int arg0);
-	SequencerCommand(SequencerCommandName name,int arg0,int arg1);
-	SequencerCommand(SequencerCommandName name,int arg0,int arg1,int arg2);
-	virtual ~SequencerCommand();
-
-	void init(SequencerCommand &c);
-
-	SequencerCommandName getName();
-	int getArg(int i);
-	int getArgCount();
-
-	const char* getRaw();
+	static SequencerCommand command(SequencerCommand* c);
+	static SequencerCommand command(SequencerCommandName name);
+	static SequencerCommand command(SequencerCommandName name,int arg0);
+	static SequencerCommand command(SequencerCommandName name,int arg0,int arg1);
+	static SequencerCommand command(SequencerCommandName name,int arg0,int arg1,int arg2);
 
 private:
-	void validate();
+	static void validate(SequencerCommand* c);
 
-private:
-	SequencerCommandName _name;
-	Array <int> _args;
-	char _raw[16];
 };
 
 #endif /* SEQUENCERCOMMAND_H_ */

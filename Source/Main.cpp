@@ -12,7 +12,7 @@
 
 #include "Noisemaker/TalCore.h"
 
-#include "Sequencer/Phrase.h"
+#include "Sequencer/Sequencer.h"
 
 //==============================================================================
 
@@ -24,23 +24,13 @@ class GlobalMidi: public  MidiInputCallback
 {
 public:
 	GlobalMidi() {
-		_p=nullptr;
+
 	}
 
 	 void handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message)
 	 {
-		 if (_p)
-		 {
-			// _p->addEvent(message);
-		 }
-	 }
 
-	 void setPhrase(Phrase* p) {
-		 _p = p;
 	 }
-
-private:
-	 Phrase* _p;
 };
 
 //==============================================================================
@@ -102,47 +92,11 @@ int main (int argc, char* argv[])
 	adm.getAudioDeviceSetup(setup);
 	app.getMidiMessageCollector().reset(setup.sampleRate);
 
-	Phrase phrase(&app.getMidiMessageCollector(),1);
-
 	GlobalMidi gm;
 	adm.addMidiInputCallback("VMPK Output",&gm);
-	gm.setPhrase(&phrase);
 
-	/*{
-		std::cout << "recording.."<<endl;
-		int start = (int)Time::getMillisecondCounterHiRes();
-		phrase.Play(start);
-
-		phrase.AddEvent(MidiMessage(0x90,0x60,0x80,start));
-		Time::waitForMillisecondCounter(start+=500);
-
-		phrase.AddEvent(MidiMessage(0x80,0x60,0x80,start));
-		Time::waitForMillisecondCounter(start+=500);
-
-		phrase.AddEvent(MidiMessage(0x90,0x60,0x80,start));
-		Time::waitForMillisecondCounter(start+=500);
-
-		phrase.AddEvent(MidiMessage(0x80,0x60,0x80,start));
-
-		phrase.Stop();
-		std::cout << "done.."<<endl;
-
-		phrase.Debug();
-	}
-
-	{
-		std::cout << "playing.."<<endl;
-		int start = (int)Time::getMillisecondCounterHiRes();
-		phrase.Play(start);
-		while ((int)Time::getMillisecondCounterHiRes() - start < 3000)
-		{
-			phrase.Tick((int)Time::getMillisecondCounterHiRes());
-			pthread_yield();
-		}
-		phrase.Stop();
-		std::cout << "done.."<<endl;
-	}*/
-
+	Sequencer* pSeq = getSequencerInstance(&app.getMidiMessageCollector());
+	pSeq->start();
 
 	// wait
 	std::cout <<"q to quit..\n";
@@ -169,23 +123,18 @@ int main (int argc, char* argv[])
 
 		if (s[0]=='p')//play
 		{
-			double start = Time::getMillisecondCounterHiRes();
 			printf("play...\n");
-			phrase.debug();
-	//		phrase.play();
-			while (Time::getMillisecondCounterHiRes() - start < 3000)
-			{
-				double i = Time::getMillisecondCounterHiRes();
+			SequencerCommand sc();
+		}
 
-			//	int tick = phrase.tick();
-
-				Time::waitForMillisecondCounter(i+PHRASE_DELAY_MSEC(120));
-			}
-//			phrase.stop();
-			printf("stopped\n");
+		if (s[0]=='s')//play
+		{
+			printf("stop...\n");
 		}
 
 	}
+
+	freeSequencer();
 
 	// cleanup
 	app.setProcessor(nullptr);
