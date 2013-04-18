@@ -9,7 +9,6 @@
 
 Phrase::Phrase()
 {
-	init(nullptr,0);
 }
 
 Phrase::Phrase(MidiMessageCollector* pCollector,int channel)

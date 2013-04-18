@@ -9,12 +9,11 @@
 
 Pattern::Pattern()
 {
+	for (int i=0;i<16;i++)
+	{
+		_phrases[i] = new Phrase();
+	}
 	init(nullptr);
-}
-
-Pattern::Pattern(MidiMessageCollector* pMessageCollector)
-{
-	init(pMessageCollector);
 }
 
 void Pattern::init(MidiMessageCollector* pMessageCollector)
@@ -40,6 +39,11 @@ void Pattern::init(MidiMessageCollector* pMessageCollector)
 
 Pattern::~Pattern()
 {
+	for (int i=0;i<16;i++)
+	{
+		if (_phrases[i])
+			delete _phrases[i];
+	}
 
 }
 
@@ -47,7 +51,7 @@ void Pattern::play()
 {
 	for (int i=0;i<16;i++)
 	{
-		_phrases[i].play();
+		_phrases[i]->play();
 	}
 
 	_state = PATTERN_PLAYING;
@@ -57,7 +61,8 @@ void Pattern::stop()
 {
 	for (int i=0;i<16;i++)
 	{
-		_phrases[i].stop();
+		Phrase* phrase = _phrases[i];
+		phrase->stop();
 	}
 
 	_state = PATTERN_STOPPED;
@@ -68,7 +73,7 @@ void Pattern::pause()
 {
 	for (int i=0;i<16;i++)
 	{
-		_phrases[i].pause();
+		_phrases[i]->pause();
 	}
 
 	_state = PATTERN_PAUSED;
@@ -88,7 +93,7 @@ void Pattern::addEvent(MidiMessage m)
 {
 	if (_state==PATTERN_PLAYING)
 	{
-		_phrases[_activePhrase].addEvent(m);
+		_phrases[_activePhrase]->addEvent(m);
 	}
 }
 
@@ -98,7 +103,7 @@ void Pattern::clear()
 	{
 		for (int i=0;i<16;i++)
 		{
-			_phrases[i].clear();
+			_phrases[i]->clear();
 		}
 	}
 }
@@ -112,7 +117,7 @@ int Pattern::tick()
 	{
 		for (int i=0;i<16;i++)
 		{
-			_phrases[i].tick();
+			_phrases[i]->tick();
 		}
 
 		ret = _clock;
@@ -145,21 +150,21 @@ Phrase* Pattern::checkoutActivePhrase()
 	_checkedOutPhrase = _activePhrase;
 
 	// return the phrase so the caller can dick with it
-	return &_phrases[_activePhrase];
+	return _phrases[_activePhrase];
 }
 
 void Pattern::checkinActivePhrase()
 {
 	// the phrase will have been dicked with, so recalculate stuff
-	Phrase* phrase = &_phrases[_checkedOutPhrase];
+	Phrase* phrase = _phrases[_checkedOutPhrase];
 
 	// recalculate pattern length
 	int maxLengthBars = 0;
 	int maxLengthClocks =0;
 	for (int i=0;i<16;i++)
 	{
-		int lengthBars = _phrases[i].getLengthBars();
-		int lengthClocks = _phrases[i].getLengthBars();
+		int lengthBars = _phrases[i]->getLengthBars();
+		int lengthClocks = _phrases[i]->getLengthBars();
 
 		if (lengthBars > maxLengthBars)
 			maxLengthBars = lengthBars;

@@ -9,19 +9,23 @@
 
 Song::Song()
 {
-
+	for (int i=0;i<16;i++)
+	{
+		_patterns[i] = new Pattern();
+	}
 }
 
 void Song::init(MidiMessageCollector* pMessageCollector)
 {
 	for (int i=0;i<16;i++)
 	{
-		_patterns[i].init(pMessageCollector);
+		_patterns[i]->init(pMessageCollector);
 	}
 
 	_state = SONG_STOPPED;
 
 	_currentPattern=0;
+	_pCurrentPattern = _patterns[0];
 	_nextPattern=0;
 	_clock=0;
 
@@ -30,7 +34,10 @@ void Song::init(MidiMessageCollector* pMessageCollector)
 
 Song::~Song()
 {
-
+	for (int i=0;i<16;i++)
+	{
+		delete _patterns[i];
+	}
 }
 
 void Song::play()
@@ -63,7 +70,7 @@ void Song::setNextPattern(int i)
 		_pCurrentPattern->stop();
 
 		_currentPattern = i;
-		_pCurrentPattern = &_patterns[i];
+		_pCurrentPattern = _patterns[i];
 
 		_currentPatternLengthClocks = _pCurrentPattern->getLengthClocks();
 	}
@@ -103,7 +110,7 @@ int Song::tick()
 				_pCurrentPattern->stop();
 
 				_currentPattern = _nextPattern;
-				_pCurrentPattern = &_patterns[_nextPattern];
+				_pCurrentPattern = _patterns[_nextPattern];
 
 				_currentPatternLengthClocks = _pCurrentPattern->getLengthClocks();
 			}
@@ -120,7 +127,7 @@ void Song::addEvent(MidiMessage m)
 {
 	if (_state==SONG_PLAYING)
 	{
-		_patterns[_currentPattern].addEvent(m);
+		_patterns[_currentPattern]->addEvent(m);
 	}
 }
 
@@ -130,7 +137,7 @@ void Song::clear()
 	{
 		for (int i=0;i<16;i++)
 		{
-			_patterns[i].clear();
+			_patterns[i]->clear();
 		}
 	}
 }

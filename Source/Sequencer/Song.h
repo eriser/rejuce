@@ -41,7 +41,7 @@ public:
 	void clear();
 
 private:
-	Pattern _patterns[16];
+	Pattern* _patterns[16];
 	int _currentPattern;
 	Pattern* _pCurrentPattern;
 	int _nextPattern;

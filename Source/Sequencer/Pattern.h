@@ -23,7 +23,6 @@ class Song;
 class Pattern {
 public:
 	Pattern();
-	Pattern(MidiMessageCollector* collector);
 	void init(MidiMessageCollector* collector);
 	virtual ~Pattern();
 
@@ -53,7 +52,7 @@ public:
 
 private:
 	int _clock;
-	Phrase _phrases[16];
+	Phrase* _phrases[16];
 	bool _mutes[16];
 	int _activePhrase;
 	int _checkedOutPhrase;
