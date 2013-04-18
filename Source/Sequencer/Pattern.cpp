@@ -34,7 +34,7 @@ void Pattern::init(MidiMessageCollector* pMessageCollector)
 
 		checkinActivePhrase();
 
-		_mutes[16]=false;
+		_mutes[i]=false;
 	}
 }
 
