@@ -15,6 +15,14 @@
 #include "Song.h"
 #include "SequencerCommand.h"
 
+enum TransportState
+{
+	TRANSPORT_STOPPED = 0,
+	TRANSPORT_PAUSED,
+	TRANSPORT_PLAYING,
+	TRANSPORT_RECORDING
+};
+
 class Sequencer: private Thread {
 public:
 	Sequencer();
@@ -26,6 +34,7 @@ public:
 	void stop();
 
 	bool command(SequencerCommand c);
+	void midiEvent(MidiMessage m);
 
 private:
 	void run();
@@ -34,9 +43,14 @@ private:
 	void executeCommand(SequencerCommand* c);
 
 private:
+	void commandTransport(SequencerCommand* c);
+
+private:
 	MidiMessageCollector* _pMessageCollector;
 	float _bpm;
 	Song _song;
+
+	TransportState _transportState;
 
 	Array <SequencerCommand> _commandCollector;
 	CriticalSection _commandSection;	// TODO: remove this, use a lockless FIFO command queue

@@ -44,6 +44,8 @@ void Sequencer::init(MidiMessageCollector* collector)
 	_bpm = 120.0f;
 	_pMessageCollector = collector;
 
+	_transportState = TRANSPORT_STOPPED;
+
 	_song.init();
 }
 
@@ -68,9 +70,15 @@ void Sequencer::run()
 
 int Sequencer::tick()
 {
+	int t = 0;
 
+	if (_transportState == TRANSPORT_PLAYING ||
+		_transportState == TRANSPORT_RECORDING)
+	{
+		t = _song.tick(_pMessageCollector);
+	}
 
-	return 0;
+	return t;
 }
 
 void Sequencer::start()
@@ -82,6 +90,14 @@ void Sequencer::stop()
 {
 	signalThreadShouldExit();
 	waitForThreadToExit(-1);
+}
+
+void Sequencer::midiEvent(MidiMessage m)
+{
+	if (_transportState==TRANSPORT_RECORDING)
+	{
+		_song.addEvent(m);
+	}
 }
 
 bool Sequencer::command(SequencerCommand c)
@@ -115,8 +131,50 @@ void Sequencer::executeCommands()
 
 void Sequencer::executeCommand(SequencerCommand* c)
 {
-	//TODO
+	switch (c->name)
+	{
+	case SC_TRANSPORT_PAUSE:
+	case SC_TRANSPORT_PLAY:
+	case SC_TRANSPORT_RECORD:
+	case SC_TRANSPORT_REWIND:
+	case SC_TRANSPORT_STOP:
+		commandTransport(c);
+		break;
+
+	default:
+		break;
+	}
 }
 
+void Sequencer::commandTransport(SequencerCommand* c)
+{
+	switch (c->name)
+	{
+	case SC_TRANSPORT_PAUSE:
+		_transportState = TRANSPORT_PAUSED;
+		break;
 
+	case SC_TRANSPORT_PLAY:
+		_transportState = TRANSPORT_PLAYING;
+		_song.play();
+		break;
+
+	case SC_TRANSPORT_RECORD:
+		_transportState = TRANSPORT_RECORDING;
+		_song.play();
+		break;
+
+	case SC_TRANSPORT_REWIND:
+		_song.stop();
+		_song.play();
+		break;
+
+	case SC_TRANSPORT_STOP:
+		_song.stop();
+		break;
+
+	default:
+		break;
+	}
+}
 

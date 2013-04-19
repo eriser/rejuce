@@ -126,7 +126,10 @@ int Pattern::tick(MidiMessageCollector* pCollector)
 		if (_clock < _lengthClocks-1)
 			_clock++;
 		else
+		{
+			DBG("ep.");
 			_clock=0;
+		}
 	}
 
 	return ret;
@@ -164,7 +167,7 @@ void Pattern::checkinActivePhrase()
 	for (int i=0;i<16;i++)
 	{
 		int lengthBars = _phrases[i]->getLengthBars();
-		int lengthClocks = _phrases[i]->getLengthBars();
+		int lengthClocks = _phrases[i]->getLengthClocks();
 
 		if (lengthBars > maxLengthBars)
 			maxLengthBars = lengthBars;
@@ -172,6 +175,9 @@ void Pattern::checkinActivePhrase()
 		if (lengthClocks > maxLengthClocks)
 			maxLengthClocks = lengthClocks;
 	}
+
+	_lengthBars = maxLengthBars;
+	_lengthClocks = maxLengthClocks;
 
 	_checkedOutPhrase = -1;
 }

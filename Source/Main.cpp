@@ -20,6 +20,8 @@
 //#include <Windows.h>
 #include <iostream>
 
+Sequencer* pSeq = nullptr;
+
 class GlobalMidi: public  MidiInputCallback
 {
 public:
@@ -29,9 +31,12 @@ public:
 
 	 void handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message)
 	 {
-
+		 if (pSeq)
+			 pSeq->midiEvent(message);
 	 }
 };
+
+
 
 //==============================================================================
 int main (int argc, char* argv[])
@@ -96,7 +101,7 @@ int main (int argc, char* argv[])
 
 	MidiMessageCollector* collector = &app.getMidiMessageCollector();
 	collector->reset(setup.sampleRate);
-	Sequencer* pSeq = getSequencerInstance(collector);
+	pSeq = getSequencerInstance(collector);
 
 	// wait
 	std::cout <<"q to quit..\n";
@@ -124,12 +129,19 @@ int main (int argc, char* argv[])
 		if (s[0]=='p')//play
 		{
 			printf("play...\n");
-			SequencerCommand sc();
+			pSeq->command(SequencerCommandFactory::command(SC_TRANSPORT_PLAY));
 		}
 
-		if (s[0]=='s')//play
+		if (s[0]=='r')//record
+		{
+			printf("record...\n");
+			pSeq->command(SequencerCommandFactory::command(SC_TRANSPORT_RECORD));
+		}
+
+		if (s[0]=='s')//stop
 		{
 			printf("stop...\n");
+			pSeq->command(SequencerCommandFactory::command(SC_TRANSPORT_STOP));
 		}
 
 	}

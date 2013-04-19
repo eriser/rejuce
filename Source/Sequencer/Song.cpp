@@ -42,6 +42,7 @@ Song::~Song()
 
 void Song::play()
 {
+	_pCurrentPattern->play();
 	_state = SONG_PLAYING;
 }
 
