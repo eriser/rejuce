@@ -28,9 +28,8 @@ class Phrase
 
 public:
 	Phrase();
-	Phrase(MidiMessageCollector* pCollector,int channel);
 	virtual ~Phrase();
-	void init(MidiMessageCollector* pCollector,int channel);
+	void init(int channel);
 
 	void setLengthBars(int bars);
 	int getLengthBars();
@@ -49,7 +48,7 @@ protected:
 	void addEvent(MidiMessage m); // new events merged on next Play or Stop
 
 	// has to be called on time
-	int tick();
+	int tick(MidiMessageCollector* pCollector);
 
 private:
 	void MergeScratchBuffer();
@@ -66,7 +65,6 @@ private:
 	int _curMessageClock;
 	bool _haveEvent;
 
-	MidiMessageCollector* _pCollector;
 	int _lengthBars;
     int _timeSigNumerator;
     int _timeSigDenominator;

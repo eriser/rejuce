@@ -38,7 +38,7 @@ int main (int argc, char* argv[])
 {
 //	CoInitialize(NULL);
 
-/*	// setup audio and midi in
+	// setup audio and midi in
 	AudioDeviceManager adm;	
 	DBG("list audio device types");
 	for (int n=0;n<adm.getAvailableDeviceTypes().size();n++)
@@ -93,12 +93,11 @@ int main (int argc, char* argv[])
 
 	GlobalMidi gm;
 	adm.addMidiInputCallback("VMPK Output",&gm);
-	*/
 
-	MidiMessageCollector* collector = nullptr;//&app.getMidiMessageCollector();
-	//collector->reset(setup.sampleRate);
+	MidiMessageCollector* collector = &app.getMidiMessageCollector();
+	collector->reset(setup.sampleRate);
 	Sequencer* pSeq = getSequencerInstance(collector);
-/*
+
 	// wait
 	std::cout <<"q to quit..\n";
 	char s[10];s[0]='\0';
@@ -135,14 +134,14 @@ int main (int argc, char* argv[])
 
 	}
 
-*/
+
 	freeSequencer();
-/*
+
 	// cleanup
 	app.setProcessor(nullptr);
 	adm.removeAudioCallback(&app);
 	adm.removeMidiInputCallback("4- PCR MIDI IN",&app);
-*/
+
 //	CoUninitialize();
     return 0;
 }

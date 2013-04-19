@@ -13,14 +13,13 @@ Pattern::Pattern()
 	{
 		_phrases[i] = new Phrase();
 	}
-	init(nullptr);
+	init();
 }
 
-void Pattern::init(MidiMessageCollector* pMessageCollector)
+void Pattern::init()
 {
 	_activePhrase=0;
 	_checkedOutPhrase=-1;
-	_pMessageCollector=pMessageCollector;
 	_clock=0;
 	_state = PATTERN_STOPPED;
 
@@ -29,12 +28,13 @@ void Pattern::init(MidiMessageCollector* pMessageCollector)
 		setActivePhrase(i);
 		Phrase* phrase = checkoutActivePhrase();
 
-		phrase->init(pMessageCollector,i);
+		phrase->init(i);
 
 		checkinActivePhrase();
 
 		_mutes[i]=false;
 	}
+	setActivePhrase(0);
 }
 
 Pattern::~Pattern()
@@ -109,7 +109,7 @@ void Pattern::clear()
 }
 
 // has to be called on time
-int Pattern::tick()
+int Pattern::tick(MidiMessageCollector* pCollector)
 {
 	int ret = _clock;
 
@@ -117,7 +117,7 @@ int Pattern::tick()
 	{
 		for (int i=0;i<16;i++)
 		{
-			_phrases[i]->tick();
+			_phrases[i]->tick(pCollector);
 		}
 
 		ret = _clock;

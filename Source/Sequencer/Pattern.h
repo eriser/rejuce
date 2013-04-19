@@ -23,7 +23,7 @@ class Song;
 class Pattern {
 public:
 	Pattern();
-	void init(MidiMessageCollector* collector);
+	void init();
 	virtual ~Pattern();
 
 	// control/transport
@@ -42,7 +42,7 @@ public:
 	int getLengthClocks();
 
 	// has to be called on time
-	int tick();
+	int tick(MidiMessageCollector* pCollector);
 
 	void setActivePhrase(int i);
 
@@ -62,7 +62,6 @@ private:
 
 	PatternState _state;
 
-	MidiMessageCollector* _pMessageCollector;
 };
 
 #endif /* PATTERN_H_ */

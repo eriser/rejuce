@@ -31,8 +31,7 @@ void freeSequencer()
 
 Sequencer::Sequencer() : Thread ("Sequencer")
 {
-	_bpm = 120.0f;
-	_pMessageCollector = nullptr;
+	init (nullptr);
 }
 
 Sequencer::~Sequencer()
@@ -42,8 +41,10 @@ Sequencer::~Sequencer()
 
 void Sequencer::init(MidiMessageCollector* collector)
 {
+	_bpm = 120.0f;
 	_pMessageCollector = collector;
-	_song.init(collector);
+
+	_song.init();
 }
 
 void Sequencer::run()
@@ -61,6 +62,8 @@ void Sequencer::run()
 		// wait
 		Time::waitForMillisecondCounter(start+PHRASE_DELAY_MSEC(_bpm));
 	}
+
+	DBG("sequencer thread exiting");
 }
 
 int Sequencer::tick()

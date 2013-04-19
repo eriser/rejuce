@@ -9,18 +9,13 @@
 
 Phrase::Phrase()
 {
+	init(0);
 }
 
-Phrase::Phrase(MidiMessageCollector* pCollector,int channel)
-{
-	init(pCollector,channel);
-}
-
-void Phrase::init(MidiMessageCollector* pCollector,int channel)
+void Phrase::init(int channel)
 {
 	_channel = channel;
 	_state = PHRASE_STOPPED;
-	_pCollector = pCollector;
 	_lengthBars = 1;
 	_timeSigNumerator = 4;
 	_timeSigDenominator = 4;
@@ -103,7 +98,7 @@ void Phrase::debug()
 
 }
 
-int Phrase::tick()
+int Phrase::tick(MidiMessageCollector* pCollector)
 {
 	int ret = _clock;
 
@@ -121,7 +116,7 @@ int Phrase::tick()
 				{
 					// get it in the queue
 					MidiMessage m(_curMessage);
-					_pCollector->addMessageToQueue(m);
+					pCollector->addMessageToQueue(m);
 					_haveEvent = false;
 
 					_DebugEvent(_clock,m);
@@ -149,7 +144,7 @@ int Phrase::tick()
 					{
 						// its not in the future, so get it in the queue
 						MidiMessage m(_curMessage);
-						_pCollector->addMessageToQueue(m);
+						pCollector->addMessageToQueue(m);
 						_haveEvent = false;
 
 						_DebugEvent(_clock,m);
@@ -194,7 +189,6 @@ void Phrase::stop()
 
 	_clock =0;
 	_haveEvent = false;
-	_curMessage =0;
 	_curMessageClock =0;
 
 

@@ -22,7 +22,7 @@ class Song {
 public:
 
 	Song();
-	void init(MidiMessageCollector* pMessageCollector);
+	void init();
 	virtual ~Song();
 
 	// live operations
@@ -35,7 +35,7 @@ public:
 	void setBpm(float bpm);
 	float getBpm();
 
-	int tick();
+	int tick(MidiMessageCollector* pCollector);
 
 	void addEvent(MidiMessage m); // new events merged on next Play or Stop
 	void clear();

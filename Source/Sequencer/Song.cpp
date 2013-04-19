@@ -15,11 +15,11 @@ Song::Song()
 	}
 }
 
-void Song::init(MidiMessageCollector* pMessageCollector)
+void Song::init()
 {
 	for (int i=0;i<16;i++)
 	{
-		_patterns[i]->init(pMessageCollector);
+		_patterns[i]->init();
 	}
 
 	_state = SONG_STOPPED;
@@ -87,13 +87,13 @@ float Song::getBpm()
 }
 
 
-int Song::tick()
+int Song::tick(MidiMessageCollector* pCollector)
 {
 	int ret = _clock;
 
 	if (_state==SONG_PLAYING)
 	{
-		_pCurrentPattern->tick();
+		_pCurrentPattern->tick(pCollector);
 
 		ret = _clock;
 
