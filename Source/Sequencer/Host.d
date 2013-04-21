@@ -1,5 +1,5 @@
-../../Source/Sequencer/Sequencer.o: ../../Source/Sequencer/Sequencer.cpp \
- ../../Source/Sequencer/Sequencer.h \
+../../Source/Sequencer/Host.o: ../../Source/Sequencer/Host.cpp \
+ ../../Source/Sequencer/Host.h \
  ../../Source/Sequencer/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Sequencer/../../JuceLibraryCode/AppConfig.h \
  ../../Source/Sequencer/../../JuceLibraryCode/modules/juce_audio_basics/juce_audio_basics.h \
@@ -309,5 +309,66 @@
  ../../Source/Sequencer/../../JuceLibraryCode/modules/juce_data_structures/app_properties/juce_ApplicationProperties.h \
  ../../Source/Sequencer/../../JuceLibraryCode/modules/juce_data_structures/app_properties/juce_PropertiesFile.h \
  ../../Source/Sequencer/../../JuceLibraryCode/modules/juce_events/juce_events.h \
- ../../Source/Sequencer/Phrase.h ../../Source/Sequencer/Pattern.h \
- ../../Source/Sequencer/Song.h ../../Source/Sequencer/HostCommand.h
+ ../../Source/Sequencer/HostCommand.h ../../Source/Sequencer/Song.h \
+ ../../Source/Sequencer/Pattern.h ../../Source/Sequencer/Phrase.h \
+ ../../Source/Sequencer/../Noisemaker/TalCore.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/AudioUtils.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/Params.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/SynthEngine.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/AudioUtils.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/SynthVoice.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/Vco.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/Osc.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/OscSaw.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/BlepData.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/OscPulse.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/OscTriangle.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/OscSin.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/OscNoise.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/LfoHandler1.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/LfoHandler.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/Lfo.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/LfoHandler2.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/AdsrHandler.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/Adsr.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/FilterHandler.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/Decimator.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/Interpolatorlinear.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/FilterLp24db.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/FilterLp18db.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/FilterLp12db.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/FilterLp06db.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/FilterHp24db.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/FilterBp24db.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/FilterN24db.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/FilterStateVariable12db.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/FilterMoog24.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/Portamento.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/PitchwheelHandler.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/VelocityHandler.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/HighPass.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/VoiceManager.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/ParamChangeUtil.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/StereoPan.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Chorus/ChorusEngine.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Chorus/Chorus.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Chorus/../../Engine/Lfo.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Chorus/OnePoleLP.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Chorus/../../Engine/Params.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Chorus/DCBlock.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Delay/DelayEngine.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Delay/Delay.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Delay/TalEq.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Delay/Filter6dB.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Delay/HighPass.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Delay/../../Engine/AudioUtils.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Reverb/ReverbEngine.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Reverb/TalReverb.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Reverb/AllPassFilter.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Reverb/../../Engine/AudioUtils.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Reverb/CombFilter.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Reverb/NoiseGenerator.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Reverb/Filter.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/../Effects/Reverb/../../Engine/Params.h \
+ ../../Source/Sequencer/../Noisemaker/./Engine/Params.h \
+ ../../Source/Sequencer/../Noisemaker/TalPreset.h

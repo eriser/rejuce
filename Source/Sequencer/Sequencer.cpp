@@ -100,9 +100,9 @@ void Sequencer::midiEvent(MidiMessage m)
 	}
 }
 
-bool Sequencer::command(SequencerCommand c)
+bool Sequencer::command(HostCommand c)
 {
-	if (c.name != SC_INVALID)
+	if (c.name != HC_INVALID)
 	{
 		_commandSection.enter();
 		_commandCollector.add(c);
@@ -120,7 +120,7 @@ void Sequencer::executeCommands()
 	int s = _commandCollector.size();
 	for (int i=0;i<s;i++)
 	{
-		SequencerCommand* pCommand = &_commandCollector.getReference(i);
+		HostCommand* pCommand = &_commandCollector.getReference(i);
 
 		executeCommand(pCommand);
 	}
@@ -129,15 +129,15 @@ void Sequencer::executeCommands()
 	_commandSection.exit();
 }
 
-void Sequencer::executeCommand(SequencerCommand* c)
+void Sequencer::executeCommand(HostCommand* c)
 {
 	switch (c->name)
 	{
-	case SC_TRANSPORT_PAUSE:
-	case SC_TRANSPORT_PLAY:
-	case SC_TRANSPORT_RECORD:
-	case SC_TRANSPORT_REWIND:
-	case SC_TRANSPORT_STOP:
+	case HC_TRANSPORT_PAUSE:
+	case HC_TRANSPORT_PLAY:
+	case HC_TRANSPORT_RECORD:
+	case HC_TRANSPORT_REWIND:
+	case HC_TRANSPORT_STOP:
 		commandTransport(c);
 		break;
 
@@ -146,30 +146,30 @@ void Sequencer::executeCommand(SequencerCommand* c)
 	}
 }
 
-void Sequencer::commandTransport(SequencerCommand* c)
+void Sequencer::commandTransport(HostCommand* c)
 {
 	switch (c->name)
 	{
-	case SC_TRANSPORT_PAUSE:
+	case HC_TRANSPORT_PAUSE:
 		_transportState = TRANSPORT_PAUSED;
 		break;
 
-	case SC_TRANSPORT_PLAY:
+	case HC_TRANSPORT_PLAY:
 		_transportState = TRANSPORT_PLAYING;
 		_song.play();
 		break;
 
-	case SC_TRANSPORT_RECORD:
+	case HC_TRANSPORT_RECORD:
 		_transportState = TRANSPORT_RECORDING;
 		_song.play();
 		break;
 
-	case SC_TRANSPORT_REWIND:
+	case HC_TRANSPORT_REWIND:
 		_song.stop();
 		_song.play();
 		break;
 
-	case SC_TRANSPORT_STOP:
+	case HC_TRANSPORT_STOP:
 		_song.stop();
 		break;
 
