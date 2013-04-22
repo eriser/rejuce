@@ -310,5 +310,5 @@
  ../../Source/../JuceLibraryCode/modules/juce_events/juce_events.h \
  ../../Source/Sequencer/Host.h \
  ../../Source/Sequencer/../../JuceLibraryCode/JuceHeader.h \
- ../../Source/Sequencer/HostCommand.h ../../Source/Sequencer/Song.h \
+ ../../Source/Sequencer/HostEvent.h ../../Source/Sequencer/Song.h \
  ../../Source/Sequencer/Pattern.h ../../Source/Sequencer/Phrase.h

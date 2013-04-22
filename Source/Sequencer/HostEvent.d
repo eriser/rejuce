@@ -1,5 +1,5 @@
-../../Source/Sequencer/gbseq.o: ../../Source/Sequencer/gbseq.cpp \
- ../../Source/Sequencer/gbseq.h \
+../../Source/Sequencer/HostEvent.o: ../../Source/Sequencer/HostEvent.cpp \
+ ../../Source/Sequencer/HostEvent.h \
  ../../Source/Sequencer/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Sequencer/../../JuceLibraryCode/AppConfig.h \
  ../../Source/Sequencer/../../JuceLibraryCode/modules/juce_audio_basics/juce_audio_basics.h \

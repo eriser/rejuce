@@ -100,7 +100,7 @@ void Sequencer::midiEvent(MidiMessage m)
 	}
 }
 
-bool Sequencer::command(HostCommand c)
+bool Sequencer::command(HostEvent c)
 {
 	if (c.name != HC_INVALID)
 	{
@@ -120,7 +120,7 @@ void Sequencer::executeCommands()
 	int s = _commandCollector.size();
 	for (int i=0;i<s;i++)
 	{
-		HostCommand* pCommand = &_commandCollector.getReference(i);
+		HostEvent* pCommand = &_commandCollector.getReference(i);
 
 		executeCommand(pCommand);
 	}
@@ -129,7 +129,7 @@ void Sequencer::executeCommands()
 	_commandSection.exit();
 }
 
-void Sequencer::executeCommand(HostCommand* c)
+void Sequencer::executeCommand(HostEvent* c)
 {
 	switch (c->name)
 	{
@@ -146,7 +146,7 @@ void Sequencer::executeCommand(HostCommand* c)
 	}
 }
 
-void Sequencer::commandTransport(HostCommand* c)
+void Sequencer::commandTransport(HostEvent* c)
 {
 	switch (c->name)
 	{

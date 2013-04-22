@@ -25,8 +25,6 @@ Host::Host()
 Host::~Host()
 {
 	_graph.clear();
-
-
 }
 
 void Host::listInterfaces()
@@ -52,6 +50,8 @@ void Host::listInterfaces()
 
 bool Host::init(String audioDeviceType,String audioInterface,String midiInterface,int sampleRate)
 {
+	listInterfaces();
+
 	_adm.setCurrentAudioDeviceType(audioDeviceType,true);
 	AudioDeviceManager::AudioDeviceSetup ds;
 	ds.outputDeviceName = audioInterface;
@@ -62,6 +62,7 @@ bool Host::init(String audioDeviceType,String audioInterface,String midiInterfac
 		DBG(error);
 		return false;
 	}
+
 	_adm.playTestSound();
 
 	// midi setup
@@ -72,7 +73,6 @@ bool Host::init(String audioDeviceType,String audioInterface,String midiInterfac
 		return false;
 	}
 
-	_adm.addMidiInputCallback(midiInterface,this);
 	_midiInterfaceName = midiInterface;
 
 	return true;
@@ -80,6 +80,7 @@ bool Host::init(String audioDeviceType,String audioInterface,String midiInterfac
 
 void Host::start()
 {
+	_adm.addMidiInputCallback(_midiInterfaceName,this);
 	_app.setProcessor(&_graph);
 	_adm.addAudioCallback(&_app);
 }
@@ -91,8 +92,15 @@ void Host::stop()
 	_adm.removeMidiInputCallback(_midiInterfaceName,this);
 }
 
-bool Host::command(HostCommand c)
+bool Host::event(HostEvent c)
 {
+	// if this is a midi message we want to pass it straight to the
+	// correct synth.
+	if (c.name == HC_MIDI_EVENT)
+	{
+		//todo
+	}
+
 	if (c.name != HC_INVALID)
 	{
 		_commandSection.enter();
@@ -107,5 +115,16 @@ bool Host::command(HostCommand c)
 void Host::handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message)
 {
 	DBG("have midi");
+
+	// convert to event
+	int raw;
+	memcpy(&raw,message.getRawData(),jmin(message.getRawDataSize(),4));
+
+	float timestamp = message.getTimeStamp();
+	int timestampAsInt;
+	memcpy(&timestampAsInt,&timestamp,4);
+
+	// fire it
+	event(HostEventFactory::command(HC_MIDI_EVENT,timestampAsInt,raw));
 }
 

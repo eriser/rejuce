@@ -13,7 +13,7 @@
 #include "Phrase.h"
 #include "Pattern.h"
 #include "Song.h"
-#include "HostCommand.h"
+#include "HostEvent.h"
 
 enum TransportState
 {
@@ -33,17 +33,17 @@ public:
 	void start();
 	void stop();
 
-	bool command(HostCommand c);
+	bool command(HostEvent c);
 
 private:
 	void run();
 	int tick();
 	void midiEvent(MidiMessage m);
 	void executeCommands();
-	void executeCommand(HostCommand* c);
+	void executeCommand(HostEvent* c);
 
 private:
-	void commandTransport(HostCommand* c);
+	void commandTransport(HostEvent* c);
 
 private:
 	MidiMessageCollector* _pMessageCollector;
@@ -52,7 +52,7 @@ private:
 
 	TransportState _transportState;
 
-	Array <HostCommand> _commandCollector;
+	Array <HostEvent> _commandCollector;
 	CriticalSection _commandSection;	// TODO: remove this, use a lockless FIFO command queue
 };
 

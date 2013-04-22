@@ -10,7 +10,7 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 
-#include "HostCommand.h"
+#include "HostEvent.h"
 #include "Song.h"
 
 class Host: public  MidiInputCallback {
@@ -25,7 +25,7 @@ public:
 	void start();
 	void stop();
 
-	bool command(HostCommand c);
+	bool event(HostEvent c);
 
 private:
 	void handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message);
@@ -38,7 +38,7 @@ private:
 
 	Array <AudioProcessor*> _synthArray;	//our 16 synths
 
-	Array <HostCommand> _commandCollector;
+	Array <HostEvent> _commandCollector;
 	CriticalSection _commandSection;	// TODO: remove this, use FIFO
 };
 
