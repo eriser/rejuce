@@ -11,7 +11,7 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 
 #include "HostEvent.h"
-#include "Song.h"
+#include "Sequencer.h"
 
 class Host: public  MidiInputCallback {
 public:
@@ -21,9 +21,6 @@ public:
 	void listInterfaces();
 
 	bool init(String audioDeviceType,String audioInterface,String midiInterface,int sampleRate);
-
-	void start();
-	void stop();
 
 	bool event(HostEvent c);
 
@@ -38,8 +35,7 @@ private:
 
 	Array <AudioProcessor*> _synthArray;	//our 16 synths
 
-	Array <HostEvent> _commandCollector;
-	CriticalSection _commandSection;	// TODO: remove this, use FIFO
+	Sequencer _sequencer;
 };
 
 #endif /* HOST_H_ */

@@ -7,14 +7,14 @@
 
 #include "HostEvent.h"
 
-HostEvent HostEventFactory::command(HostEvent* c)
+HostEvent HostEventFactory::event(HostEvent* c)
 {
 	HostEvent sc;
 	memcpy(&sc,c,sizeof(HostEvent));
 	return sc;
 }
 
-HostEvent HostEventFactory::command(HostEventName name)
+HostEvent HostEventFactory::event(HostEventName name)
 {
 	HostEvent sc;
 	sc.name = name;
@@ -23,7 +23,7 @@ HostEvent HostEventFactory::command(HostEventName name)
 	return sc;
 }
 
-HostEvent HostEventFactory::command(HostEventName name,int arg0)
+HostEvent HostEventFactory::event(HostEventName name,int arg0)
 {
 	HostEvent sc;
 	sc.name = name;
@@ -33,7 +33,7 @@ HostEvent HostEventFactory::command(HostEventName name,int arg0)
 	return sc;
 }
 
-HostEvent HostEventFactory::command(HostEventName name,int arg0,int arg1)
+HostEvent HostEventFactory::event(HostEventName name,int arg0,int arg1)
 {
 	HostEvent sc;
 	sc.name = name;
@@ -44,7 +44,7 @@ HostEvent HostEventFactory::command(HostEventName name,int arg0,int arg1)
 	return sc;
 }
 
-HostEvent HostEventFactory::command(HostEventName name,int arg0,int arg1,int arg2)
+HostEvent HostEventFactory::event(HostEventName name,int arg0,int arg1,int arg2)
 {
 	HostEvent sc;
 	sc.name = name;
@@ -54,6 +54,24 @@ HostEvent HostEventFactory::command(HostEventName name,int arg0,int arg1,int arg
 	sc.argv[2]=arg2;
 	validate(&sc);
 	return sc;
+}
+
+HostEvent HostEventFactory::event(const MidiMessage& message)
+{
+	// convert to event
+	int raw[3];
+	double timestamp = message.getTimeStamp();
+	memcpy(&raw[0],message.getRawData(),jmin(message.getRawDataSize(),4));		// first int is midi message (4 bytes max)
+	memcpy(&raw[1],&timestamp,8);
+
+	return HostEventFactory::event(HC_MIDI_EVENT,raw[0],raw[1],raw[2]);
+}
+
+MidiMessage HostEventFactory::midiMessageFromEvent(HostEvent* c)
+{
+	double* timestamp = (double*)&c->argv[1];
+	MidiMessage m(&c->argv[0],4,*timestamp);
+	return m;
 }
 
 

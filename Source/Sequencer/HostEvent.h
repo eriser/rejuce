@@ -38,11 +38,14 @@ struct HostEvent
 
 class HostEventFactory {
 public:
-	static HostEvent command(HostEvent* c);
-	static HostEvent command(HostEventName name);
-	static HostEvent command(HostEventName name,int arg0);
-	static HostEvent command(HostEventName name,int arg0,int arg1);
-	static HostEvent command(HostEventName name,int arg0,int arg1,int arg2);
+	static HostEvent event(HostEvent* c);
+	static HostEvent event(HostEventName name);
+	static HostEvent event(HostEventName name,int arg0);
+	static HostEvent event(HostEventName name,int arg0,int arg1);
+	static HostEvent event(HostEventName name,int arg0,int arg1,int arg2);
+
+	static HostEvent event(const MidiMessage& message);
+	static MidiMessage midiMessageFromEvent(HostEvent* c);
 
 private:
 	static void validate(HostEvent* c);

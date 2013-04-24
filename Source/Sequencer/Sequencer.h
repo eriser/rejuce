@@ -33,14 +33,14 @@ public:
 	void start();
 	void stop();
 
-	bool command(HostEvent c);
+	bool event(HostEvent c);
 
 private:
 	void run();
 	int tick();
 	void midiEvent(MidiMessage m);
-	void executeCommands();
-	void executeCommand(HostEvent* c);
+	void executeEvents();
+	void executeEvent(HostEvent* c);
 
 private:
 	void commandTransport(HostEvent* c);

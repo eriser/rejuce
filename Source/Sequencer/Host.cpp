@@ -24,7 +24,13 @@ Host::Host()
 
 Host::~Host()
 {
+	_sequencer.stop();
+
 	_graph.clear();
+
+	_app.setProcessor(nullptr);
+	_adm.removeAudioCallback(&_app);
+	_adm.removeMidiInputCallback(_midiInterfaceName,this);
 }
 
 void Host::listInterfaces()
@@ -75,56 +81,65 @@ bool Host::init(String audioDeviceType,String audioInterface,String midiInterfac
 
 	_midiInterfaceName = midiInterface;
 
-	return true;
-}
-
-void Host::start()
-{
+	// start things up
 	_adm.addMidiInputCallback(_midiInterfaceName,this);
 	_app.setProcessor(&_graph);
 	_adm.addAudioCallback(&_app);
-}
 
-void Host::stop()
-{
-	_app.setProcessor(nullptr);
-	_adm.removeAudioCallback(&_app);
-	_adm.removeMidiInputCallback(_midiInterfaceName,this);
+	// sequencer initialisation
+	_sequencer.init(&_app.getMidiMessageCollector());
+	_sequencer.start();
+
+	return true;
 }
 
 bool Host::event(HostEvent c)
 {
+	bool ret = false;
+	bool bHandled = false;
+
 	// if this is a midi message we want to pass it straight to the
 	// correct synth.
 	if (c.name == HC_MIDI_EVENT)
 	{
-		//todo
-	}
+		// convert to midi message and check channel
+		MidiMessage message = HostEventFactory::midiMessageFromEvent(&c);
+		int channel = message.getChannel();
+		if (channel>0)
+		{
+			// valid channel, so convert to 0-based
+			channel--;
 
-	if (c.name != HC_INVALID)
+			// do we have a synth on this channel?
+			if (channel < _synthArray.size())
+			{
+				// add the message to the graph player queue
+				_app.getMidiMessageCollector().addMessageToQueue(message);
+			}
+		}
+	}
+	else
 	{
-		_commandSection.enter();
-		_commandCollector.add(c);
-		_commandSection.exit();
+		// TODO: some events will be system events that we need to handle here, immediately.
+		// load and save kinda stuff probably.
 
-		return true;
+		// TODO: set bHandled to true if we handled it
 	}
-	return false;
+
+	// give the event to the sequencer if its not been handled already
+	if (c.name != HC_INVALID && !bHandled)
+	{
+		ret = _sequencer.event(c);
+	}
+
+	return ret;
 }
 
 void Host::handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message)
 {
 	DBG("have midi");
 
-	// convert to event
-	int raw;
-	memcpy(&raw,message.getRawData(),jmin(message.getRawDataSize(),4));
-
-	float timestamp = message.getTimeStamp();
-	int timestampAsInt;
-	memcpy(&timestampAsInt,&timestamp,4);
-
 	// fire it
-	event(HostEventFactory::command(HC_MIDI_EVENT,timestampAsInt,raw));
+	event(HostEventFactory::event(message));
 }
 

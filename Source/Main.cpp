@@ -29,36 +29,32 @@ int main (int argc, char* argv[])
 	}
 	else
 	{
-		host->start();
-
 		// wait
 		std::cout <<"q to quit..\n";
 		char s[10];s[0]='\0';
 		while (s[0]!='q')
 		{
+			s[0]='\0';
 			std::cin >> s;
 
 			if (s[0]=='p')//play
 			{
 				printf("play...\n");
-				host->event(HostEventFactory::command(HC_TRANSPORT_PLAY));
+				host->event(HostEventFactory::event(HC_TRANSPORT_PLAY));
 			}
 
 			if (s[0]=='r')//record
 			{
 				printf("record...\n");
-				host->event(HostEventFactory::command(HC_TRANSPORT_RECORD));
+				host->event(HostEventFactory::event(HC_TRANSPORT_RECORD));
 			}
 
 			if (s[0]=='s')//stop
 			{
 				printf("stop...\n");
-				host->event(HostEventFactory::command(HC_TRANSPORT_STOP));
+				host->event(HostEventFactory::event(HC_TRANSPORT_STOP));
 			}
-
 		}
-
-		host->stop();
 	}
 
 	delete host;

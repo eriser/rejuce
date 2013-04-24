@@ -56,7 +56,7 @@ void Sequencer::run()
 		double start = Time::getMillisecondCounterHiRes();
 
 		// execute all commands
-		executeCommands();
+		executeEvents();
 
 		// tick
 		tick();
@@ -72,11 +72,7 @@ int Sequencer::tick()
 {
 	int t = 0;
 
-	if (_transportState == TRANSPORT_PLAYING ||
-		_transportState == TRANSPORT_RECORDING)
-	{
-		t = _song.tick(_pMessageCollector);
-	}
+	t = _song.tick(_pMessageCollector);
 
 	return t;
 }
@@ -100,7 +96,7 @@ void Sequencer::midiEvent(MidiMessage m)
 	}
 }
 
-bool Sequencer::command(HostEvent c)
+bool Sequencer::event(HostEvent c)
 {
 	if (c.name != HC_INVALID)
 	{
@@ -113,7 +109,7 @@ bool Sequencer::command(HostEvent c)
 	return false;
 }
 
-void Sequencer::executeCommands()
+void Sequencer::executeEvents()
 {
 	_commandSection.enter();
 
@@ -122,14 +118,14 @@ void Sequencer::executeCommands()
 	{
 		HostEvent* pCommand = &_commandCollector.getReference(i);
 
-		executeCommand(pCommand);
+		executeEvent(pCommand);
 	}
 	_commandCollector.clear();
 
 	_commandSection.exit();
 }
 
-void Sequencer::executeCommand(HostEvent* c)
+void Sequencer::executeEvent(HostEvent* c)
 {
 	switch (c->name)
 	{
@@ -152,6 +148,7 @@ void Sequencer::commandTransport(HostEvent* c)
 	{
 	case HC_TRANSPORT_PAUSE:
 		_transportState = TRANSPORT_PAUSED;
+		_song.pause();
 		break;
 
 	case HC_TRANSPORT_PLAY:
