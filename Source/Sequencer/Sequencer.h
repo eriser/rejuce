@@ -13,7 +13,7 @@
 #include "Phrase.h"
 #include "Pattern.h"
 #include "Song.h"
-#include "HostEvent.h"
+#include "../Host/HostEvent.h"
 
 enum TransportState
 {

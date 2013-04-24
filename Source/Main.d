@@ -308,8 +308,11 @@
  ../../Source/../JuceLibraryCode/modules/juce_data_structures/app_properties/juce_ApplicationProperties.h \
  ../../Source/../JuceLibraryCode/modules/juce_data_structures/app_properties/juce_PropertiesFile.h \
  ../../Source/../JuceLibraryCode/modules/juce_events/juce_events.h \
- ../../Source/Sequencer/Host.h \
- ../../Source/Sequencer/../../JuceLibraryCode/JuceHeader.h \
- ../../Source/Sequencer/HostEvent.h ../../Source/Sequencer/Sequencer.h \
- ../../Source/Sequencer/Phrase.h ../../Source/Sequencer/Pattern.h \
- ../../Source/Sequencer/Song.h
+ ../../Source/Host/Host.h \
+ ../../Source/Host/../../JuceLibraryCode/JuceHeader.h \
+ ../../Source/Host/HostEvent.h ../../Source/Host/../Sequencer/Sequencer.h \
+ ../../Source/Host/../Sequencer/../../JuceLibraryCode/JuceHeader.h \
+ ../../Source/Host/../Sequencer/Phrase.h \
+ ../../Source/Host/../Sequencer/Pattern.h \
+ ../../Source/Host/../Sequencer/Song.h \
+ ../../Source/Host/../Sequencer/../Host/HostEvent.h
