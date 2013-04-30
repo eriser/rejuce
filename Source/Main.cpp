@@ -60,5 +60,7 @@ int main (int argc, char* argv[])
 	delete host;
 
 //	CoUninitialize();
+
+	DBG("exiting OK\n");
     return 0;
 }

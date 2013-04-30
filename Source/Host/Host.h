@@ -11,6 +11,7 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 
 #include "HostEvent.h"
+#include "HostProcessor.h"
 #include "../Sequencer/Sequencer.h"
 
 class Host: public  MidiInputCallback {
@@ -29,11 +30,9 @@ private:
 
 private:
 	AudioDeviceManager _adm;
-	AudioProcessorGraph _graph;
+	HostProcessor* _hostProcessor;
 	AudioProcessorPlayer _app;
 	String _midiInterfaceName;
-
-	Array <AudioProcessor*> _synthArray;	//our 16 synths
 
 	Sequencer _sequencer;
 };

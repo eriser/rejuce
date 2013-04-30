@@ -13,22 +13,20 @@ Host::Host()
 {
 	// TODO: at the moment there is only one synth!!!
 	AudioProcessor* gs = new TalCore();
-	_synthArray.add(gs);
 
-	// add to graph
-	for (int i=0;i<_synthArray.size();i++)
-	{
-		_graph.addNode(_synthArray[i],i);
-	}
+	_hostProcessor = new HostProcessor();
+
+	_hostProcessor->hostAddSynth(gs);
+
 }
 
 Host::~Host()
 {
 	_sequencer.stop();
 
-	_graph.clear();
 
 	_app.setProcessor(nullptr);
+	delete _hostProcessor;
 	_adm.removeAudioCallback(&_app);
 	_adm.removeMidiInputCallback(_midiInterfaceName,this);
 }
@@ -83,7 +81,7 @@ bool Host::init(String audioDeviceType,String audioInterface,String midiInterfac
 
 	// start things up
 	_adm.addMidiInputCallback(_midiInterfaceName,this);
-	_app.setProcessor(&_graph);
+	_app.setProcessor(_hostProcessor);
 	_adm.addAudioCallback(&_app);
 
 	// sequencer initialisation
@@ -104,19 +102,9 @@ bool Host::event(HostEvent c)
 	{
 		// convert to midi message and check channel
 		MidiMessage message = HostEventFactory::midiMessageFromEvent(&c);
-		int channel = message.getChannel();
-		if (channel>0)
-		{
-			// valid channel, so convert to 0-based
-			channel--;
 
-			// do we have a synth on this channel?
-			if (channel < _synthArray.size())
-			{
-				// add the message to the graph player queue
-				_app.getMidiMessageCollector().addMessageToQueue(message);
-			}
-		}
+		// add the message to the graph player queue
+		_app.getMidiMessageCollector().addMessageToQueue(message);
 	}
 	else
 	{
