@@ -77,7 +77,7 @@ void HostProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 
 	for (int channel=0;channel<_synths.size();channel++)
 	{
-		_synths.getReference(channel)->prepareToPlay(sampleRate,samplesPerBlock);
+		_synths[channel]->prepareToPlay(sampleRate,samplesPerBlock);
 	}
 
 }
@@ -221,6 +221,10 @@ double HostProcessor::getTailLengthSeconds() const
 
 void HostProcessor::hostAddSynth(AudioProcessor* synth)
 {
+
+	synth->setPlayConfigDetails (0, 2,getSampleRate(), getBlockSize());
+	synth->prepareToPlay(getSampleRate(),getBlockSize());
+
 	_synths.add(synth);
 }
 

@@ -24,7 +24,6 @@ Host::~Host()
 {
 	_sequencer.stop();
 
-
 	_app.setProcessor(nullptr);
 	delete _hostProcessor;
 	_adm.removeAudioCallback(&_app);
