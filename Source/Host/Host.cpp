@@ -124,8 +124,6 @@ bool Host::event(HostEvent c)
 
 void Host::handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message)
 {
-	DBG("have midi");
-
 	// fire it
 	event(HostEventFactory::event(message));
 }

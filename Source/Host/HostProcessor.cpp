@@ -234,6 +234,8 @@ const AudioProcessor* HostProcessor::hostGetSynth(int i)
 	{
 		return _synths.getReference(i);
 	}
+
+	return nullptr;
 }
 
 //==============================================================================
