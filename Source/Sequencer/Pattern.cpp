@@ -127,7 +127,6 @@ int Pattern::tick(MidiMessageCollector* pCollector)
 			_clock++;
 		else
 		{
-			DBG("ep.");
 			_clock=0;
 		}
 	}

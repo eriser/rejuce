@@ -137,6 +137,14 @@ void Sequencer::executeEvent(HostEvent* c)
 		commandTransport(c);
 		break;
 
+	case HC_PATTERN_SET_NEXT:
+		_song.setNextPattern(c->argv[0]);
+		break;
+
+	case HC_MIDI_EVENT:
+		_song.addEvent(HostEventFactory::midiMessageFromEvent(c));
+		break;
+
 	default:
 		break;
 	}

@@ -107,7 +107,6 @@ int Phrase::tick(MidiMessageCollector* pCollector)
 		// at least some events?
 		if (!_seq.isEmpty())
 		{
-
 			//do we have an event leftover from last time?
 			if (_haveEvent)
 			{
@@ -131,13 +130,10 @@ int Phrase::tick(MidiMessageCollector* pCollector)
 				{
 					_haveEvent = true;
 
-//printf("have message in loop clock %d, message clock = %d;\n",_clock,_curMessageClock);
-
 					// is it in the future?
 					if (_curMessageClock > _clock)
 					{
 						// yes, so bail
-//printf("break;\n");
 						break;
 					}
 					else if (_curMessageClock == _clock)
@@ -155,9 +151,16 @@ int Phrase::tick(MidiMessageCollector* pCollector)
 
 		// inc clock
 		if (_clock < _lengthClocks-1)
+		{
 			_clock++;
+		}
 		else
+		{
 			_clock=0;
+			_curMessageClock=0;
+			_haveEvent=false;
+			_pseqIter->setNextSamplePosition(0);
+		}
 
 	}// state==playing
 
@@ -174,7 +177,7 @@ void Phrase::MergeScratchBuffer()
 		_scratch.clear();
 	}
 
-	//printf("after merge\n");
+	//DBG("after merge\n");
 	//Debug();
 }
 
