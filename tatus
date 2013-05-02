@@ -1,0 +1,236 @@
+commit f3a977e1bf48095933d5b61c906486990b320f1b
+Author: gnvbx <gnvbx@gnvbx-VirtualBox.(none)>
+Date:   Thu May 2 21:12:48 2013 +0100
+
+    work on metronome
+
+commit 0b591a8d47deadc7aef1b694a9ecbca1b03260ef
+Author: gnvbx <gnvbx@gnvbx-VirtualBox.(none)>
+Date:   Thu May 2 16:38:09 2013 +0100
+
+    work on metronome
+
+commit 7cab3bfb58b65d9db7871438c5623e3bfaa24ab3
+Author: gnvbx <gnvbx@gnvbx-VirtualBox.(none)>
+Date:   Thu May 2 13:29:19 2013 +0100
+
+    fixes
+
+commit a81752bb6f1f6a774bddb7794f3a320833d8dfec
+Author: gnuvebox <gnuvebox@gnuvebox-VirtualBox.(none)>
+Date:   Tue Apr 30 17:11:25 2013 +0100
+
+    minor fix
+
+commit c1138c789d4695489b9b452eb1b58630a7e69c93
+Author: gnuvebox <gnuvebox@gnuvebox-VirtualBox.(none)>
+Date:   Tue Apr 30 16:51:41 2013 +0100
+
+    fixed host, its limping along
+
+commit c5616730b985bfbddfd301a653c31db94bdac366
+Author: gnuvebox <gnuvebox@gnuvebox-VirtualBox.(none)>
+Date:   Tue Apr 30 16:35:08 2013 +0100
+
+    some work on audioprocessor for host
+
+commit 54896e62c80d26e5373339f44c2a857637d9adcf
+Author: gnuvebox <gnuvebox@gnuvebox-VirtualBox.(none)>
+Date:   Wed Apr 24 18:05:43 2013 +0100
+
+    pruning
+
+commit 47806943d48d472b4e8fc171a06ed337c2aa0424
+Author: gnuvebox <gnuvebox@gnuvebox-VirtualBox.(none)>
+Date:   Wed Apr 24 18:00:43 2013 +0100
+
+    host directory changes
+
+commit 1a6e6ce22364a5a64ae5f108e6e80928ca4461d8
+Author: gnuvebox <gnuvebox@gnuvebox-VirtualBox.(none)>
+Date:   Wed Apr 24 16:47:53 2013 +0100
+
+    fixed host/sequencer interaction
+
+commit bc7486b79e1650d6ae0bc81350999cd5567739c3
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Mon Apr 22 20:30:28 2013 +0100
+
+    pruning
+
+commit fa5c554ee15dfda156245d15fe080df75bdda9fe
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Mon Apr 22 20:29:47 2013 +0100
+
+    some fixes
+
+commit fa149f3affe6b2ee2c83c1fe0fba37671aff6689
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Sun Apr 21 21:48:46 2013 +0100
+
+    bloody mem leak
+
+commit 0882026767233a66cea9e9b67a11625658d20146
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Fri Apr 19 14:13:52 2013 +0100
+
+    fixed errors, back where we started now, but with heirarchy sorted. need to fix only plays once error
+
+commit 87b003baf2dac7cb7b594dd6a0b1f628340b35bc
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Fri Apr 19 12:28:13 2013 +0100
+
+    fixed stupid bug
+
+commit 93dae86ca9c2a2379d0635ce7a23708d1b4c7cf9
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Thu Apr 18 21:35:22 2013 +0100
+
+    simplified arrays, some fuckup still
+
+commit 12081b73fe17e87b745cfa98400da351bb007f5b
+Author: gnuvebox <gnuvebox@gnuvebox-VirtualBox.(none)>
+Date:   Thu Apr 18 17:05:30 2013 +0100
+
+    bug tracking
+
+commit b1a2990ce756acd67c604594e3c1b1d11b63bbf4
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Wed Apr 17 21:47:22 2013 +0100
+
+    stuff
+
+commit c5e6be640c04a9a0df3cebba63e54994158ddca6
+Author: gnuvebox <gnuvebox@gnuvebox-VirtualBox.(none)>
+Date:   Wed Apr 17 17:06:19 2013 +0100
+
+    bummed up some references but fixed thread i think
+
+commit b3df0c17cce67bc651c251b9c859c4493c0d1adf
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Mon Apr 15 20:58:59 2013 +0100
+
+    pruning
+
+commit b2c9e5f3dbff9e8cdbe4130227c17566871b2d15
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Mon Apr 15 20:57:40 2013 +0100
+
+    minor changes
+
+commit a99b124424e0ab548934eace81b8f3217772e4d9
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Sun Apr 14 15:28:50 2013 +0100
+
+    seq changes
+
+commit e9aac0a89410e4814a46c3370874dc026b5b9e09
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Fri Apr 12 21:35:40 2013 +0100
+
+    pruning
+
+commit 9336d6386b04ca7ec6f2d9594f00f952dea7401a
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Fri Apr 12 21:34:16 2013 +0100
+
+    work on sequencer heirarchy
+
+commit 0cc063b0aa535f885dc7cd834b8e4083053ad213
+Author: gnuvebox <gnuvebox@gnuvebox-VirtualBox.(none)>
+Date:   Fri Apr 12 16:48:57 2013 +0100
+
+    work on sequencer heirarchy
+
+commit 68906ebbdbc1e84acf2d31d5133471bcc61400bf
+Author: gnuvebox <gnuvebox@gnuvebox-VirtualBox.(none)>
+Date:   Fri Apr 12 11:57:24 2013 +0100
+
+    removed xlib dependencies
+
+commit 6b62f85e22f92d78c9cc68e0d8b3f1d73cb5b438
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Thu Apr 11 21:28:51 2013 +0100
+
+    mostly fixed sequencer
+
+commit 5005b5914cc8cad3f76b08d2388c2a3895e16447
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Wed Apr 10 22:16:56 2013 +0100
+
+    work on seq not finished
+
+commit 6855af7c3d6d11bad50ae9c1ebe2ad4c175c3687
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Mon Apr 8 21:19:37 2013 +0100
+
+    work on sequencer
+
+commit a924209435a60703a8d9735f4bcb6ec96bc2c80f
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Sun Apr 7 21:39:00 2013 +0100
+
+    start making phrase, the sequence element of the sequencer
+
+commit 2ac8231b921ae3adbe7a832c9bd500b01785ffff
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Tue Apr 2 19:58:10 2013 +0100
+
+    typo
+
+commit 93e363ea37cd77e52a877382e687402ef32b7ab2
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Tue Apr 2 19:55:01 2013 +0100
+
+    built in tal noisemaker
+
+commit 69f6b5033c521527561f07dd743ff791cb5513d6
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Sat Mar 30 20:01:31 2013 +0000
+
+    final tidy makefile
+
+commit ebf9158dbe2d7dfc17a3483f56328df078fca7eb
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Sat Mar 30 19:15:49 2013 +0000
+
+    tidying
+
+commit 55e1de068100167837951c66295a186792dffa2d
+Author: mrchay <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Sat Mar 30 19:14:53 2013 +0000
+
+    hacked away at linux makefile
+
+commit b90d9dd0a6c77bf575fa9efc2ae480c7ac1d2bf3
+Author: gboxdev <gboxdev@gboxdev-VirtualBox.(none)>
+Date:   Sat Mar 30 19:07:59 2013 +0000
+
+    hacked away at linux makefile
+
+commit af63184d39cd2ce663d2184861b06854d1bb272d
+Author: chay <chay@mrchay.com>
+Date:   Wed Mar 27 15:48:50 2013 +0000
+
+    slight understanding.
+    
+    at least everyone struggles with sample rate/delta multiplications. was
+    beginning to think i was stupid.
+
+commit c79fc804f5467b086d567bfad49944540a867f32
+Author: chay <chay@mrchay.com>
+Date:   Tue Mar 26 18:38:54 2013 +0000
+
+    upsdates
+
+commit b9fef1eaf59412f4be6d38458a34db614829d8d5
+Author: chay <chay@mrchay.com>
+Date:   Tue Mar 26 18:33:43 2013 +0000
+
+    added utils
+
+commit c2b8d70d1ed3d92cdf9e309f4b5fcd45854f96ab
+Author: chay <chay@mrchay.com>
+Date:   Tue Mar 26 16:41:17 2013 +0000
+
+    first commit
