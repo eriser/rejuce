@@ -8,22 +8,21 @@
   ==============================================================================
 */
 
-#ifndef __HOSTPROCESSOR_H
-#define __HOSTPROCESSOR_H
+#ifndef __METRONOMEPROCESSOR_H_526ED7A9__
+#define __METRONOMEPROCESSOR_H_526ED7A9__
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 
-#include "../Metronome/MetronomeProcessor.h"
 
 //==============================================================================
 /**
 */
-class HostProcessor  : public AudioProcessor
+class MetronomeProcessor  : public AudioProcessor
 {
 public:
     //==============================================================================
-	HostProcessor();
-    ~HostProcessor();
+	MetronomeProcessor();
+    ~MetronomeProcessor();
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock);
@@ -36,7 +35,7 @@ public:
     void* createEditor();
 
     //==============================================================================
-    const String getName() const            { return "HostProcessor"; }
+    const String getName() const            { return "Metronome"; }
 
     int getNumParameters();
     float getParameter (int index);
@@ -65,40 +64,22 @@ public:
     void getStateInformation (MemoryBlock& destData);
     void setStateInformation (const void* data, int sizeInBytes);
 
-
-    ////////////////////////////////////////////////////////
-
-    void hostAddSynth(AudioProcessor* synth);
-    const AudioProcessor* hostGetSynth(int i);
-
-
-    /////////////////////////////////////////////////////////
-
-
-    //==============================================================================
-    // These properties are public so that our editor component can access them
-    // A bit of a hacky way to do it, but it's only a demo! Obviously in your own
-    // code you'll do this much more neatly..
-
     //==============================================================================
     enum Parameters
     {
-        gainParam = 0,
-        delayParam,
+        volumeParam = 0,
 
         totalNumParams
     };
 
-    float gain, delay;
+    float currentVolume;
 
 private:
-    Array<AudioProcessor*> _synths;
-    AudioSampleBuffer* _synthBuffers[16];
 
-    MetronomeProcessor* _metronome;
-    AudioSampleBuffer* _metronomeBuffer;
+    // the synth!
+    Synthesiser synth;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HostProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MetronomeProcessor)
 };
 
-#endif  // __HOSTPROCESSOR_H
+#endif  // __METRONOMEPROCESSOR_H_526ED7A9__

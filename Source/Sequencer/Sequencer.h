@@ -50,6 +50,7 @@ private:
 	float _bpm;
 	Song _song;
 
+
 	TransportState _transportState;
 
 	Array <HostEvent> _commandCollector;

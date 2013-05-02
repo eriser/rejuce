@@ -308,4 +308,6 @@
  ../../Source/Host/../../JuceLibraryCode/modules/juce_data_structures/values/../undomanager/juce_UndoableAction.h \
  ../../Source/Host/../../JuceLibraryCode/modules/juce_data_structures/app_properties/juce_ApplicationProperties.h \
  ../../Source/Host/../../JuceLibraryCode/modules/juce_data_structures/app_properties/juce_PropertiesFile.h \
- ../../Source/Host/../../JuceLibraryCode/modules/juce_events/juce_events.h
+ ../../Source/Host/../../JuceLibraryCode/modules/juce_events/juce_events.h \
+ ../../Source/Host/../Metronome/MetronomeProcessor.h \
+ ../../Source/Host/../Metronome/../../JuceLibraryCode/JuceHeader.h

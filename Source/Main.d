@@ -311,6 +311,8 @@
  ../../Source/Host/Host.h \
  ../../Source/Host/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Host/HostEvent.h ../../Source/Host/HostProcessor.h \
+ ../../Source/Host/../Metronome/MetronomeProcessor.h \
+ ../../Source/Host/../Metronome/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Host/../Sequencer/Sequencer.h \
  ../../Source/Host/../Sequencer/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Host/../Sequencer/Phrase.h \

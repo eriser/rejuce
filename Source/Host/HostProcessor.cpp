@@ -9,6 +9,7 @@ HostProcessor* JUCE_CALLTYPE createHostProcessor();
 //==============================================================================
 HostProcessor::HostProcessor()
 {
+	_metronome = new MetronomeProcessor();
 }
 
 HostProcessor::~HostProcessor()
@@ -17,6 +18,8 @@ HostProcessor::~HostProcessor()
 	{
 		delete _synths[i];
 	}
+
+	delete _metronome;
 
 }
 
@@ -80,6 +83,22 @@ void HostProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 		_synths[channel]->prepareToPlay(sampleRate,samplesPerBlock);
 	}
 
+	for (int i=0;i<16;i++)
+	{
+		if (_synthBuffers[i])
+		{
+			delete _synthBuffers[i];
+		}
+		_synthBuffers[i] = new AudioSampleBuffer(getNumOutputChannels(),samplesPerBlock);
+	}
+
+
+	if (_metronomeBuffer)
+		delete _metronomeBuffer;
+	_metronomeBuffer = new AudioSampleBuffer(getNumOutputChannels(),samplesPerBlock);
+
+	_metronome->setPlayConfigDetails (0, 2,getSampleRate(), getBlockSize());
+	_metronome->prepareToPlay(getSampleRate(),getBlockSize());
 }
 
 void HostProcessor::releaseResources()
@@ -92,6 +111,7 @@ void HostProcessor::releaseResources()
 		_synths[channel]->releaseResources();
 	}
 
+	_metronome->releaseResources();
 }
 
 void HostProcessor::reset()
@@ -103,6 +123,8 @@ void HostProcessor::reset()
 	{
 		_synths[channel]->reset();
 	}
+
+	_metronome->reset();
 
 }
 
@@ -123,8 +145,22 @@ void HostProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMes
 			}
 		}
 
-		_synths[channel]->processBlock(buffer,channelBuffer);
+		_synthBuffers[channel]->clear();
+		_synths[channel]->processBlock(*(_synthBuffers[channel]),channelBuffer);
 	}
+
+	_metronomeBuffer->clear();
+	_metronome->processBlock(*_metronomeBuffer,midiMessages);
+
+	// mix
+	buffer.clear();
+	for (int i=0;i<16;i++)
+	{
+		buffer.addFrom(0,0,_synthBuffers[i]->getSampleData(0),buffer.getNumSamples(),1.0f);
+		buffer.addFrom(1,0,_synthBuffers[i]->getSampleData(1),buffer.getNumSamples(),1.0f);
+	}
+	buffer.addFrom(0,0,_metronomeBuffer->getSampleData(0),buffer.getNumSamples(),1.0f);
+	buffer.addFrom(1,0,_metronomeBuffer->getSampleData(1),buffer.getNumSamples(),1.0f);
 
 	midiMessages.clear();
 
