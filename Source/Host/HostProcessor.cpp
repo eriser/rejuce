@@ -9,6 +9,12 @@ HostProcessor* JUCE_CALLTYPE createHostProcessor();
 //==============================================================================
 HostProcessor::HostProcessor()
 {
+	_metronomeBuffer = nullptr;
+	for (int i=0;i<16;i++)
+	{
+		_synthBuffers[i] = nullptr;
+	}
+
 	_metronome = new MetronomeProcessor();
 }
 
@@ -21,49 +27,37 @@ HostProcessor::~HostProcessor()
 
 	delete _metronome;
 
+
+	for (int i=0;i<16;i++)
+	{
+		if (_synthBuffers[i])
+		{
+			delete _synthBuffers[i];
+		}
+	}
+
+	if (_metronomeBuffer)
+		delete _metronomeBuffer;
 }
 
 //==============================================================================
 int HostProcessor::getNumParameters()
 {
-    return totalNumParams;
+    return 0;
 }
 
 float HostProcessor::getParameter (int index)
 {
-    // This method will be called by the host, probably on the audio thread, so
-    // it's absolutely time-critical. Don't use critical sections or anything
-    // UI-related, or anything at all that may block in any way!
-    switch (index)
-    {
-        case gainParam:     return gain;
-        case delayParam:    return delay;
-        default:            return 0.0f;
-    }
+	return 0.0f;
 }
 
 void HostProcessor::setParameter (int index, float newValue)
 {
-    // This method will be called by the host, probably on the audio thread, so
-    // it's absolutely time-critical. Don't use critical sections or anything
-    // UI-related, or anything at all that may block in any way!
-    switch (index)
-    {
-        case gainParam:     gain = newValue;  break;
-        case delayParam:    delay = newValue;  break;
-        default:            break;
-    }
+
 }
 
 const String HostProcessor::getParameterName (int index)
 {
-    switch (index)
-    {
-        case gainParam:     return "gain";
-        case delayParam:    return "delay";
-        default:            break;
-    }
-
     return String::empty;
 }
 
@@ -130,6 +124,11 @@ void HostProcessor::reset()
 
 void HostProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
+	for (int i=0;i<16;i++)
+	{
+		_synthBuffers[i]->clear();
+	}
+
 	for (int channel=0;channel<_synths.size();channel++)
 	{
 		// copy only messages for this channel
@@ -145,7 +144,6 @@ void HostProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMes
 			}
 		}
 
-		_synthBuffers[channel]->clear();
 		_synths[channel]->processBlock(*(_synthBuffers[channel]),channelBuffer);
 	}
 

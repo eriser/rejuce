@@ -40,6 +40,8 @@ public:
 	void addEvent(MidiMessage m); // new events merged on next Play or Stop
 	void clear();
 
+	int getCurrentPatternLengthClocks();
+
 private:
 	Pattern* _patterns[16];
 	int _currentPattern;

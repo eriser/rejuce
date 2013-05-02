@@ -74,23 +74,6 @@ public:
 
     /////////////////////////////////////////////////////////
 
-
-    //==============================================================================
-    // These properties are public so that our editor component can access them
-    // A bit of a hacky way to do it, but it's only a demo! Obviously in your own
-    // code you'll do this much more neatly..
-
-    //==============================================================================
-    enum Parameters
-    {
-        gainParam = 0,
-        delayParam,
-
-        totalNumParams
-    };
-
-    float gain, delay;
-
 private:
     Array<AudioProcessor*> _synths;
     AudioSampleBuffer* _synthBuffers[16];

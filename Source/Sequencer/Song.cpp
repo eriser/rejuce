@@ -143,4 +143,9 @@ void Song::clear()
 	}
 }
 
+int Song::getCurrentPatternLengthClocks()
+{
+	return _currentPatternLengthClocks;
+}
+
 
