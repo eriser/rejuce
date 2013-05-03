@@ -51,27 +51,13 @@ public:
         angleDelta = cyclesPerSample * 2.0f * double_Pi;
 
 
-		printf("START NOTE!");
+		//printf("START NOTE!");
     }
 
     void stopNote (const bool allowTailOff)
     {
-        if (allowTailOff)
-        {
-            // start a tail-off by setting this flag. The render callback will pick up on
-            // this and do a fade out, calling clearCurrentNote() when it's finished.
-
-            if (tailOff == 0.0f) // we only need to begin a tail-off if it's not already doing so - the
-                                // stopNote method could be called more than once.
-                tailOff = 1.0f;
-        }
-        else
-        {
-            // we're being told to stop playing immediately, so reset everything..
-
-            clearCurrentNote();
-            angleDelta = 0.0f;
-        }
+    	clearCurrentNote();
+        angleDelta = 0.0f;
     }
 
     void pitchWheelMoved (const int /*newValue*/)
@@ -245,11 +231,9 @@ void MetronomeProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
 			if (raw[0])
 			{
 				MidiMessage m(raw[0],raw[1],raw[2]);
-				printf("m %d %d %d at %d\n",m.getRawData()[0],m.getRawData()[1],m.getRawData()[2],pos);
+				//printf("m %d %d %d at %d\n",m.getRawData()[0],m.getRawData()[1],m.getRawData()[2],pos);
 
-				// TODO: make it so we dont need a noteoff, to remove hack below
-				// metronome is one audio sample ahead so we can easily do a noteoff
-				metronomeMidiBuffer.addEvent(m,pos==0?1:pos);
+				metronomeMidiBuffer.addEvent(m,pos);
 			}
 		}
 	}
