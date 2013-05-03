@@ -28,6 +28,7 @@ void Song::init()
 	_pCurrentPattern = _patterns[0];
 	_nextPattern=0;
 	_clock=0;
+	_metronomeState=METRONOME_RECORD;
 
 	setNextPattern(0);
 }
@@ -38,6 +39,12 @@ Song::~Song()
 	{
 		delete _patterns[i];
 	}
+}
+
+void Song::record()
+{
+	_pCurrentPattern->play();
+	_state = SONG_RECORDING;
 }
 
 void Song::play()
@@ -77,6 +84,11 @@ void Song::setNextPattern(int i)
 	}
 }
 
+void Song::setMetronomeState(MetronomeState s)
+{
+	_metronomeState = s;
+}
+
 void Song::setBpm(float bpm)
 {
 	_bpm = bpm;
@@ -92,28 +104,29 @@ int Song::tick(MidiMessageCollector* pCollector)
 {
 	int ret = _clock;
 
-	if (_state==SONG_PLAYING)
+	if (_state==SONG_PLAYING ||
+		_state==SONG_RECORDING)
 	{
 		_pCurrentPattern->tick(pCollector);
 
 		ret = _clock;
 
 		// metronome
-		if (_clock % PHRASE_CLOCKS == 0)
+	//	if (_metronomeState!=METRONOME_OFF &&
+	//			( (_metronomeState==METRONOME_RECORD) ? _state==SONG_RECORDING : _state==SONG_PLAYING))
 		{
-			if (_clock == 0)
+			if (_clock % PHRASE_CLOCKS == 0)
 			{
-				//printf("bip %d\n",_clock);
-
-				MidiMessage bip(0xf2,0x00,Time::getMillisecondCounterHiRes()/1000.0f);
-				pCollector->addMessageToQueue(bip);
-			}
-			else
-			{
-				//printf("bop %d\n",_clock);
-
-				MidiMessage bop(0xf2,0x01,Time::getMillisecondCounterHiRes()/1000.0f);
-				pCollector->addMessageToQueue(bop);
+				if (_clock == 0)
+				{
+					MidiMessage bip(0xf2,0x00,Time::getMillisecondCounterHiRes()/1000.0f);
+					pCollector->addMessageToQueue(bip);
+				}
+				else
+				{
+					MidiMessage bop(0xf2,0x01,Time::getMillisecondCounterHiRes()/1000.0f);
+					pCollector->addMessageToQueue(bop);
+				}
 			}
 		}
 

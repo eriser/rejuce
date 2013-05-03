@@ -166,7 +166,7 @@ void Sequencer::commandTransport(HostEvent* c)
 
 	case HC_TRANSPORT_RECORD:
 		_transportState = TRANSPORT_RECORDING;
-		_song.play();
+		_song.record();
 		break;
 
 	case HC_TRANSPORT_REWIND:

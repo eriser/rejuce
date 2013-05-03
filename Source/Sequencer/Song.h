@@ -15,7 +15,14 @@ enum SongState
 	SONG_STOPPED =0,
 	SONG_PAUSED,
 	SONG_PLAYING,
-	SONG_RECORDING
+	SONG_RECORDING,
+};
+
+enum MetronomeState
+{
+	METRONOME_OFF =0,
+	METRONOME_RECORD,
+	METRONOME_PLAY,
 };
 
 class Song {
@@ -27,10 +34,12 @@ public:
 
 	// live operations
 	void play();
+	void record();
 	void stop();
 	void pause();
 
 	void setNextPattern(int i);
+	void setMetronomeState(MetronomeState s);
 
 	void setBpm(float bpm);
 	float getBpm();
@@ -51,6 +60,7 @@ private:
 	float _bpm;
 
 	SongState _state;
+	MetronomeState _metronomeState;
 
 	int _currentPatternLengthClocks;
 };

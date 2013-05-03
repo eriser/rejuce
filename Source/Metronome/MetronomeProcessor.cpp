@@ -12,10 +12,10 @@
 
 //==============================================================================
 /** A demo synth sound that's just a basic sine wave.. */
-class SineWaveSound : public SynthesiserSound
+class MetronomeSound : public SynthesiserSound
 {
 public:
-    SineWaveSound() {}
+    MetronomeSound() {}
 
     bool appliesToNote (const int /*midiNoteNumber*/)           { return true; }
     bool appliesToChannel (const int /*midiChannel*/)           { return true; }
@@ -23,31 +23,32 @@ public:
 
 //==============================================================================
 /** A simple demo synth voice that just plays a sine wave.. */
-class SineWaveVoice  : public SynthesiserVoice
+class MatronomeVoice  : public SynthesiserVoice
 {
 public:
-    SineWaveVoice()
-        : angleDelta (0.0),
-          tailOff (0.0)
+    MatronomeVoice()
+        : angleDelta (0.0f),
+          tailOff (0.1f)
     {
     }
 
     bool canPlaySound (SynthesiserSound* sound)
     {
-        return dynamic_cast <SineWaveSound*> (sound) != 0;
+        return dynamic_cast <MetronomeSound*> (sound) != 0;
     }
 
     void startNote (const int midiNoteNumber, const float velocity,
                     SynthesiserSound* /*sound*/, const int /*currentPitchWheelPosition*/)
     {
-        currentAngle = 0.0;
-        level = velocity * 0.15;
+        tailOff = 1.0f;
+
+    	currentAngle = 0.0f;
+        level = velocity * 0.15f;
 
         double cyclesPerSecond = MidiMessage::getMidiNoteInHertz (midiNoteNumber);
         double cyclesPerSample = cyclesPerSecond / getSampleRate();
 
-        tailOff = 1.0;
-        angleDelta = cyclesPerSample * 2.0 * double_Pi;
+        angleDelta = cyclesPerSample * 2.0f * double_Pi;
 
 
 		printf("START NOTE!");
@@ -60,16 +61,16 @@ public:
             // start a tail-off by setting this flag. The render callback will pick up on
             // this and do a fade out, calling clearCurrentNote() when it's finished.
 
-            if (tailOff == 0.0) // we only need to begin a tail-off if it's not already doing so - the
+            if (tailOff == 0.0f) // we only need to begin a tail-off if it's not already doing so - the
                                 // stopNote method could be called more than once.
-                tailOff = 1.0;
+                tailOff = 1.0f;
         }
         else
         {
             // we're being told to stop playing immediately, so reset everything..
 
             clearCurrentNote();
-            angleDelta = 0.0;
+            angleDelta = 0.0f;
         }
     }
 
@@ -85,7 +86,7 @@ public:
 
     void renderNextBlock (AudioSampleBuffer& outputBuffer, int startSample, int numSamples)
     {
-        if (angleDelta != 0.0)
+        if (angleDelta != 0.0f)
         {
             if (tailOff > 0)
             {
@@ -99,13 +100,13 @@ public:
                     currentAngle += angleDelta;
                     ++startSample;
 
-                    tailOff *= 0.5;
+                    tailOff *= 0.9998f;
 
-                    if (tailOff <= 0.005)
+                    if (tailOff <= 0.005f)
                     {
                         clearCurrentNote();
 
-                        angleDelta = 0.0;
+                        angleDelta = 0.0f;
                         break;
                     }
                 }
@@ -138,8 +139,8 @@ MetronomeProcessor::MetronomeProcessor()
     currentVolume = 1.0f;
 
     // we only need one voice
-    synth.addVoice (new SineWaveVoice());
-    synth.addSound (new SineWaveSound());
+    synth.addVoice (new MatronomeVoice());
+    synth.addSound (new MetronomeSound());
 }
 
 MetronomeProcessor::~MetronomeProcessor()
@@ -215,12 +216,46 @@ void MetronomeProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
     const int numSamples = buffer.getNumSamples();
     int channel;
 
+	// convert special metronome bip and bop (0xf2 00 and 0xf2 01) into note on/off messages
+
+	MidiBuffer metronomeMidiBuffer;
+	MidiBuffer::Iterator iter(midiMessages);
+	MidiMessage message;
+	int pos;
+	while (iter.getNextEvent(message,pos))
+	{
+		if (message.getRawDataSize()==2 && message.isSongPositionPointer())
+		{
+			char raw[4] = {0,0,0,0};
+
+			char* data = (char*)message.getRawData();
+			if (data[1]==0)
+			{
+				// bip
+				MidiMessage b = MidiMessage::noteOn(1,80,64.0f);
+				memcpy(raw,b.getRawData(),4);
+			}
+			else
+			{
+				// bop
+				MidiMessage b = MidiMessage::noteOn(1,70,64.0f);
+				memcpy(raw,b.getRawData(),4);
+			}
+
+			if (raw[0])
+			{
+				MidiMessage m(raw[0],raw[1],raw[2]);
+				printf("m %d %d %d at %d\n",m.getRawData()[0],m.getRawData()[1],m.getRawData()[2],pos);
+
+				// TODO: make it so we dont need a noteoff, to remove hack below
+				// metronome is one audio sample ahead so we can easily do a noteoff
+				metronomeMidiBuffer.addEvent(m,pos==0?1:pos);
+			}
+		}
+	}
+
     // and now get the synth to process these midi events and generate its output.
-    synth.renderNextBlock (buffer, midiMessages, 0, numSamples);
-
-   // for (channel = 0; channel < getNumInputChannels(); ++channel)
-     //   buffer.applyGain (channel, 0, buffer.getNumSamples(), currentVolume);
-
+    synth.renderNextBlock (buffer, metronomeMidiBuffer, 0, numSamples);
 }
 
 //==============================================================================
