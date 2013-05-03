@@ -98,6 +98,25 @@ int Song::tick(MidiMessageCollector* pCollector)
 
 		ret = _clock;
 
+		// metronome
+		if (_clock % PHRASE_CLOCKS == 0)
+		{
+			if (_clock == 0)
+			{
+				//printf("bip %d\n",_clock);
+
+				MidiMessage bip(0xf2,0x00,Time::getMillisecondCounterHiRes()/1000.0f);
+				pCollector->addMessageToQueue(bip);
+			}
+			else
+			{
+				//printf("bop %d\n",_clock);
+
+				MidiMessage bop(0xf2,0x01,Time::getMillisecondCounterHiRes()/1000.0f);
+				pCollector->addMessageToQueue(bop);
+			}
+		}
+
 		// inc clock
 		if (_clock < _currentPatternLengthClocks-1)
 		{

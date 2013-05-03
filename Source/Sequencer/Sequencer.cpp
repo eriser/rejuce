@@ -74,13 +74,6 @@ int Sequencer::tick()
 
 	t = _song.tick(_pMessageCollector);
 
-	// bop
-	if (t % PHRASE_CLOCKS == 0)
-	{
-		MidiMessage bop(0xf2);
-		_pMessageCollector->addMessageToQueue(bop);
-	}
-
 	return t;
 }
 

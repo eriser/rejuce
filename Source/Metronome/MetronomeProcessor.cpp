@@ -42,12 +42,15 @@ public:
     {
         currentAngle = 0.0;
         level = velocity * 0.15;
-        tailOff = 0.0;
 
         double cyclesPerSecond = MidiMessage::getMidiNoteInHertz (midiNoteNumber);
         double cyclesPerSample = cyclesPerSecond / getSampleRate();
 
+        tailOff = 1.0;
         angleDelta = cyclesPerSample * 2.0 * double_Pi;
+
+
+		printf("START NOTE!");
     }
 
     void stopNote (const bool allowTailOff)
@@ -96,7 +99,7 @@ public:
                     currentAngle += angleDelta;
                     ++startSample;
 
-                    tailOff *= 0.99;
+                    tailOff *= 0.5;
 
                     if (tailOff <= 0.005)
                     {
@@ -134,10 +137,8 @@ MetronomeProcessor::MetronomeProcessor()
     // Set up some default values..
     currentVolume = 1.0f;
 
-    // Initialise the synth...
-    for (int i = 4; --i >= 0;)
-        synth.addVoice (new SineWaveVoice());   // These voices will play our custom sine-wave sounds..
-
+    // we only need one voice
+    synth.addVoice (new SineWaveVoice());
     synth.addSound (new SineWaveSound());
 }
 
@@ -220,11 +221,6 @@ void MetronomeProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
    // for (channel = 0; channel < getNumInputChannels(); ++channel)
      //   buffer.applyGain (channel, 0, buffer.getNumSamples(), currentVolume);
 
-    // In case we have more outputs than inputs, we'll clear any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
 }
 
 //==============================================================================
@@ -266,20 +262,12 @@ bool MetronomeProcessor::isOutputChannelStereoPair (int /*index*/) const
 
 bool MetronomeProcessor::acceptsMidi() const
 {
-   #if JucePlugin_WantsMidiInput
-    return true;
-   #else
-    return false;
-   #endif
+	return true;
 }
 
 bool MetronomeProcessor::producesMidi() const
 {
-   #if JucePlugin_ProducesMidiOutput
-    return true;
-   #else
-    return false;
-   #endif
+	return false;
 }
 
 bool MetronomeProcessor::silenceInProducesSilenceOut() const

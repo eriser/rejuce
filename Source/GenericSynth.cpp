@@ -157,7 +157,7 @@ GenericSynth::~GenericSynth()
 //========================================================================================================================
 const String GenericSynth::getName() const
 {
-    return "Juce Demo Filter";
+    return "Metronome Synth";
 }
 
 int GenericSynth::getNumParameters()

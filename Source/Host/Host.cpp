@@ -124,6 +124,8 @@ bool Host::event(HostEvent c)
 
 void Host::handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message)
 {
+	printf("c timecode %f\n",message.getTimeStamp());
+
 	// fire it
 	event(HostEventFactory::event(message));
 }

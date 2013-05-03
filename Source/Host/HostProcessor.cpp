@@ -140,6 +140,7 @@ void HostProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMes
 		{
 			if (message.getChannel() == channel+1)
 			{
+				printf("c %d %d %d at %d\n",message.getRawData()[0],message.getRawData()[1],message.getRawData()[2],pos);
 				channelBuffer.addEvent(message,pos);
 			}
 		}
@@ -147,8 +148,52 @@ void HostProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMes
 		_synths[channel]->processBlock(*(_synthBuffers[channel]),channelBuffer);
 	}
 
-	_metronomeBuffer->clear();
-	_metronome->processBlock(*_metronomeBuffer,midiMessages);
+	// convert special metronome bip and bop (0xf2 00 and 0xf2 01) into note on/off messages
+	{
+		MidiBuffer metronomeMidiBuffer;
+		MidiBuffer::Iterator iter(midiMessages);
+		MidiMessage message;
+		int pos;
+		while (iter.getNextEvent(message,pos))
+		{
+			if (message.getRawDataSize()==2 && message.isSongPositionPointer())
+			{
+				char raw[4] = {0,0,0,0};
+
+				char* data = (char*)message.getRawData();
+				if (data[1]==0)
+				{
+					// bip
+					MidiMessage b = MidiMessage::noteOn(1,80,64.0f);
+					memcpy(raw,b.getRawData(),4);
+				}
+				else
+				{
+					// bop
+					MidiMessage b = MidiMessage::noteOn(1,60,64.0f);
+					memcpy(raw,b.getRawData(),4);
+				}
+
+				if (raw[0])
+				{
+					MidiMessage m(raw[0],raw[1],raw[2]);
+					printf("m %d %d %d at %d\n",m.getRawData()[0],m.getRawData()[1],m.getRawData()[2],pos);
+
+					// TODO: make it so we dont need a noteoff, to remove hack below
+					// metronome is one audio sample ahead so we can easily do a noteoff
+					metronomeMidiBuffer.addEvent(m,pos==0?1:pos);
+
+
+//					MidiMessage off;
+//					off.allNotesOff(1);
+//					metronomeMidiBuffer.addEvent(off,pos);
+				}
+			}
+		}
+
+		_metronomeBuffer->clear();
+		_metronome->processBlock(*_metronomeBuffer,metronomeMidiBuffer);
+	}
 
 	// mix
 	buffer.clear();
@@ -160,8 +205,9 @@ void HostProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMes
 	buffer.addFrom(0,0,_metronomeBuffer->getSampleData(0),buffer.getNumSamples(),1.0f);
 	buffer.addFrom(1,0,_metronomeBuffer->getSampleData(1),buffer.getNumSamples(),1.0f);
 
-	midiMessages.clear();
 
+	// clear all messages before we return
+	midiMessages.clear();
 }
 
 //==============================================================================
