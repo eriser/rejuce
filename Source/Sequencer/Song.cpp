@@ -158,7 +158,7 @@ int Song::tick(MidiMessageCollector* pCollector)
 
 void Song::addEvent(MidiMessage m)
 {
-	if (_state==SONG_PLAYING)
+	if (_state==SONG_RECORDING)
 	{
 		_patterns[_currentPattern]->addEvent(m);
 	}

@@ -23,7 +23,8 @@ int main (int argc, char* argv[])
 {
 	Host* host = new Host();
 
-	if (!host->init("ALSA","Intel 82801AA-ICH","VMPK Output",44100))
+	//if (!host->init("ALSA","Intel 82801AA-ICH","VMPK Output",44100))
+	if (!host->init("ALSA","HDA Intel (1)","VMPK Output",44100))
 	{
 		DBG("could not initialize host.");
 	}
