@@ -112,8 +112,8 @@ int Song::tick(MidiMessageCollector* pCollector)
 		ret = _clock;
 
 		// metronome
-	//	if (_metronomeState!=METRONOME_OFF &&
-	//			( (_metronomeState==METRONOME_RECORD) ? _state==SONG_RECORDING : _state==SONG_PLAYING))
+		if (_metronomeState!=METRONOME_OFF &&
+				( (_metronomeState==METRONOME_RECORD) ? _state==SONG_RECORDING : _state==SONG_PLAYING))
 		{
 			if (_clock % PHRASE_CLOCKS == 0)
 			{
