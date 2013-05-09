@@ -64,9 +64,38 @@ void WebInterface::initialiseWebserver()
 void WebInterface_websocket_ready_handler(struct mg_connection *conn)
 {
 	WebInterface* pThis = (WebInterface*)mg_get_user_info(conn);
+
+	unsigned char buf[40];
+	buf[0] = 0x81;
+	buf[1] = snprintf((char *) buf + 2, sizeof(buf) - 2, "%s", "server ready");
+	mg_write(conn, buf, 2 + buf[1]);
 }
 
 int WebInterface_websocket_data_handler(struct mg_connection *conn)
 {
 	WebInterface* pThis = (WebInterface*)mg_get_user_info(conn);
+
+	// read the data sent to us
+	MemoryBlock data;
+	char temp[1024];
+	int tempSize =0;
+
+	while ( (tempSize = mg_read(conn,temp,1024)) )
+	{
+		data.append(temp,tempSize);
+
+		if (data.getSize() > 10000)
+			break;
+	}
+
+	printf("rcv: [%.*s]\n", (int)data.getSize(), (char*)data.getData());
+
+	// make up some crap response
+	unsigned char buf[40];
+	buf[0] = 0x81;
+	buf[1] = snprintf((char *) buf + 2, sizeof(buf) - 2, "%s", "stuff and nonsense");
+	mg_write(conn, buf, 2 + buf[1]);
+
+	return 1; // return 0 close websocket
 }
+
