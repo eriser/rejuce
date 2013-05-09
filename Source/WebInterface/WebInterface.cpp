@@ -8,9 +8,10 @@
 #include "WebInterface.h"
 #include "../../JuceLibraryCode/JuceHeader.h"
 
-WebInterface::WebInterface() : Thread ("WebInterface")
+WebInterface::WebInterface(Host* host) : Thread ("WebInterface")
 {
 	_ctx = nullptr;
+	_host = host;
 }
 
 WebInterface::~WebInterface()

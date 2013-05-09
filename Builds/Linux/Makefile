@@ -35,7 +35,7 @@ ifeq ($(CONFIG),Release)
   CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Os
   CXXFLAGS += $(CFLAGS) 
-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -ldl -lfreetype -lpthread -lrt -lX11 -lGL -lGLU -lXinerama -lasound -lXext 
+  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -ldl -lpthread -lrt -lasound 
   LDDEPS :=
   RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
   TARGET := rejuce
@@ -75,14 +75,19 @@ OBJECTS := \
   $(OBJDIR)/juce_events_79b2840.o \
   $(OBJS)
 
-.PHONY: clean
+.PHONY: clean www
 
-$(OUTDIR)/$(TARGET): $(OBJECTS) $(LDDEPS) $(RESOURCES)
+$(OUTDIR)/$(TARGET): $(OBJECTS) $(LDDEPS) $(RESOURCES) www
 	@echo Linking rejuce
 	-@mkdir -p $(BINDIR)
 	-@mkdir -p $(LIBDIR)
-	-@mkdir -p $(OUTDIR)
+	-@mkdir -p $(OUTDIR)	
 	@$(BLDCMD)
+
+www:
+	# copy web interface www folder
+	-@mkdir -p $(OUTDIR)/www
+	cp $(MAINPATH)/WebInterface/www/* $(OUTDIR)/www
 
 clean:
 	@echo Cleaning rejuce

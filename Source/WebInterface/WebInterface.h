@@ -14,7 +14,7 @@
 class WebInterface : private Thread {
 
 public:
-	WebInterface();
+	WebInterface(Host* host);
 	virtual ~WebInterface();
 
 	void start();
@@ -26,6 +26,7 @@ private:
 
 private:
 	struct mg_context *_ctx;
+	Host* _host;
 
 };
 

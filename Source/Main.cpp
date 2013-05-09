@@ -11,6 +11,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "Host/Host.h"
+#include "WebInterface/WebInterface.h"
 
 //==============================================================================
 
@@ -22,6 +23,7 @@
 int main (int argc, char* argv[])
 {
 	Host* host = new Host();
+	WebInterface webInterface(host);
 
 	if (!host->init("ALSA","Intel 82801AA-ICH","VMPK Output",44100))
 	//if (!host->init("ALSA","HDA Intel (1)","VMPK Output",44100))
@@ -30,6 +32,9 @@ int main (int argc, char* argv[])
 	}
 	else
 	{
+		std::cout <<"start webinterface\n";
+		webInterface.start();
+
 		// wait
 		std::cout <<"q to quit..\n";
 		char s[10];s[0]='\0';
@@ -56,6 +61,9 @@ int main (int argc, char* argv[])
 				host->event(HostEventFactory::event(HC_TRANSPORT_STOP));
 			}
 		}
+
+		std::cout <<"stop webinterface\n";
+		webInterface.stop();
 	}
 
 	delete host;
