@@ -79,6 +79,7 @@ int WebInterface_websocket_data_handler(struct mg_connection *conn)
 	// read the data sent to us
 	MemoryBlock data;
 	char temp[1024];
+	memset(temp,0,1024);
 	int tempSize =0;
 
 	while ( (tempSize = mg_read(conn,temp,1024)) )
@@ -89,12 +90,14 @@ int WebInterface_websocket_data_handler(struct mg_connection *conn)
 			break;
 	}
 
+
+
 	printf("rcv: [%.*s]\n", (int)data.getSize(), (char*)data.getData());
 
-	// make up some crap response
+	// acknowledge
 	unsigned char buf[40];
 	buf[0] = 0x81;
-	buf[1] = snprintf((char *) buf + 2, sizeof(buf) - 2, "%s", "stuff and nonsense");
+	buf[1] = snprintf((char *) buf + 2, sizeof(buf) - 2, "%s", "ACK");
 	mg_write(conn, buf, 2 + buf[1]);
 
 	return 1; // return 0 close websocket
