@@ -29,6 +29,9 @@
 #define __STDC_LIMIT_MACROS   // C++ wants that for INT64_MAX
 #endif
 
+#define USE_WEBSOCKET
+#define DEBUG_TRACE
+
 #if defined (_MSC_VER)
 // conditional expression is constant: introduced by FD_SET(..)
 #pragma warning (disable : 4127)
