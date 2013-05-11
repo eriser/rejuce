@@ -20,14 +20,19 @@ public:
 	void start();
 	void stop();
 
+	void parseCommand(char* szCommand);
+
+	struct mg_connection* getConnection();
+	void setConnection(mg_connection* conn);
+
 private:
 	void run();
 	void initialiseWebserver();
 
 private:
-	struct mg_context *_ctx;
+	struct mg_context* _ctx;
+	struct mg_connection* _conn;
 	Host* _host;
-
 };
 
 void WebInterface_websocket_ready_handler(struct mg_connection *conn);
