@@ -28,11 +28,14 @@ public:
 private:
 	void run();
 	void initialiseWebserver();
+	void populateCommandMap();
 
 private:
 	struct mg_context* _ctx;
 	struct mg_connection* _conn;
 	Host* _host;
+
+	HashMap <String,HostEventName> _commandNameMap;
 };
 
 void WebInterface_websocket_ready_handler(struct mg_connection *conn);

@@ -10,11 +10,26 @@
 #include <arpa/inet.h>
 #include "cJSON.h"
 
+void WebInterface::populateCommandMap()
+{
+	_commandNameMap.set("play",HC_TRANSPORT_PLAY);
+	_commandNameMap.set("stop",HC_TRANSPORT_STOP);
+	_commandNameMap.set("pause",HC_TRANSPORT_PAUSE);
+	_commandNameMap.set("rewind",HC_TRANSPORT_REWIND);
+	_commandNameMap.set("record",HC_TRANSPORT_RECORD);
+
+	_commandNameMap.set("setnext",HC_PATTERN_SET_NEXT);
+	_commandNameMap.set("midievent",HC_MIDI_EVENT);
+
+}
+
 WebInterface::WebInterface(Host* host) : Thread ("WebInterface")
 {
 	_ctx = nullptr;
 	_conn = nullptr;
 	_host = host;
+
+	populateCommandMap();
 }
 
 WebInterface::~WebInterface()
@@ -189,12 +204,62 @@ printf("send ack\n");
 void WebInterface::parseCommand(char* szCommand)
 {
 	cJSON* pJson = cJSON_Parse(szCommand);
+	bool bOk = true;
+
+	cJSON* args = nullptr;
+	cJSON* event = nullptr;
 
 	if (pJson)
 	{
+		event = cJSON_GetObjectItem(pJson,"event");
+		if (!event || event->type!=cJSON_String)
+		{
+			DBG("event null or not string");
+			bOk = false;
+		}
+
+		args = cJSON_GetObjectItem(pJson,"args");
+		if (!args || args->type!=cJSON_Array)
+		{
+			DBG("args null or not array");
+			bOk = false;
+		}
+
+		if (bOk)
+		{
+			for (int i=0;i<cJSON_GetArraySize(args);i++)
+			{
+				cJSON* arg = cJSON_GetArrayItem(args,i);
+				if (!arg || arg->type!=cJSON_Number)
+				{
+					DBG("at least one argument is NULL or NaN");
+					bOk = false;
+				}
+			}
+		}
 
 		// TODO
 		// get event
 		// get args, which must all be ints
+	}
+	else
+	{
+		DBG("cannot parse JSON");
+		bOk = false;
+	}
+
+	if (bOk)
+	{
+		String name = event->valuestring;
+
+		if (!_commandNameMap.contains(name))
+		{
+			DBG("event not known");
+			bOk = false;
+		}
+		else
+		{
+			// todo: parse using command hashmap
+		}
 	}
 }
