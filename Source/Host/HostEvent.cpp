@@ -44,6 +44,19 @@ HostEvent HostEventFactory::event(HostEventName name,int arg0,int arg1)
 	return sc;
 }
 
+HostEvent HostEventFactory::event(HostEventName name,int argc,int* args)
+{
+	HostEvent sc;
+	sc.name = name;
+	sc.argc = argc;
+	for (int i=0;i<argc;i++)
+	{
+		sc.argv[i]=args[i];
+	}
+	validate(&sc);
+	return sc;
+}
+
 HostEvent HostEventFactory::event(HostEventName name,int arg0,int arg1,int arg2)
 {
 	HostEvent sc;

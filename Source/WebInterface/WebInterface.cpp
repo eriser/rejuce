@@ -207,6 +207,7 @@ void WebInterface::parseCommand(char* szCommand)
 	bool bOk = true;
 
 	cJSON* args = nullptr;
+	int argarray[8];
 	cJSON* event = nullptr;
 
 	if (pJson)
@@ -235,6 +236,10 @@ void WebInterface::parseCommand(char* szCommand)
 					DBG("at least one argument is NULL or NaN");
 					bOk = false;
 				}
+				else
+				{
+					argarray[i]=arg->valueint;
+				}
 			}
 		}
 
@@ -259,7 +264,11 @@ void WebInterface::parseCommand(char* szCommand)
 		}
 		else
 		{
-			// todo: parse using command hashmap
+			HostEventName hen = _commandNameMap[name];
+			HostEvent event = HostEventFactory::event(hen,
+					cJSON_GetArraySize(args),argarray);
+
+			_host->event(event);
 		}
 	}
 }

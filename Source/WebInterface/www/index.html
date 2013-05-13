@@ -47,10 +47,23 @@ function onMessage(evt)
 	trace('RESPONSE: ' + evt.data);
 }
 
-function doSend(message)
+function doSend()
 {
-	trace("SENT: " + message); 
-	websocket.send(message);
+	// make json
+	var json = '{"event": "'+arguments[0]+'",';
+	json += '"args":[';
+	for (i=1;i<arguments.length;i++)
+	{
+		json+=''+arguments[i];
+		if (i!=arguments.length-1)
+		{
+			json +=',';
+		}
+	}
+	json += ']}';
+
+	trace("SENT: " + json); 
+	websocket.send(json);
 }
 
 function trace(message)
