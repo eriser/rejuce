@@ -10,6 +10,7 @@
 
 #include "../Host/Host.h"
 #include "mongoose.h"
+#include "../Groovebox/GrooveEvent.h"
 
 class WebInterface : private Thread {
 
@@ -19,6 +20,8 @@ public:
 
 	void start();
 	void stop();
+
+	void send(GrooveEvent& event);
 
 	void parseCommand(char* szCommand);
 

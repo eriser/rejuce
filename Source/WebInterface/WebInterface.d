@@ -322,5 +322,7 @@
  ../../Source/WebInterface/../Host/../Sequencer/Song.h \
  ../../Source/WebInterface/../Host/../Sequencer/../Host/HostEvent.h \
  ../../Source/WebInterface/mongoose.h \
+ ../../Source/WebInterface/../Groovebox/GrooveEvent.h \
+ ../../Source/WebInterface/../Groovebox/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/WebInterface/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/WebInterface/cJSON.h

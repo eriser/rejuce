@@ -11,7 +11,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "Host/Host.h"
-#include "WebInterface/WebInterface.h"
+#include "Groovebox/Groovebox.h"
 
 //==============================================================================
 
@@ -23,7 +23,7 @@
 int main (int argc, char* argv[])
 {
 	Host* host = new Host();
-	WebInterface webInterface(host);
+	Groovebox Groovebox(host);
 
 	if (!host->init("ALSA","Intel 82801AA-ICH","VMPK Output",44100))
 	//if (!host->init("ALSA","HDA Intel (1)","VMPK Output",44100))
@@ -32,8 +32,8 @@ int main (int argc, char* argv[])
 	}
 	else
 	{
-		std::cout <<"start webinterface\n";
-		webInterface.start();
+		std::cout <<"start Groovebox\n";
+		Groovebox.start();
 
 		// wait
 		std::cout <<"q to quit..\n";
@@ -62,8 +62,8 @@ int main (int argc, char* argv[])
 			}
 		}
 
-		std::cout <<"stop webinterface\n";
-		webInterface.stop();
+		std::cout <<"stop Groovebox\n";
+		Groovebox.stop();
 	}
 
 	delete host;

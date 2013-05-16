@@ -272,3 +272,8 @@ void WebInterface::parseCommand(char* szCommand)
 		}
 	}
 }
+
+void WebInterface::send(GrooveEvent& event)
+{
+	// send event to websocket
+}
