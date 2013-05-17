@@ -321,10 +321,5 @@
  ../../Source/Host/../Sequencer/../Host/HostEvent.h \
  ../../Source/Groovebox/Groovebox.h \
  ../../Source/Groovebox/../../JuceLibraryCode/JuceHeader.h \
- ../../Source/Groovebox/../WebInterface/WebInterface.h \
- ../../Source/Groovebox/../WebInterface/../Host/Host.h \
- ../../Source/Groovebox/../WebInterface/mongoose.h \
- ../../Source/Groovebox/../WebInterface/../Groovebox/GrooveEvent.h \
- ../../Source/Groovebox/../WebInterface/../Groovebox/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Groovebox/../Host/Host.h \
  ../../Source/Groovebox/GrooveEvent.h

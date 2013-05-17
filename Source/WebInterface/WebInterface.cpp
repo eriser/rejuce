@@ -12,22 +12,22 @@
 
 void WebInterface::populateCommandMap()
 {
-	_commandNameMap.set("play",HC_TRANSPORT_PLAY);
-	_commandNameMap.set("stop",HC_TRANSPORT_STOP);
-	_commandNameMap.set("pause",HC_TRANSPORT_PAUSE);
-	_commandNameMap.set("rewind",HC_TRANSPORT_REWIND);
-	_commandNameMap.set("record",HC_TRANSPORT_RECORD);
+	_grooveEventMap.set("play",HC_TRANSPORT_PLAY);
+	_grooveEventMap.set("stop",HC_TRANSPORT_STOP);
+	_grooveEventMap.set("pause",HC_TRANSPORT_PAUSE);
+	_grooveEventMap.set("rewind",HC_TRANSPORT_REWIND);
+	_grooveEventMap.set("record",HC_TRANSPORT_RECORD);
 
-	_commandNameMap.set("setnext",HC_PATTERN_SET_NEXT);
-	_commandNameMap.set("midievent",HC_MIDI_EVENT);
+	_grooveEventMap.set("setnext",HC_PATTERN_SET_NEXT);
+	_grooveEventMap.set("midievent",HC_MIDI_EVENT);
 
 }
 
-WebInterface::WebInterface(Host* host) : Thread ("WebInterface")
+WebInterface::WebInterface(Groovebox* pBox) : Thread ("WebInterface")
 {
 	_ctx = nullptr;
 	_conn = nullptr;
-	_host = host;
+	_groovebox = pBox;
 
 	populateCommandMap();
 }
@@ -242,10 +242,6 @@ void WebInterface::parseCommand(char* szCommand)
 				}
 			}
 		}
-
-		// TODO
-		// get event
-		// get args, which must all be ints
 	}
 	else
 	{
@@ -257,18 +253,16 @@ void WebInterface::parseCommand(char* szCommand)
 	{
 		String name = event->valuestring;
 
-		if (!_commandNameMap.contains(name))
+		if (!_grooveEventMap.contains(name))
 		{
 			DBG("event not known");
 			bOk = false;
 		}
 		else
 		{
-			HostEventName hen = _commandNameMap[name];
-			HostEvent event = HostEventFactory::event(hen,
-					cJSON_GetArraySize(args),argarray);
-
-			_host->event(event);
+			GrooveEventName hen = _grooveEventMap[name];
+			GrooveEvent event = GrooveEventFactory::event(hen,cJSON_GetArraySize(args),argarray);
+			_groovebox->event(event);
 		}
 	}
 }
