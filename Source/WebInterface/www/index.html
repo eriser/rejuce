@@ -74,11 +74,11 @@ function trace(message)
 
 window.addEventListener("load", init, false);
 
-</script>
+</script>	
 
-<input type="button" name="record" value="(r)" onclick="doSend('record')"></input>
-<input type="button" name="stop" value="[ ]" onclick="doSend('stop')"></input>
-<input type="button" name="play" value="|>" onclick="doSend('play')"></input>
-<input type="button" name="pause" value="||" onclick="doSend('pause')"></input>
+<input type="button" name="record" value="(r)" onclick="doSend('GC_BUTTON_DOWN',4)"></input>
+<input type="button" name="stop" value="[ ]" onclick="doSend('GC_BUTTON_DOWN',0)"></input>
+<input type="button" name="play" value="|>" onclick="doSend('GC_BUTTON_DOWN',1)"></input>
+<input type="button" name="pause" value="||" onclick="doSend('GC_BUTTON_DOWN',2)"></input>
 
 </html> 

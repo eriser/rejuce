@@ -13,15 +13,16 @@ Pattern::Pattern()
 	{
 		_phrases[i] = new Phrase();
 	}
-	init();
+	init(nullptr);
 }
 
-void Pattern::init()
+void Pattern::init(HostEventListener* pHostEventListener)
 {
 	_activePhrase=0;
 	_checkedOutPhrase=-1;
 	_clock=0;
 	_state = PATTERN_STOPPED;
+	_pHostEventListener = pHostEventListener;
 
 	for (int i=0;i<16;i++)
 	{

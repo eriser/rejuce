@@ -8,6 +8,8 @@
 #ifndef PATTERN_H_
 #define PATTERN_H_
 
+#include "../Host/HostEvent.h"
+#include "../Host/HostEventListener.h"
 #include "Phrase.h"
 class Phrase;
 
@@ -23,7 +25,7 @@ class Song;
 class Pattern {
 public:
 	Pattern();
-	void init();
+	void init(HostEventListener* pHostEventListener);
 	virtual ~Pattern();
 
 	// control/transport
@@ -61,6 +63,8 @@ private:
 	int _lengthClocks;
 
 	PatternState _state;
+
+	HostEventListener* _pHostEventListener;
 
 };
 

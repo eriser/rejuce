@@ -10,6 +10,19 @@ enum GrooveEventName
 {
 	GC_INVALID = GROOVEEVENT_INVALID,
 
+	GC_BUTTON_DOWN = 1,
+	GC_BUTTON_UP = 2,
+
+	GC_KNOB = 3,
+};
+
+enum GrooveControlName
+{
+	GT_STOP =0,
+	GT_PLAY,
+	GT_PAUSE,
+	GT_REWIND,
+	GT_RECORD,
 
 };
 

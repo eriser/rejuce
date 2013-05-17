@@ -10,18 +10,19 @@
 
 #include "mongoose.h"
 #include "../Groovebox/Groovebox.h"
+#include "../Groovebox/GrooveEvent.h"
 
-class WebInterface : private Thread {
+class WebInterface : private Thread, public GrooveboxInterface {
 
 public:
-	WebInterface(Groovebox* pBox);
+	WebInterface();
 	virtual ~WebInterface();
 
 	void start();
 	void stop();
 
 	// called by groovebox class to send a grooveevent to the interface
-	void send(GrooveEvent& event);
+	void onGrooveEvent(GrooveEvent& event);
 
 	// triggered by interface to send grooveevent to groovebox class
 	void parseCommand(char* szCommand);
@@ -37,9 +38,7 @@ private:
 private:
 	struct mg_context* _ctx;
 	struct mg_connection* _conn;
-	Groovebox* _groovebox;
 
-	HashMap <String,HostEventName> _grooveEventMap;
 };
 
 void WebInterface_websocket_ready_handler(struct mg_connection *conn);

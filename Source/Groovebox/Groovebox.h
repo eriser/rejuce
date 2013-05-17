@@ -10,10 +10,12 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "../Host/Host.h"
-#include "GrooveEvent.h"
+#include "../Host/HostEventListener.h"
+#include "GrooveEventListener.h"
+#include "GrooveboxInterface.h"
 
 
-class Groovebox {
+class Groovebox : public GrooveEventListener, public HostEventListener {
 public:
 	Groovebox(Host* pHost,GrooveboxInterface* pInterface);
 	virtual ~Groovebox();
@@ -21,14 +23,16 @@ public:
 	void start();
 	void stop();
 
-	// called by interface to do a grooveevent
-	void event(GrooveEvent& event);
+	// how we get events in from the interface
+	void onGrooveEvent(GrooveEvent& event);
+
+	// how we get events from the host
+	void onHostEvent(HostEvent& event);
 
 private:
-	// called by us to send an grooveevent out
 	void out(GrooveEvent &event);
 
-	GrooveboxInterface* _webIterface;
+	GrooveboxInterface* _interface;
 	Host* _host;
 };
 

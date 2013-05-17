@@ -312,12 +312,14 @@
  ../../Source/Host/HostEvent.h ../../Source/Host/HostProcessor.h \
  ../../Source/Host/../Metronome/MetronomeProcessor.h \
  ../../Source/Host/../Metronome/../../JuceLibraryCode/JuceHeader.h \
+ ../../Source/Host/HostEventListener.h \
  ../../Source/Host/../Sequencer/Sequencer.h \
  ../../Source/Host/../Sequencer/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Host/../Sequencer/Phrase.h \
  ../../Source/Host/../Sequencer/Pattern.h \
- ../../Source/Host/../Sequencer/Song.h \
  ../../Source/Host/../Sequencer/../Host/HostEvent.h \
+ ../../Source/Host/../Sequencer/../Host/HostEventListener.h \
+ ../../Source/Host/../Sequencer/Song.h \
  ../../Source/Host/../Noisemaker/TalCore.h \
  ../../Source/Host/../Noisemaker/./Engine/AudioUtils.h \
  ../../Source/Host/../Noisemaker/./Engine/Params.h \

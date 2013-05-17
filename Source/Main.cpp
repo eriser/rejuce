@@ -12,6 +12,7 @@
 
 #include "Host/Host.h"
 #include "Groovebox/Groovebox.h"
+#include "WebInterface/WebInterface.h"
 
 //==============================================================================
 
@@ -22,10 +23,12 @@
 //==============================================================================
 int main (int argc, char* argv[])
 {
-	Host* host = new Host();
-	Groovebox Groovebox(host);
+	Host host;
+	WebInterface interface;
+	Groovebox groovebox(&host,&interface);
+	interface.setOutListener(&groovebox);
 
-	if (!host->init("ALSA","Intel 82801AA-ICH","VMPK Output",44100))
+	if (!host.init("ALSA","Intel 82801AA-ICH","VMPK Output",44100))
 	//if (!host->init("ALSA","HDA Intel (1)","VMPK Output",44100))
 	{
 		DBG("could not initialize host.");
@@ -33,7 +36,7 @@ int main (int argc, char* argv[])
 	else
 	{
 		std::cout <<"start Groovebox\n";
-		Groovebox.start();
+		groovebox.start();
 
 		// wait
 		std::cout <<"q to quit..\n";
@@ -46,27 +49,27 @@ int main (int argc, char* argv[])
 			if (s[0]=='p')//play
 			{
 				printf("play...\n");
-				host->event(HostEventFactory::event(HC_TRANSPORT_PLAY));
+				host.event(HostEventFactory::event(HC_TRANSPORT_PLAY));
 			}
 
 			if (s[0]=='r')//record
 			{
 				printf("record...\n");
-				host->event(HostEventFactory::event(HC_TRANSPORT_RECORD));
+				host.event(HostEventFactory::event(HC_TRANSPORT_RECORD));
 			}
 
 			if (s[0]=='s')//stop
 			{
 				printf("stop...\n");
-				host->event(HostEventFactory::event(HC_TRANSPORT_STOP));
+				host.event(HostEventFactory::event(HC_TRANSPORT_STOP));
 			}
 		}
 
 		std::cout <<"stop Groovebox\n";
-		Groovebox.stop();
-	}
 
-	delete host;
+		groovebox.stop();
+
+	}
 
 //	CoUninitialize();
 

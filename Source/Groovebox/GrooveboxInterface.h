@@ -9,20 +9,19 @@
 #define GBINTERFACE_H_
 
 #include "GrooveEvent.h"
+#include "GrooveEventListener.h"
 
-class GrooveboxInterface {
-
+class GrooveboxInterface : public GrooveEventListener
+{
 public:
+
 	virtual void start() =0;
 	virtual void stop() =0;
 
-	virtual void send(GrooveEvent& event);
+	void setOutListener(GrooveEventListener* pOutListener);
 
-	// triggered by interface to send grooveevent to groovebox class
-	virtual void parseCommand(char* szCommand);
-
-	struct mg_connection* getConnection();
-	void setConnection(mg_connection* conn);
+protected:
+	GrooveEventListener* _pOutListener;
 
 };
 

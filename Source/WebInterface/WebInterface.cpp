@@ -10,26 +10,10 @@
 #include <arpa/inet.h>
 #include "cJSON.h"
 
-void WebInterface::populateCommandMap()
-{
-	_grooveEventMap.set("play",HC_TRANSPORT_PLAY);
-	_grooveEventMap.set("stop",HC_TRANSPORT_STOP);
-	_grooveEventMap.set("pause",HC_TRANSPORT_PAUSE);
-	_grooveEventMap.set("rewind",HC_TRANSPORT_REWIND);
-	_grooveEventMap.set("record",HC_TRANSPORT_RECORD);
-
-	_grooveEventMap.set("setnext",HC_PATTERN_SET_NEXT);
-	_grooveEventMap.set("midievent",HC_MIDI_EVENT);
-
-}
-
-WebInterface::WebInterface(Groovebox* pBox) : Thread ("WebInterface")
+WebInterface::WebInterface() : Thread ("WebInterface")
 {
 	_ctx = nullptr;
 	_conn = nullptr;
-	_groovebox = pBox;
-
-	populateCommandMap();
 }
 
 WebInterface::~WebInterface()
@@ -204,70 +188,42 @@ printf("send ack\n");
 void WebInterface::parseCommand(char* szCommand)
 {
 	cJSON* pJson = cJSON_Parse(szCommand);
-	bool bOk = true;
 
-	cJSON* args = nullptr;
-	int argarray[8];
-	cJSON* event = nullptr;
+	GrooveEvent event;
+	memset(&event,0,sizeof(GrooveEvent));
 
-	if (pJson)
+	cJSON* name = cJSON_GetObjectItem(pJson,"name");
+	if (name && name->type==cJSON_String && name->valuestring)
 	{
-		event = cJSON_GetObjectItem(pJson,"event");
-		if (!event || event->type!=cJSON_String)
-		{
-			DBG("event null or not string");
-			bOk = false;
-		}
+		if (0==strcmp(name->valuestring,"GC_BUTTON_DOWN"))
+			event.name=GC_BUTTON_DOWN;
+		if (0==strcmp(name->valuestring,"GC_BUTTON_UP"))
+			event.name=GC_BUTTON_UP;
+		if (0==strcmp(name->valuestring,"GC_KNOB"))
+			event.name=GC_KNOB;
+	}
 
-		args = cJSON_GetObjectItem(pJson,"args");
-		if (!args || args->type!=cJSON_Array)
+	cJSON* argv = cJSON_GetObjectItem(pJson,"argv");
+	if (argv && argv->type==cJSON_Array)
+	{
+		event.argc = cJSON_GetArraySize(argv);
+		for (int i=0;i<event.argc;i++)
 		{
-			DBG("args null or not array");
-			bOk = false;
-		}
-
-		if (bOk)
-		{
-			for (int i=0;i<cJSON_GetArraySize(args);i++)
+			cJSON* arg = cJSON_GetArrayItem(argv,i);
+			if (arg && arg->type==cJSON_Number)
 			{
-				cJSON* arg = cJSON_GetArrayItem(args,i);
-				if (!arg || arg->type!=cJSON_Number)
-				{
-					DBG("at least one argument is NULL or NaN");
-					bOk = false;
-				}
-				else
-				{
-					argarray[i]=arg->valueint;
-				}
+				event.argv[i] = arg->valueint;
 			}
 		}
 	}
-	else
-	{
-		DBG("cannot parse JSON");
-		bOk = false;
-	}
 
-	if (bOk)
+	if (event.name!=GC_INVALID)
 	{
-		String name = event->valuestring;
-
-		if (!_grooveEventMap.contains(name))
-		{
-			DBG("event not known");
-			bOk = false;
-		}
-		else
-		{
-			GrooveEventName hen = _grooveEventMap[name];
-			GrooveEvent event = GrooveEventFactory::event(hen,cJSON_GetArraySize(args),argarray);
-			_groovebox->event(event);
-		}
+		_pOutListener->onGrooveEvent(event);
 	}
 }
 
-void WebInterface::send(GrooveEvent& event)
+void WebInterface::onGrooveEvent(GrooveEvent& event)
 {
 	// send event to websocket
 }

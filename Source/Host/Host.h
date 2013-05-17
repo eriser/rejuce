@@ -12,6 +12,7 @@
 
 #include "HostEvent.h"
 #include "HostProcessor.h"
+#include "HostEventListener.h"
 #include "../Sequencer/Sequencer.h"
 
 class Host: public  MidiInputCallback {
@@ -25,6 +26,8 @@ public:
 
 	bool event(HostEvent c);
 
+	void setHostEventListener(HostEventListener* pHostEventListener);
+
 private:
 	void handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message);
 
@@ -35,6 +38,7 @@ private:
 	String _midiInterfaceName;
 
 	Sequencer _sequencer;
+	HostEventListener* _hostEventListener;
 };
 
 #endif /* HOST_H_ */

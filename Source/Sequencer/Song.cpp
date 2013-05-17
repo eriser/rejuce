@@ -15,11 +15,13 @@ Song::Song()
 	}
 }
 
-void Song::init()
+void Song::init(HostEventListener* pHostEventListener)
 {
+	_pHostEventListener = pHostEventListener;
+
 	for (int i=0;i<16;i++)
 	{
-		_patterns[i]->init();
+		_patterns[i]->init(pHostEventListener);
 	}
 
 	_state = SONG_STOPPED;
@@ -28,6 +30,7 @@ void Song::init()
 	_pCurrentPattern = _patterns[0];
 	_nextPattern=0;
 	_clock=0;
+	_ledPos=0;
 	_metronomeState=METRONOME_RECORD;
 
 	setNextPattern(0);
@@ -111,6 +114,16 @@ int Song::tick(MidiMessageCollector* pCollector)
 
 		ret = _clock;
 
+		// led pos indicator
+		if (_clock % (PHRASE_CLOCKS/4) )
+		{
+			HostEvent event = HostEventFactory::event(HC_OUT_LEDPOS,_ledPos);
+			_pHostEventListener->onHostEvent(event);
+			_ledPos++;
+			if (_ledPos>_currentPatternLengthClocks/4)
+				_ledPos++;
+		}
+
 		// metronome
 		if (_metronomeState!=METRONOME_OFF &&
 				( (_metronomeState==METRONOME_RECORD) ? _state==SONG_RECORDING : _state==SONG_PLAYING))
@@ -149,6 +162,7 @@ int Song::tick(MidiMessageCollector* pCollector)
 			}
 
 			_clock=0;
+			_ledPos=0;
 		}
 
 	}

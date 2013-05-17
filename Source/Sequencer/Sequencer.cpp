@@ -9,12 +9,12 @@
 
 Sequencer* g_sequencer = nullptr;
 
-Sequencer* getSequencerInstance(MidiMessageCollector* collector)
+Sequencer* getSequencerInstance(MidiMessageCollector* collector,HostEventListener* pHostEventListener)
 {
 	if (!g_sequencer)
 	{
 		g_sequencer = new Sequencer();
-		g_sequencer->init(collector);
+		g_sequencer->init(collector,pHostEventListener);
 		g_sequencer->start();
 	}
 
@@ -31,7 +31,7 @@ void freeSequencer()
 
 Sequencer::Sequencer() : Thread ("Sequencer")
 {
-	init (nullptr);
+	init (nullptr,nullptr);
 }
 
 Sequencer::~Sequencer()
@@ -39,14 +39,15 @@ Sequencer::~Sequencer()
 	stop();
 }
 
-void Sequencer::init(MidiMessageCollector* collector)
+void Sequencer::init(MidiMessageCollector* collector,HostEventListener* pHostEventListener)
 {
 	_bpm = 120.0f;
 	_pMessageCollector = collector;
+	_pHostEventListener = pHostEventListener;
 
 	_transportState = TRANSPORT_STOPPED;
 
-	_song.init();
+	_song.init(_pHostEventListener);
 }
 
 void Sequencer::run()

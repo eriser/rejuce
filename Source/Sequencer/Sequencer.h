@@ -14,6 +14,7 @@
 #include "Pattern.h"
 #include "Song.h"
 #include "../Host/HostEvent.h"
+#include "../Host/HostEventListener.h"
 
 enum TransportState
 {
@@ -28,7 +29,7 @@ public:
 	Sequencer();
 	virtual ~Sequencer();
 
-	void init(MidiMessageCollector* collector);
+	void init(MidiMessageCollector* collector,HostEventListener* pHostEventListener);
 
 	void start();
 	void stop();
@@ -47,6 +48,7 @@ private:
 
 private:
 	MidiMessageCollector* _pMessageCollector;
+	HostEventListener* _pHostEventListener;
 	float _bpm;
 	Song _song;
 

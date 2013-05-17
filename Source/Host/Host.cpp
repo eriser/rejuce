@@ -30,6 +30,11 @@ Host::~Host()
 	_adm.removeMidiInputCallback(_midiInterfaceName,this);
 }
 
+void Host::setHostEventListener(HostEventListener* pHostEventListener)
+{
+	_hostEventListener = pHostEventListener;
+}
+
 void Host::listInterfaces()
 {
 	DBG("list audio device types");
@@ -84,7 +89,7 @@ bool Host::init(String audioDeviceType,String audioInterface,String midiInterfac
 	_adm.addAudioCallback(&_app);
 
 	// sequencer initialisation
-	_sequencer.init(&_app.getMidiMessageCollector());
+	_sequencer.init(&_app.getMidiMessageCollector(),_hostEventListener);
 	_sequencer.start();
 
 	return true;

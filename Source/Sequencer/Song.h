@@ -9,6 +9,8 @@
 #define SONG_H_
 
 #include "Pattern.h"
+#include "../Host/HostEventListener.h"
+#include "../Host/HostEvent.h"
 
 enum SongState
 {
@@ -29,7 +31,7 @@ class Song {
 public:
 
 	Song();
-	void init();
+	void init(HostEventListener* pHostEventListener);
 	virtual ~Song();
 
 	// live operations
@@ -57,10 +59,13 @@ private:
 	Pattern* _pCurrentPattern;
 	int _nextPattern;
 	int _clock;
+	int _ledPos;
 	float _bpm;
 
 	SongState _state;
 	MetronomeState _metronomeState;
+
+	HostEventListener* _pHostEventListener;
 
 	int _currentPatternLengthClocks;
 };
