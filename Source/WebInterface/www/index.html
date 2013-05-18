@@ -50,8 +50,8 @@ function onMessage(evt)
 function doSend()
 {
 	// make json
-	var json = '{"event": "'+arguments[0]+'",';
-	json += '"args":[';
+	var json = '{"name": "'+arguments[0]+'",';
+	json += '"argv":[';
 	for (i=1;i<arguments.length;i++)
 	{
 		json+=''+arguments[i];

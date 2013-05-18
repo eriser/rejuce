@@ -62,6 +62,8 @@ private:
 	int _lengthBars;
 	int _lengthClocks;
 
+	int _ledPos;
+
 	PatternState _state;
 
 	HostEventListener* _pHostEventListener;

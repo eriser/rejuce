@@ -59,7 +59,6 @@ private:
 	Pattern* _pCurrentPattern;
 	int _nextPattern;
 	int _clock;
-	int _ledPos;
 	float _bpm;
 
 	SongState _state;

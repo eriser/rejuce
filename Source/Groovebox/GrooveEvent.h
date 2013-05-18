@@ -14,6 +14,8 @@ enum GrooveEventName
 	GC_BUTTON_UP = 2,
 
 	GC_KNOB = 3,
+
+	GC_OUT_LEDPOS = 100,		// one param, -1 for all off, 0-16 normally
 };
 
 enum GrooveControlName

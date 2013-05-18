@@ -226,4 +226,34 @@ void WebInterface::parseCommand(char* szCommand)
 void WebInterface::onGrooveEvent(GrooveEvent& event)
 {
 	// send event to websocket
+	unsigned char outbuf[128];
+
+	cJSON* pJson = cJSON_CreateObject();
+	const char* eventName = nullptr;
+	switch (event.name)
+	{
+	case GC_BUTTON_DOWN: eventName = "GC_BUTTON_DOWN"; break;
+	case GC_BUTTON_UP: eventName = "GC_BUTTON_UP"; break;
+	case GC_KNOB: eventName = "GC_KNOB"; break;
+	case GC_OUT_LEDPOS: eventName = "GC_OUT_LEDPOS"; break;
+	default:
+		return;
+		break;
+	}
+	cJSON_AddItemToObject(pJson,"name",cJSON_CreateString(eventName));
+	cJSON* pArray = cJSON_CreateIntArray(event.argv,event.argc);
+	cJSON_AddItemToObject(pJson,"argv",pArray);
+
+	printf("=====%d\n",event.name);
+	char* c = cJSON_PrintUnformatted(pJson);
+
+	printf ("send: %s\n",c);
+
+	outbuf[0] = 0x81;
+	outbuf[1] = snprintf((char *) outbuf + 2, sizeof(outbuf) - 2, "%s", c);
+	mg_write(_conn, outbuf, 2 + outbuf[1]);
+
+	free(c);
+	cJSON_Delete(pJson);
 }
+

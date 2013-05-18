@@ -71,7 +71,17 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 
 void Groovebox::onHostEvent(HostEvent& event)
 {
-	// convert this to a groove event if necessary
+	switch (event.name)
+	{
+		case HC_OUT_LEDPOS:
+		{
+			GrooveEvent ge = GrooveEventFactory::event(GC_OUT_LEDPOS,event.argv[0]);
+			_interface->onGrooveEvent(ge);
+			break;
+		}
+		default:
+			break;
+	}
 }
 
 void Groovebox::out(GrooveEvent &event)
