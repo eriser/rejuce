@@ -15,7 +15,32 @@ enum GrooveEventName
 
 	GC_KNOB = 3,
 
+	GC_LED = 4,					// 2 params, [which led] [on/off]
+
 	GC_OUT_LEDPOS = 100,		// one param, -1 for all off, 0-16 normally
+};
+
+enum GrooveLedName
+{
+	GT_LED_PLAYING =0,
+	GT_LED_RECORDING,
+
+	GT_LED_POS_0 = 100,
+	GT_LED_POS_1 = 101,
+	GT_LED_POS_2 = 102,
+	GT_LED_POS_3 = 103,
+	GT_LED_POS_4 = 104,
+	GT_LED_POS_5 = 105,
+	GT_LED_POS_6 = 106,
+	GT_LED_POS_7 = 107,
+	GT_LED_POS_8 = 108,
+	GT_LED_POS_9 = 109,
+	GT_LED_POS_10 = 110,
+	GT_LED_POS_11 = 111,
+	GT_LED_POS_12 = 112,
+	GT_LED_POS_13 = 113,
+	GT_LED_POS_14 = 114,
+	GT_LED_POS_15 = 115,
 };
 
 enum GrooveControlName
@@ -25,7 +50,6 @@ enum GrooveControlName
 	GT_PAUSE,
 	GT_REWIND,
 	GT_RECORD,
-
 };
 
 struct GrooveEvent
