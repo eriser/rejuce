@@ -27,6 +27,37 @@ td.center
 	width:54px;
 	height:57px
 }
+
+.buttonTransportRecord
+{
+	background: url('transport_record.png') no-repeat;
+	width:52px;
+	height:31px;
+}
+.buttonTransporStop
+{
+	background: url('transport_stop.png') no-repeat;
+	width:52px;
+	height:31px;
+}
+.buttonTransportBack
+{
+	background: url('transport_back.png') no-repeat;
+	width:52px;
+	height:31px;
+}
+.buttonTransportPause
+{
+	background: url('transport_pause.png') no-repeat;
+	width:52px;
+	height:31px;
+}
+.buttonTransportPlay
+{
+	background: url('transport_play.png') no-repeat;
+	width:52px;
+	height:31px;
+}
 </STYLE>
 
 <script language="javascript" type="text/javascript">
@@ -104,11 +135,43 @@ window.addEventListener("load", init, false);
 </head>
 <body>
 
-<input type="button" name="record" value="(r)" onclick="doSend('GC_BUTTON_DOWN',4)"></input>
-<input type="button" name="stop" value="[ ]" onclick="doSend('GC_BUTTON_DOWN',0)"></input>
-<input type="button" name="play" value="|>" onclick="doSend('GC_BUTTON_DOWN',1)"></input>
-<input type="button" name="pause" value="||" onclick="doSend('GC_BUTTON_DOWN',2)"></input>
+<!-- transport -->
 
+<table>
+<tr>
+<td class="center">
+<IMG class="led" SRC="red_light_off.png">
+</td><td>
+&nbsp;
+</td><td>
+&nbsp;
+</td><td>
+&nbsp;
+</td><td class="center">
+<IMG class="led" SRC="green_light_off.png">
+</td>
+</tr>
+<tr>
+<td>
+<input type="button" class="buttonTransportRecord" name="record" onclick="doSend('GC_BUTTON_DOWN',4)"></input>
+</td><td>
+<input type="button" class="buttonTransporStop" name="stop" onclick="doSend('GC_BUTTON_DOWN',0)"></input>
+</td><td>
+<input type="button" class="buttonTransportBack" name="back" onclick="doSend('GC_BUTTON_DOWN',2)"></input>
+</td><td>
+<input type="button" class="buttonTransportPause" name="pause" onclick="doSend('GC_BUTTON_DOWN',2)"></input>
+</td><td>
+<input type="button" class="buttonTransportPlay" name="play" onclick="doSend('GC_BUTTON_DOWN',1)"></input>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+<!-- piano bit -->
 <TABLE>
 		<TR>
 		<table><tr>
@@ -132,40 +195,40 @@ window.addEventListener("load", init, false);
 		</TR>
 		<TR>
 		<table><tr>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_on.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_on.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_on.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_on.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_on.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
-			<TD COLSPAN="2" CLASS="center"><IMG class="led" SRC="red_light_on.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_on.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_on.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_on.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_on.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_on.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_off.png"></TD>
+			<TD CLASS="center"><IMG class="led" SRC="red_light_on.png"></TD>
 			</tr>
 			<tr>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_A" ONCLICK="buttonPress('A')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_B" ONCLICK="buttonPress('B')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_C" ONCLICK="buttonPress('C')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_D" ONCLICK="buttonPress('D')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_E" ONCLICK="buttonPress('E')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_F" ONCLICK="buttonPress('F')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_G" ONCLICK="buttonPress('G')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_H" ONCLICK="buttonPress('H')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_I" ONCLICK="buttonPress('I')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_J" ONCLICK="buttonPress('J')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_K" ONCLICK="buttonPress('K')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_L" ONCLICK="buttonPress('L')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_M" ONCLICK="buttonPress('M')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_N" ONCLICK="buttonPress('N')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_O" ONCLICK="buttonPress('O')"></TD>
-			<TD COLSPAN="2"><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_P" ONCLICK="buttonPress('P')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_A" ONCLICK="buttonPress('A')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_B" ONCLICK="buttonPress('B')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_C" ONCLICK="buttonPress('C')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_D" ONCLICK="buttonPress('D')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_E" ONCLICK="buttonPress('E')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_F" ONCLICK="buttonPress('F')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_G" ONCLICK="buttonPress('G')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_H" ONCLICK="buttonPress('H')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_I" ONCLICK="buttonPress('I')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_J" ONCLICK="buttonPress('J')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_K" ONCLICK="buttonPress('K')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_L" ONCLICK="buttonPress('L')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_M" ONCLICK="buttonPress('M')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_N" ONCLICK="buttonPress('N')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_O" ONCLICK="buttonPress('O')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_P" ONCLICK="buttonPress('P')"></TD>
 			</tr></table>
 		</TR>
 		</TABLE> 
