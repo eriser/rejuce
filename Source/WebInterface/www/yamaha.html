@@ -1,115 +1,44 @@
-<!DOCTYPE html>
-
-<meta charset="utf-8" />
-
-<head>
-<title>WebSocket Test</title>
-
-<STYLE>
-td.center
-{
-	text-align:center;
-}
-.center
-{
-	margin-left:auto;
-	margin-right:auto;
-}
-.buttonWhite
-{
-	background: url('button_white.png') no-repeat;
-	width:54px;
-	height:56px
-}
-.buttonBlack
-{
-	background: url('button_black.png') no-repeat;
-	width:54px;
-	height:57px
-}
-</STYLE>
-
-<script language="javascript" type="text/javascript">
-
-var wsUri = "ws://localhost:8080/";
-var output;
-var websocket;
-
-function init()
-{
-	output = document.getElementById("output");
-	connectWebSocket();
-}
-
-function connectWebSocket()
-{
-	websocket = new WebSocket(wsUri);
-	websocket.onopen = function(evt) { onOpen(evt) };
-	websocket.onclose = function(evt) { onClose(evt) };
-	websocket.onmessage = function(evt) { onMessage(evt) };
-	websocket.onerror = function(evt) { onError(evt) };
-}
-
-function onOpen(evt)
-{
- 	trace("CONNECTED");
-}
-
-function onClose(evt)
-{
-	trace("DISCONNECTED, reconnect: "+evt.data);
-	websocket = new WebSocket(wsUri);
-}
-
-function onError(evt)
-{
-	trace('ERROR, attempt reconnect: '+evt.data);
-	websocket = new WebSocket(wsUri);
-}
-
-function onMessage(evt)
-{
-	trace('RESPONSE: ' + evt.data);
-}
-
-function doSend()
-{
-	// make json
-	var json = '{"name": "'+arguments[0]+'",';
-	json += '"argv":[';
-	for (i=1;i<arguments.length;i++)
-	{
-		json+=''+arguments[i];
-		if (i!=arguments.length-1)
+<!DOCTYPE HTML PUBLIC 
+  "-//IETF//DTD HTML LEVEL 1//EN">
+<HTML>
+  <HEAD>
+    <TITLE>Yamaha RM1x</TITLE>
+    <META HTTP-EQUIV="Content-Type" 
+          CONTENT="text/html; charset=utf-8">
+	<SCRIPT>
+		function buttonPress(name)
 		{
-			json +=',';
+		alert("Button " + name + " pressed");
 		}
-	}
-	json += ']}';
+	</SCRIPT>		  
+	<STYLE>
+		td.center
+		{
+			text-align:center;
+		}
+		.center
+		{
+			margin-left:auto;
+			margin-right:auto;
+		}
+		.buttonWhite
+		{
+			background: url('button_white.png') no-repeat;
+			width:54px;
+			height:56px
+		}
+		.buttonBlack
+		{
+			background: url('button_black.png') no-repeat;
+			width:54px;
+			height:57px
+		}
+	</STYLE>
+  </HEAD>
+  <BODY>
 
-	trace("SENT: " + json); 
-	websocket.send(json);
-}
 
-function trace(message)
-{
-	console.log(message);
-}
-
-
-window.addEventListener("load", init, false);
-
-</script>	
-
-</head>
-<body>
-
-<input type="button" name="record" value="(r)" onclick="doSend('GC_BUTTON_DOWN',4)"></input>
-<input type="button" name="stop" value="[ ]" onclick="doSend('GC_BUTTON_DOWN',0)"></input>
-<input type="button" name="play" value="|>" onclick="doSend('GC_BUTTON_DOWN',1)"></input>
-<input type="button" name="pause" value="||" onclick="doSend('GC_BUTTON_DOWN',2)"></input>
-
-<TABLE>
+  <TABLE>
 		<TR>
 		<table><tr>
 			<TD width="90">&nbsp;</TD>
@@ -169,6 +98,5 @@ window.addEventListener("load", init, false);
 			</tr></table>
 		</TR>
 		</TABLE> 
-
-</body>
-</html> 
+  </BODY>
+</HTML>
