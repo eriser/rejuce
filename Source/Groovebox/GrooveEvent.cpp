@@ -75,6 +75,32 @@ void GrooveEventFactory::validate(GrooveEvent* c)
 
 }
 
+const char* GrooveEvent_getNameString(GrooveEventName name)
+{
+	// Use Preprocessor to expand data into switch statement cases
+	switch(name)
+	{
+		#define X(Enum, String) case Enum:  return String; break;
+			X_GROOVEEVENTS
+		#undef X
 
+	default: return nullptr; break;
+	}
+	return nullptr;
+}
+
+const char* GrooveControl_getNameString(GrooveControlName name)
+{
+	// Use Preprocessor to expand data into switch statement cases
+	switch(name)
+	{
+		#define X(Enum, String) case Enum:  return String; break;
+			X_GROOVEEVENTS
+		#undef X
+
+	default: return nullptr; break;
+	}
+	return nullptr;
+}
 
 

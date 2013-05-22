@@ -6,57 +6,67 @@
 
 #define GROOVEEVENT_INVALID 0
 
-enum GrooveEventName
-{
-	GC_INVALID = GROOVEEVENT_INVALID,
 
-	GC_BUTTON_DOWN = 1,
-	GC_BUTTON_UP = 2,
+ #define X_GROOVEEVENTS \
+    X(GE_INVALID, 		"invalid") \
+    X(GE_BUTTON_DOWN,   "buttonDown") \
+    X(GE_BUTTON_UP, 	"buttonUp") \
+    X(GE_KNOB, 			"knob") \
+    X(GE_LEDSET,		"led") \
+	X(GE_SIZE,		 	"size")
 
-	GC_KNOB = 3,
+typedef enum {
+	#define X(Enum, String)       Enum,
+		X_GROOVEEVENTS
+	#undef X
+} GrooveEventName;
 
-	GC_LED = 4,					// 2 params, [which led] [on/off]
 
-	GC_OUT_LEDPOS = 100,		// one param, -1 for all off, 0-16 normally
-};
+#define X_GROOVECONTROLS \
+   X(GC_INVALID, 		"invalid") \
+   \
+   X(GC_BUTTON_PLAY,	"play") \
+   X(GC_BUTTON_STOP,	"stop") \
+   X(GC_BUTTON_PAUSE,	"pause") \
+   X(GC_BUTTON_BACK,	"back") \
+   X(GC_BUTTON_RECORD,	"record") \
+   \
+   X(GCL_PLAYING, 		"playing") \
+   X(GCL_RECORDING, 	"recording") \
+   X(GCL_SEMI_0, 		"semi0") \
+   X(GCL_SEMI_1, 		"semi1") \
+   X(GCL_SEMI_2, 		"semi2") \
+   X(GCL_SEMI_3, 		"semi3") \
+   X(GCL_SEMI_4, 		"semi4") \
+   X(GCL_SEMI_5, 		"semi5") \
+   X(GCL_SEMI_6, 		"semi6") \
+   X(GCL_SEMI_7, 		"semi7") \
+   X(GCL_SEMI_8, 		"semi8") \
+   X(GCL_SEMI_9, 		"semi9") \
+   X(GCL_SEMI_10, 		"semi10") \
+   X(GCL_SEMI_11, 		"semi11") \
+   X(GCL_SEMI_12, 		"semi12") \
+   X(GCL_SEMI_13, 		"semi13") \
+   X(GCL_SEMI_14, 		"semi14") \
+   X(GCL_SEMI_15, 		"semi15") \
+   \
+   X(GC_SIZE,		 	"size")
 
-enum GrooveLedName
-{
-	GT_LED_PLAYING =0,
-	GT_LED_RECORDING,
+typedef enum {
+	#define X(Enum, String)       Enum,
+	X_GROOVECONTROLS
+	#undef X
+} GrooveControlName;
 
-	GT_LED_POS_0 = 100,
-	GT_LED_POS_1 = 101,
-	GT_LED_POS_2 = 102,
-	GT_LED_POS_3 = 103,
-	GT_LED_POS_4 = 104,
-	GT_LED_POS_5 = 105,
-	GT_LED_POS_6 = 106,
-	GT_LED_POS_7 = 107,
-	GT_LED_POS_8 = 108,
-	GT_LED_POS_9 = 109,
-	GT_LED_POS_10 = 110,
-	GT_LED_POS_11 = 111,
-	GT_LED_POS_12 = 112,
-	GT_LED_POS_13 = 113,
-	GT_LED_POS_14 = 114,
-	GT_LED_POS_15 = 115,
-};
 
-enum GrooveControlName
-{
-	GT_STOP =0,
-	GT_PLAY,
-	GT_PAUSE,
-	GT_REWIND,
-	GT_RECORD,
-};
+const char* GrooveEvent_getNameString(GrooveEventName name);
+const char* GrooveControl_getNameString(GrooveControlName name);
 
 struct GrooveEvent
 {
-	GrooveEventName name;
-	int argc;
-	int argv[8];
+	GrooveEventName event;
+	GrooveControlName control;
+	int argv;
 };
 
 class GrooveEventFactory {

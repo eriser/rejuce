@@ -14,6 +14,8 @@ WebInterface::WebInterface() : Thread ("WebInterface")
 {
 	_ctx = nullptr;
 	_conn = nullptr;
+
+	populateMaps();
 }
 
 WebInterface::~WebInterface()
@@ -185,6 +187,29 @@ printf("send ack\n");
 	return 1; // return 0 close websocket
 }
 
+void WebInterface::populateMaps()
+{
+	int i;
+
+	for (i=0;i<GE_SIZE;i++)
+	{
+		const char* name = GrooveEvent_getNameString((GrooveEventName)i);
+		_eventMap.set(String(name),i);
+	}
+
+	for (i=0;i<GL_SIZE;i++)
+	{
+		const char* name = GrooveLed_getNameString((GrooveLedName)i);
+		_ledMap.set(String(name),i);
+	}
+
+	for (i=0;i<GC_SIZE;i++)
+	{
+		const char* name = GrooveControl_getNameString((GrooveControlName)i);
+		_controlMap.set(String(name),i);
+	}
+}
+
 void WebInterface::parseCommand(char* szCommand)
 {
 	cJSON* pJson = cJSON_Parse(szCommand);
@@ -192,15 +217,18 @@ void WebInterface::parseCommand(char* szCommand)
 	GrooveEvent event;
 	memset(&event,0,sizeof(GrooveEvent));
 
-	cJSON* name = cJSON_GetObjectItem(pJson,"name");
-	if (name && name->type==cJSON_String && name->valuestring)
+	// event
+	cJSON* pj = cJSON_GetObjectItem(pJson,"event");
+	if (pj && pj->type==cJSON_String && pj->valuestring)
 	{
-		if (0==strcmp(name->valuestring,"GC_BUTTON_DOWN"))
-			event.name=GC_BUTTON_DOWN;
-		if (0==strcmp(name->valuestring,"GC_BUTTON_UP"))
-			event.name=GC_BUTTON_UP;
-		if (0==strcmp(name->valuestring,"GC_KNOB"))
-			event.name=GC_KNOB;
+		event.event = _eventMap[pj->valuestring];
+	}
+
+	// thing
+	cJSON* pj = cJSON_GetObjectItem(pJson,"event");
+	if (pj && pj->type==cJSON_String && pj->valuestring)
+	{
+		event.event = _eventMap[pj->valuestring];
 	}
 
 	cJSON* argv = cJSON_GetObjectItem(pJson,"argv");

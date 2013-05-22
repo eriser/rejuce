@@ -47,7 +47,7 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 			case GT_PAUSE:
 				_host->event(HostEventFactory::event(HC_TRANSPORT_PAUSE));
 				break;
-			case GT_REWIND:
+			case GT_BACK:
 				_host->event(HostEventFactory::event(HC_TRANSPORT_REWIND));
 				break;
 			case GT_RECORD:
