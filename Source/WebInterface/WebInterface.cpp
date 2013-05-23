@@ -194,58 +194,51 @@ void WebInterface::populateMaps()
 	for (i=0;i<GE_SIZE;i++)
 	{
 		const char* name = GrooveEvent_getNameString((GrooveEventName)i);
-		_eventMap.set(String(name),i);
-	}
-
-	for (i=0;i<GL_SIZE;i++)
-	{
-		const char* name = GrooveLed_getNameString((GrooveLedName)i);
-		_ledMap.set(String(name),i);
+		_eventMap.set(String(name),(GrooveEventName)i);
 	}
 
 	for (i=0;i<GC_SIZE;i++)
 	{
 		const char* name = GrooveControl_getNameString((GrooveControlName)i);
-		_controlMap.set(String(name),i);
+		_controlMap.set(String(name),(GrooveControlName)i);
 	}
 }
 
 void WebInterface::parseCommand(char* szCommand)
 {
 	cJSON* pJson = cJSON_Parse(szCommand);
+	cJSON* pj;
+	bool bOk = true;
+
+	if (!pJson)
+		return;
 
 	GrooveEvent event;
 	memset(&event,0,sizeof(GrooveEvent));
 
 	// event
-	cJSON* pj = cJSON_GetObjectItem(pJson,"event");
-	if (pj && pj->type==cJSON_String && pj->valuestring)
+	pj = cJSON_GetObjectItem(pJson,"event");
+	if (bOk && pj && pj->type==cJSON_String && pj->valuestring && _eventMap.contains(pj->valuestring))
 	{
 		event.event = _eventMap[pj->valuestring];
 	}
+	else bOk = false;
 
 	// thing
-	cJSON* pj = cJSON_GetObjectItem(pJson,"event");
-	if (pj && pj->type==cJSON_String && pj->valuestring)
+	pj = cJSON_GetObjectItem(pJson,"control");
+	if (bOk && pj && pj->type==cJSON_String && pj->valuestring && _controlMap.contains(pj->valuestring))
 	{
-		event.event = _eventMap[pj->valuestring];
+		event.control = _controlMap[pj->valuestring];
+	}
+	else bOk = false;
+
+	pj = cJSON_GetObjectItem(pJson,"argv");
+	if (bOk && pj && pj->type==cJSON_Number)
+	{
+		event.argv = _controlMap[pj->valuestring];
 	}
 
-	cJSON* argv = cJSON_GetObjectItem(pJson,"argv");
-	if (argv && argv->type==cJSON_Array)
-	{
-		event.argc = cJSON_GetArraySize(argv);
-		for (int i=0;i<event.argc;i++)
-		{
-			cJSON* arg = cJSON_GetArrayItem(argv,i);
-			if (arg && arg->type==cJSON_Number)
-			{
-				event.argv[i] = arg->valueint;
-			}
-		}
-	}
-
-	if (event.name!=GC_INVALID)
+	if (bOk && event.event!=GE_INVALID)
 	{
 		_pOutListener->onGrooveEvent(event);
 	}
@@ -257,22 +250,17 @@ void WebInterface::onGrooveEvent(GrooveEvent& event)
 	unsigned char outbuf[128];
 
 	cJSON* pJson = cJSON_CreateObject();
-	const char* eventName = nullptr;
-	switch (event.name)
-	{
-	case GC_BUTTON_DOWN: eventName = "GC_BUTTON_DOWN"; break;
-	case GC_BUTTON_UP: eventName = "GC_BUTTON_UP"; break;
-	case GC_KNOB: eventName = "GC_KNOB"; break;
-	case GC_OUT_LEDPOS: eventName = "GC_OUT_LEDPOS"; break;
-	default:
-		return;
-		break;
-	}
-	cJSON_AddItemToObject(pJson,"name",cJSON_CreateString(eventName));
-	cJSON* pArray = cJSON_CreateIntArray(event.argv,event.argc);
-	cJSON_AddItemToObject(pJson,"argv",pArray);
 
-	printf("=====%d\n",event.name);
+	const char* eventName = nullptr;
+	eventName = GrooveEvent_getNameString(event.event);
+	cJSON_AddItemToObject(pJson,"event",cJSON_CreateString(eventName));
+
+	const char* controlName = nullptr;
+	controlName = GrooveControl_getNameString(event.control);
+	cJSON_AddItemToObject(pJson,"control",cJSON_CreateString(controlName));
+
+	cJSON_AddItemToObject(pJson,"argv",cJSON_CreateNumber(event.argv));
+
 	char* c = cJSON_PrintUnformatted(pJson);
 
 	printf ("send: %s\n",c);

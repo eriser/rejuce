@@ -14,65 +14,13 @@ GrooveEvent GrooveEventFactory::event(GrooveEvent* c)
 	return sc;
 }
 
-GrooveEvent GrooveEventFactory::event(GrooveEventName name)
+GrooveEvent GrooveEventFactory::event(GrooveEventName event,GrooveControlName control,int argv)
 {
 	GrooveEvent sc;
-	sc.name = name;
-	sc.argc = 0;
-	validate(&sc);
+	sc.event = event;
+	sc.control = control;
+	sc.argv = argv;
 	return sc;
-}
-
-GrooveEvent GrooveEventFactory::event(GrooveEventName name,int arg0)
-{
-	GrooveEvent sc;
-	sc.name = name;
-	sc.argc = 1;
-	sc.argv[0]=arg0;
-	validate(&sc);
-	return sc;
-}
-
-GrooveEvent GrooveEventFactory::event(GrooveEventName name,int arg0,int arg1)
-{
-	GrooveEvent sc;
-	sc.name = name;
-	sc.argc = 2;
-	sc.argv[0]=arg0;
-	sc.argv[1]=arg1;
-	validate(&sc);
-	return sc;
-}
-
-GrooveEvent GrooveEventFactory::event(GrooveEventName name,int argc,int* args)
-{
-	GrooveEvent sc;
-	sc.name = name;
-	sc.argc = argc;
-	for (int i=0;i<argc;i++)
-	{
-		sc.argv[i]=args[i];
-	}
-	validate(&sc);
-	return sc;
-}
-
-GrooveEvent GrooveEventFactory::event(GrooveEventName name,int arg0,int arg1,int arg2)
-{
-	GrooveEvent sc;
-	sc.name = name;
-	sc.argc = 2;
-	sc.argv[0]=arg0;
-	sc.argv[1]=arg1;
-	sc.argv[2]=arg2;
-	validate(&sc);
-	return sc;
-}
-
-
-void GrooveEventFactory::validate(GrooveEvent* c)
-{
-
 }
 
 const char* GrooveEvent_getNameString(GrooveEventName name)
@@ -95,7 +43,7 @@ const char* GrooveControl_getNameString(GrooveControlName name)
 	switch(name)
 	{
 		#define X(Enum, String) case Enum:  return String; break;
-			X_GROOVEEVENTS
+			X_GROOVECONTROLS
 		#undef X
 
 	default: return nullptr; break;

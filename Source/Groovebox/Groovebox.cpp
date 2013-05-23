@@ -12,6 +12,10 @@ Groovebox::Groovebox(Host* pHost,GrooveboxInterface* pInterface) :GrooveEventLis
 	_host = pHost;
 	_interface = pInterface;
 	_host->setHostEventListener(this);
+
+	for (int i=0;i<GC_SIZE;i++) _controlState[i]=0;
+
+	_transportState = TRANSPORT_STOPPED;
 }
 
 Groovebox::~Groovebox()
@@ -32,41 +36,77 @@ void Groovebox::stop()
 void Groovebox::onGrooveEvent(GrooveEvent& event)
 {
 	// events coming in from interface. update local state or fire host event
-	switch (event.name)
+	switch (event.event)
 	{
-	case GC_BUTTON_DOWN:
-	{
-		switch (event.argv[0])
+		case GE_BUTTON_DOWN:
 		{
-			case GT_STOP:
-				_host->event(HostEventFactory::event(HC_TRANSPORT_STOP));
-				break;
-			case GT_PLAY:
-				_host->event(HostEventFactory::event(HC_TRANSPORT_PLAY));
-				break;
-			case GT_PAUSE:
-				_host->event(HostEventFactory::event(HC_TRANSPORT_PAUSE));
-				break;
-			case GT_BACK:
-				_host->event(HostEventFactory::event(HC_TRANSPORT_REWIND));
-				break;
-			case GT_RECORD:
-				_host->event(HostEventFactory::event(HC_TRANSPORT_RECORD));
-				break;
+			switch (event.control)
+			{
+				case GC_BUTTON_STOP:
+					_host->event(HostEventFactory::event(HC_TRANSPORT_STOP));
+					_transportState = TRANSPORT_STOPPED;
+					setTransportLeds();
+					break;
+				case GC_BUTTON_PLAY:
+					_host->event(HostEventFactory::event(HC_TRANSPORT_PLAY));
+					_transportState = TRANSPORT_PLAYING;
+					setTransportLeds();
+					break;
+				case GC_BUTTON_PAUSE:
+					_host->event(HostEventFactory::event(HC_TRANSPORT_PAUSE));
+					_transportState = TRANSPORT_PAUSED;
+					setTransportLeds();
+					break;
+				case GC_BUTTON_BACK:
+					_host->event(HostEventFactory::event(HC_TRANSPORT_REWIND));
+					break;
+				case GC_BUTTON_RECORD:
+					_host->event(HostEventFactory::event(HC_TRANSPORT_RECORD));
+					_transportState = TRANSPORT_RECORDING;
+					setTransportLeds();
+					break;
 
-			default:
-				// TODO: something else
-				break;
+				default:
+					// TODO: something else
+					break;
+			}
+			break;
 		}
-		break;
-	}
-	case GC_BUTTON_UP:
 
-		break;
-	case GC_KNOB:
+		default:
+			break;
 
-		break;
 	}
+}
+
+void Groovebox::setTransportLeds()
+{
+	GrooveEvent ge;
+
+	if ( ((_transportState==TRANSPORT_PLAYING) != (_controlState[GCL_PLAYING])) ||
+		 ((_transportState==TRANSPORT_RECORDING) != (_controlState[GCL_RECORDING])))
+	{
+		ge = GrooveEventFactory::event(GE_LEDSET,GCL_PLAYING,(_transportState==TRANSPORT_PLAYING));
+		_interface->onGrooveEvent(ge);
+	}
+
+	if ((_transportState==TRANSPORT_RECORDING) != (_controlState[GCL_RECORDING]))
+	{
+		ge = GrooveEventFactory::event(GE_LEDSET,GCL_PLAYING,(_transportState==TRANSPORT_RECORDING));
+		_interface->onGrooveEvent(ge);
+	}
+}
+
+void Groovebox::setSemiLedsOff()
+{
+
+}
+
+void Groovebox::setLedPos(HostEvent& event)
+{
+	// TODO
+//	GrooveEvent ge = GrooveEventFactory::event(GCL_,event.argv[0]);
+//				_interface->onGrooveEvent(ge);
 }
 
 void Groovebox::onHostEvent(HostEvent& event)
@@ -75,20 +115,11 @@ void Groovebox::onHostEvent(HostEvent& event)
 	{
 		case HC_OUT_LEDPOS:
 		{
-			GrooveEvent ge = GrooveEventFactory::event(GC_OUT_LEDPOS,event.argv[0]);
-			_interface->onGrooveEvent(ge);
+			setLedPos(event);
 			break;
 		}
 		default:
 			break;
 	}
-}
-
-void Groovebox::out(GrooveEvent &event)
-{
-	// feeds the event to the interface
-	// at the moment a webinterface
-
-	_interface->onGrooveEvent(event);
 }
 

@@ -13,6 +13,7 @@
 #include "../Host/HostEventListener.h"
 #include "GrooveEventListener.h"
 #include "GrooveboxInterface.h"
+#include "../Sequencer/Sequencer.h"
 
 
 class Groovebox : public GrooveEventListener, public HostEventListener {
@@ -30,10 +31,16 @@ public:
 	void onHostEvent(HostEvent& event);
 
 private:
-	void out(GrooveEvent &event);
+	void setLedPos(HostEvent& event);
+	void setSemiLedsOff();
+	void setTransportLeds();
 
 	GrooveboxInterface* _interface;
 	Host* _host;
+
+	TransportState _transportState;
+
+	int _controlState[GC_SIZE];
 };
 
 #endif /* GROOVEBOX_H_ */

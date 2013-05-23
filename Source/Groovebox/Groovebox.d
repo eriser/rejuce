@@ -326,4 +326,5 @@
  ../../Source/Groovebox/../Host/HostEventListener.h \
  ../../Source/Groovebox/GrooveEventListener.h \
  ../../Source/Groovebox/GrooveEvent.h \
- ../../Source/Groovebox/GrooveboxInterface.h
+ ../../Source/Groovebox/GrooveboxInterface.h \
+ ../../Source/Groovebox/../Sequencer/Sequencer.h

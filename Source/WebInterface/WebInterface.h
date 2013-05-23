@@ -39,9 +39,8 @@ private:
 	struct mg_context* _ctx;
 	struct mg_connection* _conn;
 
-	HashMap<String,int> _eventMap;
-	HashMap<String,int> _controlMap;
-	HashMap<String,int> _ledMap;
+	HashMap<String,GrooveEventName> _eventMap;
+	HashMap<String,GrooveControlName> _controlMap;
 
 };
 

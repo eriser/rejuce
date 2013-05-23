@@ -327,6 +327,7 @@
  ../../Source/Groovebox/GrooveEventListener.h \
  ../../Source/Groovebox/GrooveEvent.h \
  ../../Source/Groovebox/GrooveboxInterface.h \
+ ../../Source/Groovebox/../Sequencer/Sequencer.h \
  ../../Source/WebInterface/WebInterface.h \
  ../../Source/WebInterface/mongoose.h \
  ../../Source/WebInterface/../Groovebox/Groovebox.h \

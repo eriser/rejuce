@@ -103,20 +103,13 @@ function onMessage(evt)
 	trace('RESPONSE: ' + evt.data);
 }
 
-function doSend()
+function doSend(event,control,argv)
 {
 	// make json
-	var json = '{"name": "'+arguments[0]+'",';
-	json += '"argv":[';
-	for (i=1;i<arguments.length;i++)
-	{
-		json+=''+arguments[i];
-		if (i!=arguments.length-1)
-		{
-			json +=',';
-		}
-	}
-	json += ']}';
+	var json = '{"event": "'+event+'",';
+	json += '"control": "'+control+'",';
+	json += '"argv": '+argv;
+	json += '}';
 
 	trace("SENT: " + json); 
 	websocket.send(json);
@@ -153,15 +146,15 @@ window.addEventListener("load", init, false);
 </tr>
 <tr>
 <td>
-<input type="button" class="buttonTransportRecord" name="record" onclick="doSend('GC_BUTTON_DOWN',4)"></input>
+<input type="button" class="buttonTransportRecord" name="record" onclick="doSend('buttonDown','record',0)"></input>
 </td><td>
-<input type="button" class="buttonTransporStop" name="stop" onclick="doSend('GC_BUTTON_DOWN',0)"></input>
+<input type="button" class="buttonTransporStop" name="stop" onclick="doSend('buttonDown','stop',0)"></input>
 </td><td>
-<input type="button" class="buttonTransportBack" name="back" onclick="doSend('GC_BUTTON_DOWN',2)"></input>
+<input type="button" class="buttonTransportBack" name="back" onclick="doSend('buttonDown','back',0)"></input>
 </td><td>
-<input type="button" class="buttonTransportPause" name="pause" onclick="doSend('GC_BUTTON_DOWN',2)"></input>
+<input type="button" class="buttonTransportPause" name="pause" onclick="doSend('buttonDown','pause',0)"></input>
 </td><td>
-<input type="button" class="buttonTransportPlay" name="play" onclick="doSend('GC_BUTTON_DOWN',1)"></input>
+<input type="button" class="buttonTransportPlay" name="play" onclick="doSend('buttonDown','play',0)"></input>
 </td>
 </tr>
 </table>

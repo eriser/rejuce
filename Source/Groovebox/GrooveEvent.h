@@ -72,16 +72,9 @@ struct GrooveEvent
 class GrooveEventFactory {
 public:
 	static GrooveEvent event(GrooveEvent* c);
-	static GrooveEvent event(GrooveEventName name);
-	static GrooveEvent event(GrooveEventName name,int argc,int* args);
-	static GrooveEvent event(GrooveEventName name,int arg0);
-	static GrooveEvent event(GrooveEventName name,int arg0,int arg1);
-	static GrooveEvent event(GrooveEventName name,int arg0,int arg1,int arg2);
-
-	static GrooveEvent event(const MidiMessage& message);
+	static GrooveEvent event(GrooveEventName event,GrooveControlName control,int argv);
 
 private:
-	static void validate(GrooveEvent* c);
 
 };
 
