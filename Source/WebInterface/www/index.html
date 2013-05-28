@@ -15,6 +15,32 @@ td.center
 	margin-left:auto;
 	margin-right:auto;
 }
+
+.ledGreenOff
+{
+	background: url('green_light_off.png') no-repeat;
+	width:12;
+	height:12;
+}
+.ledGreenOn
+{
+	background: url('green_light_on.png') no-repeat;
+	width:12;
+	height:12;
+}
+.ledRedOff
+{
+	background: url('red_light_off.png') no-repeat;
+	width:12;
+	height:12;
+}
+.ledRedOn
+{
+	background: url('red_light_on.png') no-repeat;
+	width:12;
+	height:12;
+}
+
 .buttonWhite
 {
 	background: url('button_white.png') no-repeat;
@@ -60,6 +86,7 @@ td.center
 }
 </STYLE>
 
+<script language="javascript" type="text/javascript" src="jquery-1.9.1.js"></script>
 <script language="javascript" type="text/javascript">
 
 var wsUri = "ws://localhost:8080/";
@@ -89,18 +116,29 @@ function onOpen(evt)
 function onClose(evt)
 {
 	trace("DISCONNECTED, reconnect: "+evt.data);
-	websocket = new WebSocket(wsUri);
+	//websocket = new WebSocket(wsUri);
 }
 
 function onError(evt)
 {
 	trace('ERROR, attempt reconnect: '+evt.data);
-	websocket = new WebSocket(wsUri);
+	//websocket = new WebSocket(wsUri);
 }
 
 function onMessage(evt)
 {
-	trace('RESPONSE: ' + evt.data);
+	trace('RECVD: ' + evt.data);
+	json = $.parseJSON(evt.data);
+	
+	switch (json.event)
+	{
+		case "led":
+			setLed(json.control,json.argv);
+		break;
+		default: break;		
+	}
+	
+	
 }
 
 function doSend(event,control,argv)
@@ -123,6 +161,15 @@ function trace(message)
 
 window.addEventListener("load", init, false);
 
+
+function setLed(control,argv)
+{
+	var led = $('#' + control);
+	
+	alert(led.class);
+}
+
+
 </script>	
 
 </head>
@@ -133,7 +180,7 @@ window.addEventListener("load", init, false);
 <table>
 <tr>
 <td class="center">
-<IMG class="led" SRC="red_light_off.png">
+<div class="ledRedOff" id="recording"></div>
 </td><td>
 &nbsp;
 </td><td>
@@ -141,7 +188,7 @@ window.addEventListener("load", init, false);
 </td><td>
 &nbsp;
 </td><td class="center">
-<IMG class="led" SRC="green_light_off.png">
+<div class="ledGreenOff" id="playing"></div>
 </td>
 </tr>
 <tr>

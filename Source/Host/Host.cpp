@@ -56,12 +56,37 @@ void Host::listInterfaces()
 	}
 }
 
+String Host::getFirstOutputDeviceName(String audioDeviceType)
+{
+	for (int n=0;n<_adm.getAvailableDeviceTypes().size();n++)
+	{
+		AudioIODeviceType* dt = _adm.getAvailableDeviceTypes().getUnchecked(n);
+
+		if (dt->getTypeName()==audioDeviceType)
+		{
+			for (int t=0;t<dt->getDeviceNames().size();t++)
+			{
+				return dt->getDeviceNames()[t];
+			}
+		}
+	}
+
+	return String::empty;
+}
+
+// empty string for audio interface uses first one found in specified type
 bool Host::init(String audioDeviceType,String audioInterface,String midiInterface,int sampleRate)
 {
 	listInterfaces();
 
 	_adm.setCurrentAudioDeviceType(audioDeviceType,true);
 	AudioDeviceManager::AudioDeviceSetup ds;
+
+	if (audioInterface.isEmpty())
+	{
+		ds.outputDeviceName = getFirstOutputDeviceName(audioDeviceType);
+		DBG("using default "+ds.outputDeviceName);
+	}
 	ds.outputDeviceName = audioInterface;
 
 	String error = _adm.setAudioDeviceSetup(ds, true);
@@ -74,17 +99,25 @@ bool Host::init(String audioDeviceType,String audioInterface,String midiInterfac
 	_adm.playTestSound();
 
 	// midi setup
-	_adm.setMidiInputEnabled(midiInterface,true);
-	if (!_adm.isMidiInputEnabled(midiInterface))
+	if (!midiInterface.isEmpty())
 	{
-		DBG("no midi input");
-		return false;
+		_adm.setMidiInputEnabled(midiInterface,true);
+		if (!_adm.isMidiInputEnabled(midiInterface))
+		{
+			DBG("no midi input");
+		}
+		else
+		{
+			_midiInterfaceName = midiInterface;
+			_adm.addMidiInputCallback(_midiInterfaceName,this);
+		}
+	}
+	else
+	{
+		DBG("midi input disabled");
 	}
 
-	_midiInterfaceName = midiInterface;
-
 	// start things up
-	_adm.addMidiInputCallback(_midiInterfaceName,this);
 	_app.setProcessor(_hostProcessor);
 	_adm.addAudioCallback(&_app);
 

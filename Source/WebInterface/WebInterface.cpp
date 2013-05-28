@@ -80,10 +80,10 @@ void WebInterface_websocket_ready_handler(struct mg_connection *conn)
 {
 	WebInterface* pThis = (WebInterface*)mg_get_user_info(conn);
 
-	unsigned char buf[40];
-	buf[0] = 0x81;
-	buf[1] = snprintf((char *) buf + 2, sizeof(buf) - 2, "%s", "GNUVEb0x");
-	mg_write(conn, buf, 2 + buf[1]);
+//	unsigned char buf[40];
+//	buf[0] = 0x81;
+//	buf[1] = snprintf((char *) buf + 2, sizeof(buf) - 2, "%s", "GNUVEb0x");
+//	mg_write(conn, buf, 2 + buf[1]);
 }
 
 int WebInterface_websocket_data_handler(struct mg_connection *conn)
@@ -174,7 +174,7 @@ int WebInterface_websocket_data_handler(struct mg_connection *conn)
 	delete[] message;
 
 	/////////////////////////////////////////
-printf("send ack\n");
+	/*printf("send ack\n");
 
 	// acknowledge
 	unsigned char outbuf[40];
@@ -182,7 +182,7 @@ printf("send ack\n");
 	outbuf[1] = snprintf((char *) outbuf + 2, sizeof(outbuf) - 2, "%s", "ACK");
 	mg_write(conn, outbuf, 2 + outbuf[1]);
 
-	printf("ack ok\n");
+	printf("ack ok\n");*/
 
 	return 1; // return 0 close websocket
 }

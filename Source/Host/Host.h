@@ -21,6 +21,7 @@ public:
 	virtual ~Host();
 
 	void listInterfaces();
+	String getFirstOutputDeviceName(String audioDeviceType);
 
 	bool init(String audioDeviceType,String audioInterface,String midiInterface,int sampleRate);
 
