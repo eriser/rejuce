@@ -162,16 +162,22 @@ function trace(message)
 
 window.addEventListener("load", init, false);
 
-
 function setLed(control,argv)
 {
 	var led = $('#' + control);
+	var cname = led[0].className;
 	
-	var cname = led.className;
+	switch (Number(argv))
+	{
+	case 0:
+		cname = cname.replace("On","Off");
+	break;
+	case 1:
+		cname = cname.replace("Off","On");
+	break;
+	}
 	
-	alert(cname);
-	
-	
+	led.attr("class", cname);
 }
 
 
@@ -180,7 +186,7 @@ function setLed(control,argv)
 </head>
 <body>
 
-<a href='javascript:setLed("playing",0);'>test</a>
+<a href='javascript:setLed("playing",1);'>test</a>
 
 <!-- transport -->
 

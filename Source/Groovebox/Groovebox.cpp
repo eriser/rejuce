@@ -83,16 +83,35 @@ void Groovebox::setTransportLeds()
 {
 	GrooveEvent ge;
 
-	if ( ((_transportState==TRANSPORT_PLAYING) != (_controlState[GCL_PLAYING])) ||
-		 ((_transportState==TRANSPORT_RECORDING) != (_controlState[GCL_RECORDING])))
+	int oldPlayLedState = _controlState[GCL_PLAYING];
+	int oldRecordLedState = _controlState[GCL_RECORDING];
+
+	if (_transportState==TRANSPORT_PLAYING)
 	{
-		ge = GrooveEventFactory::event(GE_LEDSET,GCL_PLAYING,(_transportState==TRANSPORT_PLAYING));
-		_interface->onGrooveEvent(ge);
+		_controlState[GCL_PLAYING]=1;
+	}
+	if (_transportState==TRANSPORT_RECORDING)
+	{
+		_controlState[GCL_RECORDING]=1;
+		_controlState[GCL_PLAYING]=1;
 	}
 
-	if ((_transportState==TRANSPORT_RECORDING) != (_controlState[GCL_RECORDING]))
+	if (_transportState!=TRANSPORT_PLAYING &&
+		_transportState!=TRANSPORT_RECORDING)
 	{
-		ge = GrooveEventFactory::event(GE_LEDSET,GCL_PLAYING,(_transportState==TRANSPORT_RECORDING));
+		_controlState[GCL_PLAYING]=0;
+		_controlState[GCL_RECORDING]=0;
+	}
+
+	// only send message if changed state
+	if (oldPlayLedState!=_controlState[GCL_PLAYING])
+	{
+		ge = GrooveEventFactory::event(GE_LEDSET,GCL_PLAYING,_controlState[GCL_PLAYING]);
+		_interface->onGrooveEvent(ge);
+	}
+	if (oldRecordLedState!=_controlState[GCL_RECORDING])
+	{
+		ge = GrooveEventFactory::event(GE_LEDSET,GCL_RECORDING,_controlState[GCL_RECORDING]);
 		_interface->onGrooveEvent(ge);
 	}
 }

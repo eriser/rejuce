@@ -119,6 +119,7 @@ bool Host::init(String audioDeviceType,String audioInterface,String midiInterfac
 
 	// start things up
 	_app.setProcessor(_hostProcessor);
+	_app.getMidiMessageCollector().reset(sampleRate);
 	_adm.addAudioCallback(&_app);
 
 	// sequencer initialisation
