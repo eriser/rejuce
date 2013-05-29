@@ -21,6 +21,7 @@ td.center
 	background: url('green_light_off.png') no-repeat;
 	width:12;
 	height:12;
+	display: block;
 }
 .ledGreenOn
 {
@@ -166,7 +167,11 @@ function setLed(control,argv)
 {
 	var led = $('#' + control);
 	
-	alert(led.class);
+	var cname = led.className;
+	
+	alert(cname);
+	
+	
 }
 
 
@@ -175,12 +180,14 @@ function setLed(control,argv)
 </head>
 <body>
 
+<a href='javascript:setLed("playing",0);'>test</a>
+
 <!-- transport -->
 
 <table>
 <tr>
 <td class="center">
-<div class="ledRedOff" id="recording"></div>
+<div class="ledRedOff" id="recording">&nbsp;</div>
 </td><td>
 &nbsp;
 </td><td>
@@ -188,7 +195,7 @@ function setLed(control,argv)
 </td><td>
 &nbsp;
 </td><td class="center">
-<div class="ledGreenOff" id="playing"></div>
+<div class="ledGreenOff" id="playing">&nbsp;</div>
 </td>
 </tr>
 <tr>
