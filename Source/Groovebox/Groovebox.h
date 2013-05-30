@@ -34,6 +34,7 @@ private:
 	void setLedPos(HostEvent& event);
 	void setSemiLedsOff();
 	void setTransportLeds();
+	void handleKeyboardButton(bool bDown,GrooveControlName control);
 
 	GrooveboxInterface* _interface;
 	Host* _host;
@@ -41,6 +42,9 @@ private:
 	TransportState _transportState;
 
 	int _controlState[GC_SIZE];
+
+	int _currentChannel=0;
+	int _transposeOffset=60;
 };
 
 #endif /* GROOVEBOX_H_ */

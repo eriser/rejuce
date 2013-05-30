@@ -180,7 +180,15 @@ function setLed(control,argv)
 	led.attr("class", cname);
 }
 
+function buttonPress(button)
+{
+	doSend('buttonDown',button,0);
+}
 
+function buttonRelease(button)
+{
+	doSend('buttonUp',button,0);
+}
 </script>	
 
 </head>
@@ -206,15 +214,15 @@ function setLed(control,argv)
 </tr>
 <tr>
 <td>
-<input type="button" class="buttonTransportRecord" name="record" onclick="doSend('buttonDown','record',0)"></input>
+<input type="button" class="buttonTransportRecord" name="record" onmousedown="doSend('buttonDown','record',0)"></input>
 </td><td>
-<input type="button" class="buttonTransporStop" name="stop" onclick="doSend('buttonDown','stop',0)"></input>
+<input type="button" class="buttonTransporStop" name="stop" onmousedown="doSend('buttonDown','stop',0)"></input>
 </td><td>
-<input type="button" class="buttonTransportBack" name="back" onclick="doSend('buttonDown','back',0)"></input>
+<input type="button" class="buttonTransportBack" name="back" onmousedown="doSend('buttonDown','back',0)"></input>
 </td><td>
-<input type="button" class="buttonTransportPause" name="pause" onclick="doSend('buttonDown','pause',0)"></input>
+<input type="button" class="buttonTransportPause" name="pause" onmousedown="doSend('buttonDown','pause',0)"></input>
 </td><td>
-<input type="button" class="buttonTransportPlay" name="play" onclick="doSend('buttonDown','play',0)"></input>
+<input type="button" class="buttonTransportPlay" name="play" onmousedown="doSend('buttonDown','play',0)"></input>
 </td>
 </tr>
 </table>
@@ -229,21 +237,21 @@ function setLed(control,argv)
 		<TR>
 		<table><tr>
 			<TD width="90">&nbsp;</TD>
-			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="Button_ALL" ONCLICK="buttonPress('ALL')"></TD>
-			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="Button_1OT8" ONCLICK="buttonPress('1to8')"></TD>
-			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="Button_9TO16" ONCLICK="buttonPress('9to16')"></TD>
+			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="black0" onmouseup="buttonRelease('black0')" onmousedown="buttonPress('black0')"></TD>
+			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="black1" onmouseup="buttonRelease('black1')" onmousedown="buttonPress('black1')"></TD>
+			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="black2" onmouseup="buttonRelease('black2')" onmousedown="buttonPress('black2')"></TD>
 			<TD width="50">&nbsp;</TD>
-			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="Button_BLANK" ONCLICK="buttonPress('BLANK')"></TD>
-			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="Button_BPM" ONCLICK="buttonPress('BPM')"></TD>
+			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="black3" onmouseup="buttonRelease('black3')" onmousedown="buttonPress('black3')"></TD>
+			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="black4" onmouseup="buttonRelease('black4')" onmousedown="buttonPress('black4')"></TD>
 			<TD width="50">&nbsp;</TD>
-			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="Button_MUTEMEM1" ONCLICK="buttonPress('MUTEMEM1')"></TD>
-			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="Button_MUTEMEM2" ONCLICK="buttonPress('MUTEMEM2')"></TD>
-			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="Button_MUTEMEM3" ONCLICK="buttonPress('MUTEMEM3')"></TD>
+			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="black5" onmouseup="buttonRelease('black5')" onmousedown="buttonPress('black5')"></TD>
+			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="black6" onmouseup="buttonRelease('black6')" onmousedown="buttonPress('black6')"></TD>
+			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="black7" onmouseup="buttonRelease('black7')" onmousedown="buttonPress('black7')"></TD>
 			<TD width="50">&nbsp;</TD>
-			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="Button_MUTEMEM4" ONCLICK="buttonPress('MUTEMEM4')"></TD>
-			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="Button_MUTEMEM5" ONCLICK="buttonPress('MUTEMEM5')"></TD>
+			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="black8" onmouseup="buttonRelease('black8')" onmousedown="buttonPress('black8')"></TD>
+			<TD><INPUT class="buttonBlack" TYPE="BUTTON" NAME="black9" onmouseup="buttonRelease('black9')" onmousedown="buttonPress('black9')"></TD>
 			<TD width="50">&nbsp;</TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_ENTERTAP" ONCLICK="buttonPress('ENTERTAP')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="black10" onmouseup="buttonRelease('black10')" onmousedown="buttonPress('black10')"></TD>
 			</tr></table>
 		</TR>
 		<TR>
@@ -266,22 +274,22 @@ function setLed(control,argv)
 			<TD CLASS="center"><IMG class="led" SRC="red_light_on.png"></TD>
 			</tr>
 			<tr>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_A" ONCLICK="buttonPress('A')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_B" ONCLICK="buttonPress('B')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_C" ONCLICK="buttonPress('C')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_D" ONCLICK="buttonPress('D')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_E" ONCLICK="buttonPress('E')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_F" ONCLICK="buttonPress('F')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_G" ONCLICK="buttonPress('G')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_H" ONCLICK="buttonPress('H')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_I" ONCLICK="buttonPress('I')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_J" ONCLICK="buttonPress('J')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_K" ONCLICK="buttonPress('K')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_L" ONCLICK="buttonPress('L')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_M" ONCLICK="buttonPress('M')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_N" ONCLICK="buttonPress('N')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_O" ONCLICK="buttonPress('O')"></TD>
-			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="Button_P" ONCLICK="buttonPress('P')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white0" onmouseup="buttonRelease('white0')" onmousedown="buttonPress('white0')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white1" onmouseup="buttonRelease('white1')" onmousedown="buttonPress('white1')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white2" onmouseup="buttonRelease('white2')" onmousedown="buttonPress('white2')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white3" onmouseup="buttonRelease('white3')" onmousedown="buttonPress('white3')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white4" onmouseup="buttonRelease('white4')" onmousedown="buttonPress('white4')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white5" onmouseup="buttonRelease('white5')" onmousedown="buttonPress('white5')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white6" onmouseup="buttonRelease('white6')" onmousedown="buttonPress('white6')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white7" onmouseup="buttonRelease('white7')" onmousedown="buttonPress('white7')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white8" onmouseup="buttonRelease('white8')" onmousedown="buttonPress('white8')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white9" onmouseup="buttonRelease('white9')" onmousedown="buttonPress('white9')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white10" onmouseup="buttonRelease('white10')" onmousedown="buttonPress('white10')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white11" onmouseup="buttonRelease('white11')" onmousedown="buttonPress('white11')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white12" onmouseup="buttonRelease('white12')" onmousedown="buttonPress('white12')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white13" onmouseup="buttonRelease('white13')" onmousedown="buttonPress('white13')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white14" onmouseup="buttonRelease('white14')" onmousedown="buttonPress('white14')"></TD>
+			<TD><INPUT class="buttonWhite" TYPE="BUTTON" NAME="white15" onmouseup="buttonRelease('white15')" onmousedown="buttonPress('white15')"></TD>
 			</tr></table>
 		</TR>
 		</TABLE> 

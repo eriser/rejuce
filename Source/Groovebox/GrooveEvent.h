@@ -31,6 +31,34 @@ typedef enum {
    X(GC_BUTTON_BACK,	"back") \
    X(GC_BUTTON_RECORD,	"record") \
    \
+   X(GC_BUTTON_WHITE0,	"white0") \
+   X(GC_BUTTON_WHITE1,	"white1") \
+   X(GC_BUTTON_WHITE2,	"white2") \
+   X(GC_BUTTON_WHITE3,	"white3") \
+   X(GC_BUTTON_WHITE4,	"white4") \
+   X(GC_BUTTON_WHITE5,	"white5") \
+   X(GC_BUTTON_WHITE6,	"white6") \
+   X(GC_BUTTON_WHITE7,	"white7") \
+   X(GC_BUTTON_WHITE8,	"white8") \
+   X(GC_BUTTON_WHITE9,	"white9") \
+   X(GC_BUTTON_WHITE10,	"white10") \
+   X(GC_BUTTON_WHITE11,	"white11") \
+   X(GC_BUTTON_WHITE12,	"white12") \
+   X(GC_BUTTON_WHITE13,	"white13") \
+   X(GC_BUTTON_WHITE14,	"white14") \
+   X(GC_BUTTON_WHITE15,	"white15") \
+   X(GC_BUTTON_BLACK0,	"black0") \
+   X(GC_BUTTON_BLACK1,	"black1") \
+   X(GC_BUTTON_BLACK2,	"black2") \
+   X(GC_BUTTON_BLACK3,	"black3") \
+   X(GC_BUTTON_BLACK4,	"black4") \
+   X(GC_BUTTON_BLACK5,	"black5") \
+   X(GC_BUTTON_BLACK6,	"black6") \
+   X(GC_BUTTON_BLACK7,	"black7") \
+   X(GC_BUTTON_BLACK8,	"black8") \
+   X(GC_BUTTON_BLACK9,	"black9") \
+   X(GC_BUTTON_BLACK10,	"black10") \
+   \
    X(GCL_PLAYING, 		"playing") \
    X(GCL_RECORDING, 	"recording") \
    X(GCL_SEMI_0, 		"semi0") \

@@ -67,8 +67,21 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 					break;
 
 				default:
-					// TODO: something else
+					// notes
+					if (event.control>=GC_BUTTON_WHITE0 && event.control<=GC_BUTTON_BLACK10)
+						handleKeyboardButton(true,event.control);
 					break;
+			}
+			break;
+		}
+
+		case GE_BUTTON_UP:
+		{
+			switch (event.control)
+			{
+			default:
+				handleKeyboardButton(false,event.control);
+				break;
 			}
 			break;
 		}
@@ -77,6 +90,16 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 			break;
 
 	}
+}
+
+void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
+{
+	//MidiMessage m(0xf2,0x00,Time::getMillisecondCounterHiRes()/1000.0f);
+	//
+	//TODO: fire midi message for correct channel for correct note/note up
+	akjakjkahkjah
+
+	_host->event(HostEventFactory::event(m));
 }
 
 void Groovebox::setTransportLeds()
