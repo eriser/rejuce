@@ -43,8 +43,8 @@ private:
 
 	int _controlState[GC_SIZE];
 
-	int _currentChannel=0;
-	int _transposeOffset=60;
+	int _currentChannel;
+	int _transposeOffset;
 };
 
 #endif /* GROOVEBOX_H_ */

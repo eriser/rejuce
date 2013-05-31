@@ -15,7 +15,10 @@ Groovebox::Groovebox(Host* pHost,GrooveboxInterface* pInterface) :GrooveEventLis
 
 	for (int i=0;i<GC_SIZE;i++) _controlState[i]=0;
 
+
 	_transportState = TRANSPORT_STOPPED;
+	_currentChannel=0;
+	_transposeOffset=0;
 }
 
 Groovebox::~Groovebox()
@@ -68,7 +71,7 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 
 				default:
 					// notes
-					if (event.control>=GC_BUTTON_WHITE0 && event.control<=GC_BUTTON_BLACK10)
+					if (event.control>=GC_BUTTON_WHITE0 && event.control<=GC_BUTTON_WHITE15)
 						handleKeyboardButton(true,event.control);
 					break;
 			}
@@ -94,10 +97,24 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 
 void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 {
-	//MidiMessage m(0xf2,0x00,Time::getMillisecondCounterHiRes()/1000.0f);
-	//
-	//TODO: fire midi message for correct channel for correct note/note up
-	akjakjkahkjah
+	int note=0;
+	int velocity = 100;	// TODO: we could take this value from the interface in argv
+	MidiMessage m;
+
+	// 58 is midi note of lowest note on keyboard
+	// GC_BUTTON_WHITE0 is first key, and keys are in contiguous ascending order
+	note = 58 + _transposeOffset + control - GC_BUTTON_WHITE0;
+
+	if (bDown)
+	{
+		m = MidiMessage::noteOn(_currentChannel+1,note,(unsigned char)velocity);
+	}
+	else
+	{
+		m = MidiMessage::noteOff(_currentChannel+1,note,(unsigned char)velocity);
+	}
+
+	m.setTimeStamp(Time::getMillisecondCounterHiRes()/1000.0f);
 
 	_host->event(HostEventFactory::event(m));
 }
