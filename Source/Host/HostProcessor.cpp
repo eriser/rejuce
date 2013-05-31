@@ -130,6 +130,8 @@ void HostProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMes
 	}
 	_metronomeBuffer->clear();
 
+	// loop over channels
+	bool panic = false;
 	for (int channel=0;channel<_synths.size();channel++)
 	{
 		// copy only messages for this channel

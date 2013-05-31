@@ -31,6 +31,7 @@ public:
 
 private:
 	void handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message);
+	void panic();
 
 private:
 	AudioDeviceManager _adm;

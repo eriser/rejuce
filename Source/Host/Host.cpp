@@ -132,11 +132,11 @@ bool Host::init(String audioDeviceType,String audioInterface,String midiInterfac
 bool Host::event(HostEvent c)
 {
 	bool ret = false;
-	bool bHandled = false;
+	bool bConsumed = false;
 
 	// if this is a midi message we want to pass it straight to the
 	// correct synth.
-	if (c.name == HC_MIDI_EVENT)
+	if (!bConsumed && c.name == HC_MIDI_EVENT)
 	{
 		// convert to midi message and check channel
 		MidiMessage message = HostEventFactory::midiMessageFromEvent(&c);
@@ -144,7 +144,8 @@ bool Host::event(HostEvent c)
 		// add the message to the graph player queue
 		_app.getMidiMessageCollector().addMessageToQueue(message);
 	}
-	else
+
+
 	{
 		// TODO: some events will be system events that we need to handle here, immediately.
 		// load and save kinda stuff probably.
@@ -152,8 +153,15 @@ bool Host::event(HostEvent c)
 		// TODO: set bHandled to true if we handled it
 	}
 
+	// if its a transport stop, always call panic to kill any stray notes
+	if (!bConsumed && c.name == HC_TRANSPORT_STOP)
+	{
+		panic();
+		bConsumed = true;
+	}
+
 	// give the event to the sequencer if its not been handled already
-	if (c.name != HC_INVALID && !bHandled)
+	if (!bConsumed && c.name != HC_INVALID)
 	{
 		ret = _sequencer.event(c);
 	}
@@ -167,5 +175,15 @@ void Host::handleIncomingMidiMessage (MidiInput* source,const MidiMessage& messa
 
 	// fire it
 	event(HostEventFactory::event(message));
+}
+
+void Host::panic()
+{
+	for (int c=1;c<=16;c++)
+	{
+		MidiMessage m = MidiMessage::allNotesOff(c);
+		m.setTimeStamp(Time::getMillisecondCounterHiRes()/1000.0f);
+		event (HostEventFactory::event(m));
+	}
 }
 
