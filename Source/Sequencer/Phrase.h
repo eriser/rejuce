@@ -13,7 +13,7 @@
 #define PHRASE_CLOCKS 24	/* resolution in beat */
 #define PHRASE_DELAY_MSEC(bpm) (1000 / ((bpm*PHRASE_CLOCKS)/60) )
 
-class Pattern;
+class Section;
 
 enum PhraseState
 {
@@ -24,7 +24,7 @@ enum PhraseState
 
 class Phrase
 {
-	friend class Pattern;
+	friend class Section;
 
 public:
 	Phrase();

@@ -316,7 +316,7 @@
  ../../Source/Host/../Sequencer/Sequencer.h \
  ../../Source/Host/../Sequencer/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Host/../Sequencer/Phrase.h \
- ../../Source/Host/../Sequencer/Pattern.h \
+ ../../Source/Host/../Sequencer/Section.h \
  ../../Source/Host/../Sequencer/../Host/HostEvent.h \
  ../../Source/Host/../Sequencer/../Host/HostEventListener.h \
  ../../Source/Host/../Sequencer/Song.h \

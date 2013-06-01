@@ -11,7 +11,7 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 
 #include "Phrase.h"
-#include "Pattern.h"
+#include "Section.h"
 #include "Song.h"
 #include "../Host/HostEvent.h"
 #include "../Host/HostEventListener.h"

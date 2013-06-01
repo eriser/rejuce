@@ -1,5 +1,5 @@
-../../Source/Sequencer/Song.o: ../../Source/Sequencer/Song.cpp \
- ../../Source/Sequencer/Song.h ../../Source/Sequencer/Section.h \
+../../Source/Sequencer/Section.o: ../../Source/Sequencer/Section.cpp \
+ ../../Source/Sequencer/Section.h \
  ../../Source/Sequencer/../Host/HostEvent.h \
  ../../Source/Sequencer/../Host/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Sequencer/../Host/../../JuceLibraryCode/AppConfig.h \

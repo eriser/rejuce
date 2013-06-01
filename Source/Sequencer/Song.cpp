@@ -11,7 +11,7 @@ Song::Song()
 {
 	for (int i=0;i<16;i++)
 	{
-		_patterns[i] = new Pattern();
+		_patterns[i] = new Section();
 	}
 }
 

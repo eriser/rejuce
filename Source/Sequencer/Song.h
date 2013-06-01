@@ -8,7 +8,7 @@
 #ifndef SONG_H_
 #define SONG_H_
 
-#include "Pattern.h"
+#include "Section.h"
 #include "../Host/HostEventListener.h"
 #include "../Host/HostEvent.h"
 
@@ -54,9 +54,9 @@ public:
 	int getCurrentPatternLengthClocks();
 
 private:
-	Pattern* _patterns[16];
+	Section* _patterns[16];
 	int _currentPattern;
-	Pattern* _pCurrentPattern;
+	Section* _pCurrentPattern;
 	int _nextPattern;
 	int _clock;
 	float _bpm;

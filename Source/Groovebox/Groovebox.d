@@ -319,7 +319,7 @@
  ../../Source/Groovebox/../Host/../Sequencer/Sequencer.h \
  ../../Source/Groovebox/../Host/../Sequencer/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Groovebox/../Host/../Sequencer/Phrase.h \
- ../../Source/Groovebox/../Host/../Sequencer/Pattern.h \
+ ../../Source/Groovebox/../Host/../Sequencer/Section.h \
  ../../Source/Groovebox/../Host/../Sequencer/../Host/HostEvent.h \
  ../../Source/Groovebox/../Host/../Sequencer/../Host/HostEventListener.h \
  ../../Source/Groovebox/../Host/../Sequencer/Song.h \
