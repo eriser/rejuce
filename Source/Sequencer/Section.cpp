@@ -117,16 +117,6 @@ int Section::tick(MidiMessageCollector* pCollector)
 
 	if (_state==PATTERN_PLAYING)
 	{
-		// led pos indicator
-		if (_clock % (PHRASE_CLOCKS / 4) == 0)
-		{
-			HostEvent event = HostEventFactory::event(HC_OUT_LEDPOS,_ledPos);
-			_pHostEventListener->onHostEvent(event);
-			_ledPos++;
-			if (_ledPos>_lengthBars*4)
-				_ledPos=0;
-		}
-
 		for (int i=0;i<16;i++)
 		{
 			_phrases[i]->tick(pCollector);

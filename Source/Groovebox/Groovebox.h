@@ -16,6 +16,13 @@
 #include "../Sequencer/Sequencer.h"
 
 
+enum GrooveboxKeyboardMode
+{
+	KEYBOARD_KB=0,
+	KEYBOARD_MUTE,
+	KEYBOARD_SECTION
+};
+
 class Groovebox : public GrooveEventListener, public HostEventListener {
 public:
 	Groovebox(Host* pHost,GrooveboxInterface* pInterface);
@@ -31,15 +38,15 @@ public:
 	void onHostEvent(HostEvent& event);
 
 private:
-	void setLedPos(HostEvent& event);
-	void setSemiLedsOff();
 	void setTransportLeds();
 	void handleKeyboardButton(bool bDown,GrooveControlName control);
+	void handleKeboardModeButton(GrooveControlName control);
 
 	GrooveboxInterface* _interface;
 	Host* _host;
 
 	TransportState _transportState;
+	GrooveboxKeyboardMode _keyboardMode;
 
 	int _controlState[GC_SIZE];
 

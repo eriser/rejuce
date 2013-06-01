@@ -48,6 +48,18 @@ td.center
 	width:54px;
 	height:56px
 }
+.buttonBlackSmall
+{
+	background: url('black_small.png') no-repeat;
+	width:41px;
+	height:27px;
+}
+.buttonWhiteSmall
+{
+	background: url('button_white.png') no-repeat;
+	width:41px;
+	height:27px;
+}
 .buttonBlack
 {
 	background: url('button_black.png') no-repeat;
@@ -224,6 +236,30 @@ function buttonRelease(button)
 </td><td>
 <input type="button" class="buttonTransportPlay" name="play" onmousedown="doSend('buttonDown','play',0)"></input>
 </td>
+</tr>
+</table>
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+<table>
+<tr>
+<td>oct -</td>
+<td>oct +</td>
+<td>track</td>
+<td>transpose</td>
+<td><div class="ledRedOff" id="muteLed">&nbsp;</div>mute</td>
+<td><div class="ledRedOff" id="sectionLed">&nbsp;</div>section</td>
+</tr>
+<tr>
+<td><input type="button" class="buttonWhiteSmall" name="play" onmousedown="buttonPress('octDown')"></input></td>
+<td><input type="button" class="buttonWhiteSmall" name="play" onmousedown="buttonPress('octUp')"></input></td>
+<td><input type="button" class="buttonBlackSmall" name="play" onmousedown="buttonPress('track')"></input></td>
+<td><input type="button" class="buttonBlackSmall" name="play" onmousedown="buttonPress('transpose')"></input></td>
+<td><input type="button" class="buttonBlackSmall" name="play" onmousedown="buttonPress('mute')"></input></td>
+<td><input type="button" class="buttonBlackSmall" name="play" onmousedown="buttonPress('section')"></input></td>
 </tr>
 </table>
 

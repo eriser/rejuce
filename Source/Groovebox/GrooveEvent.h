@@ -15,6 +15,8 @@
     X(GE_LEDSET,		"led") \
 	X(GE_SIZE,		 	"size")
 
+// for leds, 0 = off, 1 = on, 2 = pulse 1 time, 3 = flashing
+
 typedef enum {
 	#define X(Enum, String)       Enum,
 		X_GROOVEEVENTS
@@ -30,6 +32,13 @@ typedef enum {
    X(GC_BUTTON_PAUSE,	"pause") \
    X(GC_BUTTON_BACK,	"back") \
    X(GC_BUTTON_RECORD,	"record") \
+   \
+   X(GC_BUTTON_OCTDOWN,		"octDown") \
+   X(GC_BUTTON_OCTUP,		"octUp") \
+   X(GC_BUTTON_TRACK,		"track") \
+   X(GC_BUTTON_TRANSPOSE,	"transpose") \
+   X(GC_BUTTON_MUTE,		"mute") \
+   X(GC_BUTTON_SECTION,		"section") \
    \
    X(GC_BUTTON_WHITE0,	"white0") \
    X(GC_BUTTON_WHITE1,	"white1") \
@@ -60,6 +69,10 @@ typedef enum {
    \
    X(GCL_PLAYING, 		"playing") \
    X(GCL_RECORDING, 	"recording") \
+   \
+   X(GCL_TRACK, 		"muteLed") \
+   X(GCL_SECTION, 		"sectionLed") \
+   \
    X(GCL_SEMI_0, 		"semi0") \
    X(GCL_SEMI_1, 		"semi1") \
    X(GCL_SEMI_2, 		"semi2") \

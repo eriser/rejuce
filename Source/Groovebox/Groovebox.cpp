@@ -19,6 +19,7 @@ Groovebox::Groovebox(Host* pHost,GrooveboxInterface* pInterface) :GrooveEventLis
 	_transportState = TRANSPORT_STOPPED;
 	_currentChannel=0;
 	_transposeOffset=0;
+	_keyboardMode = KEYBOARD_KB;
 }
 
 Groovebox::~Groovebox()
@@ -69,6 +70,26 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 					setTransportLeds();
 					break;
 
+				case GC_BUTTON_OCTDOWN:
+					if (_transposeOffset-12 >= (0-24))
+					{
+						_transposeOffset-=12;
+						// TODO: send message back of transpose value
+					}
+					break;
+				case GC_BUTTON_OCTUP:
+					if (_transposeOffset+12 <= (24))
+					{
+						_transposeOffset+=12;
+						// TODO: send message back of transpose value
+					}
+					break;
+
+				case GC_BUTTON_MUTE:
+				case GC_BUTTON_SECTION:
+					handleKeboardModeButton(event.control);
+					break;
+
 				default:
 					// notes
 					if (event.control>=GC_BUTTON_WHITE0 && event.control<=GC_BUTTON_WHITE15)
@@ -93,6 +114,11 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 			break;
 
 	}
+}
+
+void Groovebox::handleKeboardModeButton(GrooveControlName control)
+{
+
 }
 
 void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
@@ -156,27 +182,13 @@ void Groovebox::setTransportLeds()
 	}
 }
 
-void Groovebox::setSemiLedsOff()
-{
-
-}
-
-void Groovebox::setLedPos(HostEvent& event)
-{
-	// TODO
-//	GrooveEvent ge = GrooveEventFactory::event(GCL_,event.argv[0]);
-//				_interface->onGrooveEvent(ge);
-}
-
 void Groovebox::onHostEvent(HostEvent& event)
 {
+	// should never get here???
+	DBG("skjdkskjdskshdkjsdkjshdkjsdkjskskjhsd");
 	switch (event.name)
 	{
-		case HC_OUT_LEDPOS:
-		{
-			setLedPos(event);
-			break;
-		}
+
 		default:
 			break;
 	}

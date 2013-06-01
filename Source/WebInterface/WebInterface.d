@@ -319,6 +319,9 @@
  ../../Source/WebInterface/../Groovebox/../Host/../Metronome/MetronomeProcessor.h \
  ../../Source/WebInterface/../Groovebox/../Host/../Metronome/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/WebInterface/../Groovebox/../Host/HostEventListener.h \
+ ../../Source/WebInterface/../Groovebox/../Host/../Groovebox/GrooveEventListener.h \
+ ../../Source/WebInterface/../Groovebox/../Host/../Groovebox/GrooveEvent.h \
+ ../../Source/WebInterface/../Groovebox/../Host/../Groovebox/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/WebInterface/../Groovebox/../Host/../Sequencer/Sequencer.h \
  ../../Source/WebInterface/../Groovebox/../Host/../Sequencer/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/WebInterface/../Groovebox/../Host/../Sequencer/Phrase.h \
@@ -328,8 +331,8 @@
  ../../Source/WebInterface/../Groovebox/../Host/../Sequencer/Song.h \
  ../../Source/WebInterface/../Groovebox/../Host/HostEventListener.h \
  ../../Source/WebInterface/../Groovebox/GrooveEventListener.h \
- ../../Source/WebInterface/../Groovebox/GrooveEvent.h \
  ../../Source/WebInterface/../Groovebox/GrooveboxInterface.h \
+ ../../Source/WebInterface/../Groovebox/GrooveEvent.h \
  ../../Source/WebInterface/../Groovebox/../Sequencer/Sequencer.h \
  ../../Source/WebInterface/../Groovebox/GrooveEvent.h \
  ../../Source/WebInterface/../../JuceLibraryCode/JuceHeader.h \

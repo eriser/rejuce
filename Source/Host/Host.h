@@ -13,6 +13,7 @@
 #include "HostEvent.h"
 #include "HostProcessor.h"
 #include "HostEventListener.h"
+#include "../Groovebox/GrooveEventListener.h"
 #include "../Sequencer/Sequencer.h"
 
 class Host: public  MidiInputCallback {
@@ -28,6 +29,7 @@ public:
 	bool event(HostEvent c);
 
 	void setHostEventListener(HostEventListener* pHostEventListener);
+	void setOutListener(GrooveEventListener* pOutListener);
 
 private:
 	void handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message);
@@ -41,6 +43,7 @@ private:
 
 	Sequencer _sequencer;
 	HostEventListener* _hostEventListener;
+	GrooveEventListener* _grooveEventListener;
 };
 
 #endif /* HOST_H_ */

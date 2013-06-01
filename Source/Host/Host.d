@@ -313,6 +313,9 @@
  ../../Source/Host/../Metronome/MetronomeProcessor.h \
  ../../Source/Host/../Metronome/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Host/HostEventListener.h \
+ ../../Source/Host/../Groovebox/GrooveEventListener.h \
+ ../../Source/Host/../Groovebox/GrooveEvent.h \
+ ../../Source/Host/../Groovebox/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Host/../Sequencer/Sequencer.h \
  ../../Source/Host/../Sequencer/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Host/../Sequencer/Phrase.h \

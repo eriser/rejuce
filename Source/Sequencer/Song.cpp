@@ -132,6 +132,13 @@ int Song::tick(MidiMessageCollector* pCollector)
 			}
 		}
 
+		// pulse play light in time with beats
+		if (_clock % PHRASE_CLOCKS == 0)
+		{
+			HostEvent h = HostEventFactory::event(HC_OUT_BEAT);
+			_pHostEventListener->onHostEvent(h);
+		}
+
 		// inc clock
 		if (_clock < _currentPatternLengthClocks-1)
 		{

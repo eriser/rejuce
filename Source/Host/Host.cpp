@@ -35,6 +35,11 @@ void Host::setHostEventListener(HostEventListener* pHostEventListener)
 	_hostEventListener = pHostEventListener;
 }
 
+void Host::setOutListener(GrooveEventListener* pOutListener)
+{
+	_grooveEventListener = pOutListener;
+}
+
 void Host::listInterfaces()
 {
 	DBG("list audio device types");
@@ -143,8 +148,15 @@ bool Host::event(HostEvent c)
 
 		// add the message to the graph player queue
 		_app.getMidiMessageCollector().addMessageToQueue(message);
+
+		// DO NOT consume message, as it must go to the sequencer as well
 	}
 
+	if (!bConsumed && c.name == HC_OUT_BEAT)
+	{
+		GrooveEvent g = GrooveEventFactory::event(GE_LEDSET,GCL_PLAYING,2);
+		_grooveEventListener->onGrooveEvent(g);
+	}
 
 	{
 		// TODO: some events will be system events that we need to handle here, immediately.

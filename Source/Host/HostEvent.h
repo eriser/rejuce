@@ -22,10 +22,10 @@ enum HostEventName
 	HC_TRANSPORT_REWIND,
 	HC_TRANSPORT_RECORD,
 
+	HC_OUT_BEAT,												//	fired once per beat
+
 	// 1 args, 101-200
 	HC_PATTERN_SET_NEXT	= HOSTEVENT_1_ARGS,					//	[int next pattern]
-
-	HC_OUT_LEDPOS,											//	[int current beat]
 
 	// 2 args, 201-300
 	HC_MIDI_EVENT = HOSTEVENT_2_ARGS,		//	[float timestamp] [int rawmidi]
