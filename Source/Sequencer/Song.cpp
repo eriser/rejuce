@@ -167,6 +167,14 @@ int Song::tick(MidiMessageCollector* pCollector)
 
 void Song::addEvent(MidiMessage m)
 {
+	// filter some events...
+
+	// filter stop notes event
+	if (m.isControllerOfType(123))
+	{
+		return;
+	}
+
 	if (_state==SONG_RECORDING)
 	{
 		_patterns[_currentPattern]->addEvent(m);

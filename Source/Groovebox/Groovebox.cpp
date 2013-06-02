@@ -13,7 +13,7 @@ Groovebox::Groovebox(Host* pHost,GrooveboxInterface* pInterface) :GrooveEventLis
 	_interface = pInterface;
 	_host->setHostEventListener(this);
 
-	for (int i=0;i<GC_SIZE;i++) _controlState[i]=0;
+	for (int i=0;i<GC_SIZE;i++) {_controlState[i]=GE_INVALID;_controlValue[i]=0;}
 
 
 	_transportState = TRANSPORT_STOPPED;
@@ -39,6 +39,10 @@ void Groovebox::stop()
 
 void Groovebox::onGrooveEvent(GrooveEvent& event)
 {
+	// always store the control's state
+	_controlState[event.control] = event.event;
+	_controlValue[event.control] = event.argv;
+
 	// events coming in from interface. update local state or fire host event
 	switch (event.event)
 	{
@@ -149,46 +153,49 @@ void Groovebox::setTransportLeds()
 {
 	GrooveEvent ge;
 
-	int oldPlayLedState = _controlState[GCL_PLAYING];
-	int oldRecordLedState = _controlState[GCL_RECORDING];
+	int oldPlayLedState = _controlValue[GCL_PLAYING];
+	int oldRecordLedState = _controlValue[GCL_RECORDING];
 
 	if (_transportState==TRANSPORT_PLAYING)
 	{
-		_controlState[GCL_PLAYING]=1;
+		_controlValue[GCL_PLAYING]=1;
 	}
 	if (_transportState==TRANSPORT_RECORDING)
 	{
-		_controlState[GCL_RECORDING]=1;
-		_controlState[GCL_PLAYING]=1;
+		_controlValue[GCL_RECORDING]=1;
+		_controlValue[GCL_PLAYING]=1;
 	}
 
 	if (_transportState!=TRANSPORT_PLAYING &&
 		_transportState!=TRANSPORT_RECORDING)
 	{
-		_controlState[GCL_PLAYING]=0;
-		_controlState[GCL_RECORDING]=0;
+		_controlValue[GCL_PLAYING]=0;
+		_controlValue[GCL_RECORDING]=0;
 	}
 
 	// only send message if changed state
-	if (oldPlayLedState!=_controlState[GCL_PLAYING])
+	if (oldPlayLedState!=_controlValue[GCL_PLAYING])
 	{
-		ge = GrooveEventFactory::event(GE_LEDSET,GCL_PLAYING,_controlState[GCL_PLAYING]);
+		ge = GrooveEventFactory::event(GE_LEDSET,GCL_PLAYING,_controlValue[GCL_PLAYING]);
 		_interface->onGrooveEvent(ge);
 	}
-	if (oldRecordLedState!=_controlState[GCL_RECORDING])
+	if (oldRecordLedState!=_controlValue[GCL_RECORDING])
 	{
-		ge = GrooveEventFactory::event(GE_LEDSET,GCL_RECORDING,_controlState[GCL_RECORDING]);
+		ge = GrooveEventFactory::event(GE_LEDSET,GCL_RECORDING,_controlValue[GCL_RECORDING]);
 		_interface->onGrooveEvent(ge);
 	}
 }
 
 void Groovebox::onHostEvent(HostEvent& event)
 {
-	// should never get here???
-	DBG("skjdkskjdskshdkjsdkjshdkjsdkjskskjhsd");
 	switch (event.name)
 	{
-
+		case HC_OUT_BEAT:
+		{
+			GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,GCL_PLAYING,GE_LED_PULSE);
+			_interface->onGrooveEvent(ge);
+			break;
+		}
 		default:
 			break;
 	}

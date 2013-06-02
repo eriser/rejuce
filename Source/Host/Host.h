@@ -29,7 +29,6 @@ public:
 	bool event(HostEvent c);
 
 	void setHostEventListener(HostEventListener* pHostEventListener);
-	void setOutListener(GrooveEventListener* pOutListener);
 
 private:
 	void handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message);

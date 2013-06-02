@@ -48,7 +48,9 @@ private:
 	TransportState _transportState;
 	GrooveboxKeyboardMode _keyboardMode;
 
-	int _controlState[GC_SIZE];
+	// store what just happened to the control, and the value, whenever we receive an event
+	GrooveEventName _controlState[GC_SIZE];
+	int _controlValue[GC_SIZE];
 
 	int _currentChannel;
 	int _transposeOffset;

@@ -27,7 +27,6 @@ int main (int argc, char* argv[])
 	WebInterface interface;
 	Groovebox groovebox(&host,&interface);
 	interface.setOutListener(&groovebox);
-	host.setOutListener(&interface);
 
 	if (!host.init("ALSA","HDA Intel (1)","VMPK Output",44100))
 	//if (!host.init("ALSA","Intel 82801AA-ICH","VMPK Output",44100))

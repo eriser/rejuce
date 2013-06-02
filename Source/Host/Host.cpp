@@ -35,11 +35,6 @@ void Host::setHostEventListener(HostEventListener* pHostEventListener)
 	_hostEventListener = pHostEventListener;
 }
 
-void Host::setOutListener(GrooveEventListener* pOutListener)
-{
-	_grooveEventListener = pOutListener;
-}
-
 void Host::listInterfaces()
 {
 	DBG("list audio device types");
@@ -169,12 +164,13 @@ bool Host::event(HostEvent c)
 	if (!bConsumed && c.name == HC_TRANSPORT_STOP)
 	{
 		panic();
-		bConsumed = true;
+		// dont consume! sequencer needs this
 	}
 
 	// give the event to the sequencer if its not been handled already
 	if (!bConsumed && c.name != HC_INVALID)
 	{
+
 		ret = _sequencer.event(c);
 	}
 

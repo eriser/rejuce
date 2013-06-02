@@ -15,7 +15,16 @@
     X(GE_LEDSET,		"led") \
 	X(GE_SIZE,		 	"size")
 
-// for leds, 0 = off, 1 = on, 2 = pulse 1 time, 3 = flashing
+typedef enum
+{
+	GE_LED_OFF=0,
+	GE_LED_ON,
+	GE_LED_PULSE,	// once only (speed determined by interface not BPM or anything clever)
+	GE_LED_FLASH,	// flash continuously (as above)
+
+	GE_LED_SIZE
+} GrooveLedArgValues;
+
 
 typedef enum {
 	#define X(Enum, String)       Enum,
