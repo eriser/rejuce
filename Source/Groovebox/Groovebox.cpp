@@ -122,7 +122,53 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 
 void Groovebox::handleKeboardModeButton(GrooveControlName control)
 {
+	// save old led values, so we know if we need to send messages later
+	int oldLedStateMute = _controlValue[GCL_MUTE];
+	int oldLedStateSection = _controlValue[GCL_SECTION];
 
+	// act depending on which button was pressed, and update keyboard mode
+	switch (control)
+	{
+	case GC_BUTTON_MUTE:
+		if (_keyboardMode==KEYBOARD_MUTE)
+			_keyboardMode=KEYBOARD_KB;
+		else
+			_keyboardMode=KEYBOARD_MUTE;
+		break;
+	case GC_BUTTON_SECTION:
+		if (_keyboardMode==KEYBOARD_SECTION)
+			_keyboardMode=KEYBOARD_KB;
+		else
+			_keyboardMode=KEYBOARD_SECTION;
+		break;
+	default:
+		break;
+	}
+
+	// update lights depending on keyboard mode
+	_controlValue[GCL_MUTE] = 0;
+	_controlValue[GCL_SECTION] = 0;
+	switch (_keyboardMode)
+	{
+	case KEYBOARD_MUTE:
+		_controlValue[GCL_MUTE] = 3;
+		break;
+	case KEYBOARD_SECTION:
+		_controlValue[GCL_SECTION] = 3;
+		break;
+	}
+
+	// if values are different, output values
+	if (oldLedStateMute != _controlValue[GCL_MUTE])
+	{
+		GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,GCL_MUTE,_controlValue[GCL_MUTE]);
+		_interface->onGrooveEvent(ge);
+	}
+	if (oldLedStateSection != _controlValue[GCL_SECTION])
+	{
+		GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,GCL_SECTION,_controlValue[GCL_SECTION]);
+		_interface->onGrooveEvent(ge);
+	}
 }
 
 void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)

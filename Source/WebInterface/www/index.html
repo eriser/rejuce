@@ -108,10 +108,28 @@ var wsUri = "ws://localhost:8080/";
 var output;
 var websocket;
 
+var flashList = new Object();
+
 function init()
 {
 	output = document.getElementById("output");
 	connectWebSocket();
+	
+	// flasher timer. flashes leds that are in the flashing led list.
+	// its old fashioned but better than a bazillion anonymous timers and handles.
+	setInterval(function() { 
+		for ( var control in flashList ) {
+			
+			var led = $('#' + control);
+			var cname = led[0].className;
+			
+			if (String(cname).indexOf("On")!=-1)
+				led.attr("class", cname.replace("On","Off"));
+			else
+				led.attr("class", cname.replace("Off","On"));
+		}
+	}, 300);	// flash rate is arbitrary. 
+
 }
 
 function connectWebSocket()
@@ -176,11 +194,31 @@ function trace(message)
 
 window.addEventListener("load", init, false);
 
+
+function hasOwnProperty(obj, prop) {
+    var proto = obj.__proto__ || obj.constructor.prototype;
+    return (prop in obj) &&
+        (!(prop in proto) || proto[prop] !== obj[prop]);
+}
+
+if ( Object.prototype.hasOwnProperty ) {
+    var hasOwnProperty = function(obj, prop) {
+        return obj.hasOwnProperty(prop);
+    }
+}
+
 // 0 = off, 1 = on, 2 = pulse, 3 = flash
 function setLed(control,argv)
 {
 	var led = $('#' + control);
 	var cname = led[0].className;
+	
+	// remove from flash list if not wanting to flash
+	if (argv!=3)
+	{
+		if (hasOwnProperty(flashList, control))
+			delete flashList[control];
+	}
 	
 	switch (Number(argv))
 	{
@@ -201,7 +239,12 @@ function setLed(control,argv)
 				led.attr("class", cname);
         	}, 100);
     	})(led,cname);
-	break;
+		break;
+	case 3:
+		cname = cname.replace("Off","On");
+		led.attr("class", cname);
+		flashList[control]="flashing";
+		break;		
 	}
 }
 
@@ -219,7 +262,7 @@ function buttonRelease(button)
 </head>
 <body>
 
-<a href='javascript:setLed("playing",2);'>test</a>
+<a href='javascript:setLed("playing",3);'>test</a>
 
 <!-- transport -->
 

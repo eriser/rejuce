@@ -79,7 +79,7 @@ typedef enum {
    X(GCL_PLAYING, 		"playing") \
    X(GCL_RECORDING, 	"recording") \
    \
-   X(GCL_TRACK, 		"muteLed") \
+   X(GCL_MUTE, 			"muteLed") \
    X(GCL_SECTION, 		"sectionLed") \
    \
    X(GCL_SEMI_0, 		"semi0") \
