@@ -173,26 +173,73 @@ void Groovebox::handleKeboardModeButton(GrooveControlName control)
 
 void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 {
-	int note=0;
-	int velocity = 100;	// TODO: we could take this value from the interface in argv
-	MidiMessage m;
-
-	// 58 is midi note of lowest note on keyboard
-	// GC_BUTTON_WHITE0 is first key, and keys are in contiguous ascending order
-	note = 58 + _transposeOffset + control - GC_BUTTON_WHITE0;
-
-	if (bDown)
+	switch (_keyboardMode)
 	{
-		m = MidiMessage::noteOn(_currentChannel+1,note,(unsigned char)velocity);
-	}
-	else
+	case KEYBOARD_KB:
 	{
-		m = MidiMessage::noteOff(_currentChannel+1,note,(unsigned char)velocity);
+		int note=0;
+		int velocity = 100;	// TODO: we could take this value from the interface in argv
+		MidiMessage m;
+
+		// 58 is midi note of lowest note on keyboard
+		// GC_BUTTON_WHITE0 is first key, and keys are in contiguous ascending order
+		note = 58 + _transposeOffset + control - GC_BUTTON_WHITE0;
+
+		if (bDown)
+		{
+			m = MidiMessage::noteOn(_currentChannel+1,note,(unsigned char)velocity);
+		}
+		else
+		{
+			m = MidiMessage::noteOff(_currentChannel+1,note,(unsigned char)velocity);
+		}
+
+		m.setTimeStamp(Time::getMillisecondCounterHiRes()/1000.0f);
+
+		_host->event(HostEventFactory::event(m));
+		break;
 	}
+	case KEYBOARD_MUTE:
+	case KEYBOARD_SECTION:
+	{
+		int n=-1;
+		switch (control)
+		{
+		case GC_BUTTON_WHITE0: n=0; break;
+		case GC_BUTTON_WHITE1: n=1; break;
+		case GC_BUTTON_WHITE2: n=2; break;
+		case GC_BUTTON_WHITE3: n=3; break;
+		case GC_BUTTON_WHITE4: n=4; break;
+		case GC_BUTTON_WHITE5: n=5; break;
+		case GC_BUTTON_WHITE6: n=6; break;
+		case GC_BUTTON_WHITE7: n=7; break;
+		case GC_BUTTON_WHITE8: n=8; break;
+		case GC_BUTTON_WHITE9: n=9; break;
+		case GC_BUTTON_WHITE10: n=10; break;
+		case GC_BUTTON_WHITE11: n=11; break;
+		case GC_BUTTON_WHITE12: n=12; break;
+		case GC_BUTTON_WHITE13: n=13; break;
+		case GC_BUTTON_WHITE14: n=14; break;
+		case GC_BUTTON_WHITE15: n=15; break;
+		}
 
-	m.setTimeStamp(Time::getMillisecondCounterHiRes()/1000.0f);
+		if (n>=0)
+		{
+			if (_keyboardMode==KEYBOARD_MUTE)
+			{
+				HostEvent h = HostEventFactory::event(HC_PATTERN_SET_NEXT,n);
+				_host->event(h);
+			} else
+			if (_keyboardMode==KEYBOARD_SECTION)
+			{
+				HostEvent h = HostEventFactory::event(HC_PHRASE_MUTE_TOGGLE,n);
+				_host->event(h);
+			}
+		}
 
-	_host->event(HostEventFactory::event(m));
+		break;
+	}
+	}
 }
 
 void Groovebox::setTransportLeds()

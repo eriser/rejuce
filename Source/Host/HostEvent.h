@@ -26,6 +26,7 @@ enum HostEventName
 
 	// 1 args, 101-200
 	HC_PATTERN_SET_NEXT	= HOSTEVENT_1_ARGS,					//	[int next pattern]
+	HC_PHRASE_MUTE_TOGGLE,
 
 	// 2 args, 201-300
 	HC_MIDI_EVENT = HOSTEVENT_2_ARGS,		//	[float timestamp] [int rawmidi]
