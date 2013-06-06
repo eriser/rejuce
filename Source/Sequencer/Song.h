@@ -40,7 +40,8 @@ public:
 	void stop();
 	void pause();
 
-	void setNextPattern(int i);
+	void setNextSection(int i);
+	void togglePhraseMute(int i);
 	void setMetronomeState(MetronomeState s);
 
 	void setBpm(float bpm);
@@ -54,10 +55,10 @@ public:
 	int getCurrentPatternLengthClocks();
 
 private:
-	Section* _patterns[16];
-	int _currentPattern;
-	Section* _pCurrentPattern;
-	int _nextPattern;
+	Section* _sections[16];
+	int _currentSection;
+	Section* _pCurrentSection;
+	int _nextSection;
 	int _clock;
 	float _bpm;
 

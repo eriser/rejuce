@@ -143,21 +143,15 @@ bool Host::event(HostEvent c)
 
 		// add the message to the graph player queue
 		_app.getMidiMessageCollector().addMessageToQueue(message);
-
 		// DO NOT consume message, as it must go to the sequencer as well
 	}
 
+	// a beat message (useful for lighting up led)
 	if (!bConsumed && c.name == HC_OUT_BEAT)
 	{
 		GrooveEvent g = GrooveEventFactory::event(GE_LEDSET,GCL_PLAYING,2);
 		_grooveEventListener->onGrooveEvent(g);
-	}
-
-	{
-		// TODO: some events will be system events that we need to handle here, immediately.
-		// load and save kinda stuff probably.
-
-		// TODO: set bHandled to true if we handled it
+		bConsumed = true;
 	}
 
 	// if its a transport stop, always call panic to kill any stray notes

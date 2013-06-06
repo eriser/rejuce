@@ -104,6 +104,10 @@ td.center
 <script type="text/javascript" src="jquery.knob.js"></script>
 <script type="text/javascript">
 
+$(".dial").knob({
+                 'change' : function (v) { console.log(v); }
+                });
+
 var wsUri = "ws://localhost:8080/";
 var output;
 var websocket;
@@ -263,6 +267,10 @@ function buttonRelease(button)
 <body>
 
 <a href='javascript:setLed("playing",3);'>test</a>
+
+<input type="text" value="75" class="dial">
+
+<br/><br/>
 
 <!-- transport -->
 

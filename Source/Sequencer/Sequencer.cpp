@@ -139,11 +139,17 @@ void Sequencer::executeEvent(HostEvent* c)
 		break;
 
 	case HC_PATTERN_SET_NEXT:
-		_song.setNextPattern(c->argv[0]);
+		_song.setNextSection(c->argv[0]);
 		break;
 
 	case HC_MIDI_EVENT:
 		_song.addEvent(HostEventFactory::midiMessageFromEvent(c));
+		break;
+
+	case HC_PHRASE_MUTE_TOGGLE:
+		_song.togglePhraseMute(c->argv[0]);
+		break;
+
 		break;
 
 	default:

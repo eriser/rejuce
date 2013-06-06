@@ -11,7 +11,7 @@ Song::Song()
 {
 	for (int i=0;i<16;i++)
 	{
-		_patterns[i] = new Section();
+		_sections[i] = new Section();
 	}
 }
 
@@ -21,43 +21,43 @@ void Song::init(HostEventListener* pHostEventListener)
 
 	for (int i=0;i<16;i++)
 	{
-		_patterns[i]->init(pHostEventListener);
+		_sections[i]->init(pHostEventListener);
 	}
 
 	_state = SONG_STOPPED;
 
-	_currentPattern=0;
-	_pCurrentPattern = _patterns[0];
-	_nextPattern=0;
+	_currentSection=0;
+	_pCurrentSection = _sections[0];
+	_nextSection=0;
 	_clock=0;
 	_metronomeState=METRONOME_RECORD;
 
-	setNextPattern(0);
+	setNextSection(0);
 }
 
 Song::~Song()
 {
 	for (int i=0;i<16;i++)
 	{
-		delete _patterns[i];
+		delete _sections[i];
 	}
 }
 
 void Song::record()
 {
-	_pCurrentPattern->play();
+	_pCurrentSection->play();
 	_state = SONG_RECORDING;
 }
 
 void Song::play()
 {
-	_pCurrentPattern->play();
+	_pCurrentSection->play();
 	_state = SONG_PLAYING;
 }
 
 void Song::stop()
 {
-	_pCurrentPattern->stop();
+	_pCurrentSection->stop();
 	_clock =0;
 
 	_state = SONG_STOPPED;
@@ -65,24 +65,29 @@ void Song::stop()
 
 void Song::pause()
 {
-	_pCurrentPattern->pause();
+	_pCurrentSection->pause();
 
 	_state = SONG_PAUSED;
 }
 
-void Song::setNextPattern(int i)
+void Song::togglePhraseMute(int i)
 {
-	_nextPattern = i;
+	_pCurrentSection->toggleMuteState(i);
+}
+
+void Song::setNextSection(int i)
+{
+	_nextSection = i;
 
 	// if we are stopped, we can set the pattern immediately
 	if (_state == SONG_STOPPED)
 	{
-		_pCurrentPattern->stop();
+		_pCurrentSection->stop();
 
-		_currentPattern = i;
-		_pCurrentPattern = _patterns[i];
+		_currentSection = i;
+		_pCurrentSection = _sections[i];
 
-		_currentPatternLengthClocks = _pCurrentPattern->getLengthClocks();
+		_currentPatternLengthClocks = _pCurrentSection->getLengthClocks();
 	}
 }
 
@@ -109,7 +114,7 @@ int Song::tick(MidiMessageCollector* pCollector)
 	if (_state==SONG_PLAYING ||
 		_state==SONG_RECORDING)
 	{
-		_pCurrentPattern->tick(pCollector);
+		_pCurrentSection->tick(pCollector);
 
 		ret = _clock;
 
@@ -147,14 +152,14 @@ int Song::tick(MidiMessageCollector* pCollector)
 		else
 		{
 			// we might need to change pattern.
-			if (_currentPattern != _nextPattern)
+			if (_currentSection != _nextSection)
 			{
-				_pCurrentPattern->stop();
+				_pCurrentSection->stop();
 
-				_currentPattern = _nextPattern;
-				_pCurrentPattern = _patterns[_nextPattern];
+				_currentSection = _nextSection;
+				_pCurrentSection = _sections[_nextSection];
 
-				_currentPatternLengthClocks = _pCurrentPattern->getLengthClocks();
+				_currentPatternLengthClocks = _pCurrentSection->getLengthClocks();
 			}
 
 			_clock=0;
@@ -177,7 +182,7 @@ void Song::addEvent(MidiMessage m)
 
 	if (_state==SONG_RECORDING)
 	{
-		_patterns[_currentPattern]->addEvent(m);
+		_sections[_currentSection]->addEvent(m);
 	}
 }
 
@@ -187,7 +192,7 @@ void Song::clear()
 	{
 		for (int i=0;i<16;i++)
 		{
-			_patterns[i]->clear();
+			_sections[i]->clear();
 		}
 	}
 }
