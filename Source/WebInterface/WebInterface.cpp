@@ -235,7 +235,7 @@ void WebInterface::parseCommand(char* szCommand)
 	pj = cJSON_GetObjectItem(pJson,"argv");
 	if (bOk && pj && pj->type==cJSON_Number)
 	{
-		event.argv = _controlMap[pj->valuestring];
+		event.argv = pj->valueint;
 	}
 
 	if (bOk && event.event!=GE_INVALID)

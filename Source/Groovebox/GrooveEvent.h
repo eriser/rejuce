@@ -99,6 +99,17 @@ typedef enum {
    X(GCL_SEMI_14, 		"semi14") \
    X(GCL_SEMI_15, 		"semi15") \
    \
+   \
+   X(GCK_FILTER_TYPE,		"knobFilterType") \
+   X(GCK_FILTER_CUTOFF, 	"knobFilterCutoff") \
+   X(GCK_FILTER_RES, 		"knobFilterRes") \
+   X(GCK_FILTER_KEYFOLLOW,	"knobFilterKeyFollow") \
+   X(GCK_FILTER_CONTOUR,	"knobFilterContour") \
+   X(GCK_FILTER_A,			"knobFilterA") \
+   X(GCK_FILTER_D,			"knobFilterD") \
+   X(GCK_FILTER_S,			"knobFilterS") \
+   X(GCK_FILTER_R,			"knobFilterR") \
+   \
    X(GC_SIZE,		 	"size")
 
 typedef enum {

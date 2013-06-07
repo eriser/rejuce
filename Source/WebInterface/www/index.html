@@ -4,7 +4,7 @@
 
 <html>
 <head>
-<title>WebSocket Test</title>
+<title>WebInterface</title>
 
 <STYLE>
 td.center
@@ -103,10 +103,6 @@ td.center
 <script type="text/javascript" src="jquery-1.9.1.js"></script>
 <script type="text/javascript" src="jquery.knob.js"></script>
 <script type="text/javascript">
-
-$(".dial").knob({
-                 'change' : function (v) { console.log(v); }
-                });
 
 var wsUri = "ws://localhost:8080/";
 var output;
@@ -261,6 +257,37 @@ function buttonRelease(button)
 {
 	doSend('buttonUp',button,0);
 }
+
+//////////////////////
+$(function() {
+	var knobs = $(".knob");
+	knobs.attr("data-width","62");
+	knobs.attr("data-height","62");
+	knobs.attr("data-cursor","true");
+	knobs.attr("data-thickness","0.3");
+	knobs.attr("data-fgColor","#222222");
+	knobs.attr("data-step","1");
+	knobs.attr("data-min","0");
+	knobs.attr("data-max","127");
+	knobs.attr("value","64");
+	knobs.attr("data-angleOffset","-125");
+	knobs.attr("data-angleArc","250");
+
+	$(".knob").knob({
+		change : function (value) {
+			
+			doSend('knob',this.$.context.id,value);
+		    //console.log("change : " + value);
+		},
+		/*release : function (value) {
+		    console.log("release : " + value);
+		},
+		cancel : function () {
+		    console.log("cancel : " + this.value);
+		},*/
+	});
+});
+////////////////////
 </script>	
 
 </head>
@@ -268,9 +295,37 @@ function buttonRelease(button)
 
 <a href='javascript:setLed("playing",3);'>test</a>
 
-<input type="text" value="75" class="dial">
+<table>
+<tr>
+<td><input class="knob" id="knobFilterType"></td>
+<td><input class="knob" id="knobFilterCutoff"></td>
+<td><input class="knob" id="knobFilterRes"></td>
+<td><input class="knob" id="knobFilterKeyFollow"></td>
+<td><input class="knob" id="knobFilterContour"></td>
+</tr>
+<tr>
+<td>type</td>
+<td>cut</td>
+<td>res</td>
+<td>key</td>
+<td>cont</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td><input class="knob" id="knobFilterA"></td>
+<td><input class="knob" id="knobFilterD"></td>
+<td><input class="knob" id="knobFilterS"></td>
+<td><input class="knob" id="knobFilterR"></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>A</td>
+<td>D</td>
+<td>S</td>
+<td>R</td>
+</tr>
+</table>
 
-<br/><br/>
 
 <!-- transport -->
 

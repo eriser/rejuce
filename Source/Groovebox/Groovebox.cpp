@@ -6,6 +6,7 @@
  */
 
 #include "Groovebox.h"
+#include "../Noisemaker/Engine/Params.h"
 
 Groovebox::Groovebox(Host* pHost,GrooveboxInterface* pInterface) :GrooveEventListener(), HostEventListener()
 {
@@ -110,6 +111,40 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 			default:
 				handleKeyboardButton(false,event.control);
 				break;
+			}
+			break;
+		}
+
+		case GE_KNOB:
+		{
+			int controller = 0;
+
+			switch (event.control)
+			{
+			case GCK_FILTER_TYPE:		controller = FILTERTYPE;	break;
+			case GCK_FILTER_CUTOFF:		controller = CUTOFF;		break;
+			case GCK_FILTER_RES:		controller = RESONANCE;		break;
+			case GCK_FILTER_KEYFOLLOW:	controller = KEYFOLLOW;		break;
+			case GCK_FILTER_CONTOUR:	controller = FILTERCONTOUR;	break;
+			case GCK_FILTER_A:			controller = FILTERATTACK;	break;
+			case GCK_FILTER_D:			controller = FILTERDECAY;	break;
+			case GCK_FILTER_S:			controller = FILTERSUSTAIN;	break;
+			case GCK_FILTER_R:			controller = FILTERRELEASE;	break;
+			break;
+			}
+
+			if (controller)
+			{
+				int val = event.argv;
+				if (val<0) val=0;
+				if (val>127) val=127;
+
+				MidiMessage m = MidiMessage::controllerEvent(_currentChannel+1,controller,val);
+
+				m.setTimeStamp(Time::getMillisecondCounterHiRes()/1000.0f);
+				HostEvent h;
+				h = HostEventFactory::event(m);
+				_host->event(h);
 			}
 			break;
 		}

@@ -89,7 +89,7 @@ class TalPreset
 		// Init default midiMap
 		for (int i = 0; i < 256; i++) 
 		{
-			midiMap[i] = 0;
+			midiMap[i] = i;
 		}
 		name = "default";
 	}
