@@ -312,6 +312,8 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 					HostEvent h = HostEventFactory::event(HC_PHRASE_MUTE_TOGGLE,n);
 					_host->event(h);
 
+					printf("set %d led\n",n);
+
 					// also toggle the led
 					int led = _controlValue[(GrooveControlName)(GCL_SEMI_0 + n)];
 					if (led == 0)
