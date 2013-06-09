@@ -103,6 +103,12 @@ void Song::setNextSection(int i)
 		_pCurrentSection = _sections[i];
 
 		_currentPatternLengthClocks = _pCurrentSection->getLengthClocks();
+
+		if (_pHostEventListener)
+		{
+			HostEvent h = HostEventFactory::event(HC_OUT_SECTION_CHANGE,_currentSection);
+			_pHostEventListener->onHostEvent(h);
+		}
 	}
 }
 
@@ -175,6 +181,9 @@ int Song::tick(MidiMessageCollector* pCollector)
 				_pCurrentSection = _sections[_nextSection];
 
 				_currentPatternLengthClocks = _pCurrentSection->getLengthClocks();
+
+				HostEvent h = HostEventFactory::event(HC_OUT_SECTION_CHANGE,_currentSection);
+				_pHostEventListener->onHostEvent(h);
 			}
 
 			_clock=0;

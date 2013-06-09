@@ -305,7 +305,10 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 					HostEvent h = HostEventFactory::event(HC_SECTION_SET_NEXT,n);
 					_host->event(h);
 
-					// TODO!!!!
+					// also set the led (to flash, until the section actually changes)
+					_controlValue[(GrooveControlName)(GCL_SEMI_0 + n)] = GE_LED_FLASH;
+					GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + n),GE_LED_FLASH);
+					_interface->onGrooveEvent(ge);
 				} else
 				if (_keyboardMode==KEYBOARD_MUTE)
 				{
@@ -321,7 +324,7 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 					else if (led== 1)
 						led =0;
 					_controlValue[(GrooveControlName)(GCL_SEMI_0 + n)] = led;
-					GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,GCL_RECORDING,led);
+					GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + n),led);
 					_interface->onGrooveEvent(ge);
 				}
 			}
@@ -375,8 +378,43 @@ void Groovebox::onHostEvent(HostEvent& event)
 	{
 		case HC_OUT_BEAT:
 		{
+			_controlValue[GCL_PLAYING] = GE_LED_PULSE;
 			GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,GCL_PLAYING,GE_LED_PULSE);
 			_interface->onGrooveEvent(ge);
+			break;
+		}
+		case HC_OUT_SECTION_CHANGE:
+		{
+			if (_keyboardMode == KEYBOARD_SECTION)
+			{
+				// loop over keyboard leds to set them to represent the mute or section status
+				Song* song = _host->getSequencer()->getSong();
+				for (int i=0;i<16;i++)
+				{
+					int led = GE_LED_OFF;
+
+					led = GE_LED_OFF;
+					if (i==song->getCurrentSection())
+					{
+						led = GE_LED_ON;
+					}
+					else if (i==song->getNextSection())
+					{
+						led = GE_LED_FLASH;
+					}
+					else
+					{
+						led = GE_LED_OFF;
+					}
+
+					if (_controlValue[(GrooveControlName)(GCL_SEMI_0 + i)] != led)
+					{
+						_controlValue[(GrooveControlName)(GCL_SEMI_0 + i)]=led;
+						GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + i),led);
+						_interface->onGrooveEvent(ge);
+					}
+				}
+			}
 			break;
 		}
 		default:

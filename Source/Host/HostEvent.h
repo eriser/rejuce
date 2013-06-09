@@ -24,11 +24,9 @@ enum HostEventName
 
 	HC_OUT_BEAT,											//	fired once per beat
 
-	HC_SECTION_MODE,
-	HC_MUTE_MODE,
-
 	// 1 args, 101-200
 	HC_SECTION_SET_NEXT	= HOSTEVENT_1_ARGS,					//	[int next pattern]
+	HC_OUT_SECTION_CHANGE,
 	HC_PHRASE_MUTE_TOGGLE,
 
 	// 2 args, 201-300
