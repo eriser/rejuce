@@ -41,7 +41,11 @@ public:
 	void pause();
 
 	void setNextSection(int i);
+	int getCurrentSection();
+	int getNextSection();
+
 	void togglePhraseMute(int i);
+	bool getPhraseMuteState(int i);
 	void setMetronomeState(MetronomeState s);
 
 	void setBpm(float bpm);

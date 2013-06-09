@@ -30,6 +30,8 @@ public:
 
 	void setHostEventListener(HostEventListener* pHostEventListener);
 
+	Sequencer* getSequencer();
+
 private:
 	void handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message);
 	void panic();

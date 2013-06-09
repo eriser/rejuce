@@ -171,6 +171,11 @@ bool Host::event(HostEvent c)
 	return ret;
 }
 
+Sequencer* Host::getSequencer()
+{
+	return &_sequencer;
+}
+
 void Host::handleIncomingMidiMessage (MidiInput* source,const MidiMessage& message)
 {
 	printf("c timecode %f\n",message.getTimeStamp());

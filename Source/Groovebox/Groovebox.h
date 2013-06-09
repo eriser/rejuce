@@ -38,6 +38,7 @@ public:
 	void onHostEvent(HostEvent& event);
 
 private:
+	void setKeyboardLed(int led,int val);
 	void setTransportLeds();
 	void handleKeyboardButton(bool bDown,GrooveControlName control);
 	void handleKeboardModeButton(GrooveControlName control);

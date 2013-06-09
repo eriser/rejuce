@@ -185,12 +185,18 @@ void Groovebox::handleKeboardModeButton(GrooveControlName control)
 	_controlValue[GCL_SECTION] = 0;
 	switch (_keyboardMode)
 	{
-	case KEYBOARD_MUTE:
-		_controlValue[GCL_MUTE] = 3;
-		break;
-	case KEYBOARD_SECTION:
-		_controlValue[GCL_SECTION] = 3;
-		break;
+		case KEYBOARD_MUTE:
+		{
+			// enter mute mode, set out led and heads-up to the host
+			_controlValue[GCL_MUTE] = 3;
+			break;
+		}
+		case KEYBOARD_SECTION:
+		{
+			// enter section mode, set led and heads-up to host
+			_controlValue[GCL_SECTION] = 3;
+			break;
+		}
 	}
 
 	// if values are different, output values
@@ -202,6 +208,38 @@ void Groovebox::handleKeboardModeButton(GrooveControlName control)
 	if (oldLedStateSection != _controlValue[GCL_SECTION])
 	{
 		GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,GCL_SECTION,_controlValue[GCL_SECTION]);
+		_interface->onGrooveEvent(ge);
+	}
+
+	// loop over keyboard leds to set them to represent the mute or section status
+	Song* song = _host->getSequencer()->getSong();
+	for (int i=0;i<16;i++)
+	{
+		int led = GE_LED_OFF;
+
+		if (_keyboardMode == KEYBOARD_MUTE)
+		{
+			led = song->getPhraseMuteState(i) ? GE_LED_OFF : GE_LED_ON;
+		}
+		if (_keyboardMode == KEYBOARD_SECTION)
+		{
+			led = GE_LED_OFF;
+			if (i==song->getCurrentSection())
+			{
+				led = GE_LED_ON;
+			}
+			else if (i==song->getNextSection())
+			{
+				led = GE_LED_FLASH;
+			}
+			else
+			{
+				led = GE_LED_OFF;
+			}
+		}
+
+		_controlValue[(GrooveControlName)(GCL_SEMI_0 + i)]=led;
+		GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + i),led);
 		_interface->onGrooveEvent(ge);
 	}
 }
@@ -237,42 +275,57 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 	case KEYBOARD_MUTE:
 	case KEYBOARD_SECTION:
 	{
-		int n=-1;
-		switch (control)
+		if (bDown)
 		{
-		case GC_BUTTON_WHITE0: n=0; break;
-		case GC_BUTTON_WHITE1: n=1; break;
-		case GC_BUTTON_WHITE2: n=2; break;
-		case GC_BUTTON_WHITE3: n=3; break;
-		case GC_BUTTON_WHITE4: n=4; break;
-		case GC_BUTTON_WHITE5: n=5; break;
-		case GC_BUTTON_WHITE6: n=6; break;
-		case GC_BUTTON_WHITE7: n=7; break;
-		case GC_BUTTON_WHITE8: n=8; break;
-		case GC_BUTTON_WHITE9: n=9; break;
-		case GC_BUTTON_WHITE10: n=10; break;
-		case GC_BUTTON_WHITE11: n=11; break;
-		case GC_BUTTON_WHITE12: n=12; break;
-		case GC_BUTTON_WHITE13: n=13; break;
-		case GC_BUTTON_WHITE14: n=14; break;
-		case GC_BUTTON_WHITE15: n=15; break;
-		}
-
-		if (n>=0)
-		{
-			if (_keyboardMode==KEYBOARD_MUTE)
+			int n=-1;
+			switch (control)
 			{
-				HostEvent h = HostEventFactory::event(HC_PATTERN_SET_NEXT,n);
-				_host->event(h);
-			} else
-			if (_keyboardMode==KEYBOARD_SECTION)
-			{
-				HostEvent h = HostEventFactory::event(HC_PHRASE_MUTE_TOGGLE,n);
-				_host->event(h);
+				case GC_BUTTON_WHITE0: n=0; break;
+				case GC_BUTTON_WHITE1: n=1; break;
+				case GC_BUTTON_WHITE2: n=2; break;
+				case GC_BUTTON_WHITE3: n=3; break;
+				case GC_BUTTON_WHITE4: n=4; break;
+				case GC_BUTTON_WHITE5: n=5; break;
+				case GC_BUTTON_WHITE6: n=6; break;
+				case GC_BUTTON_WHITE7: n=7; break;
+				case GC_BUTTON_WHITE8: n=8; break;
+				case GC_BUTTON_WHITE9: n=9; break;
+				case GC_BUTTON_WHITE10: n=10; break;
+				case GC_BUTTON_WHITE11: n=11; break;
+				case GC_BUTTON_WHITE12: n=12; break;
+				case GC_BUTTON_WHITE13: n=13; break;
+				case GC_BUTTON_WHITE14: n=14; break;
+				case GC_BUTTON_WHITE15: n=15; break;
 			}
-		}
 
-		break;
+			if (n>=0)
+			{
+				if (_keyboardMode==KEYBOARD_SECTION)
+				{
+					HostEvent h = HostEventFactory::event(HC_SECTION_SET_NEXT,n);
+					_host->event(h);
+
+					// TODO!!!!
+				} else
+				if (_keyboardMode==KEYBOARD_MUTE)
+				{
+					HostEvent h = HostEventFactory::event(HC_PHRASE_MUTE_TOGGLE,n);
+					_host->event(h);
+
+					// also toggle the led
+					int led = _controlValue[(GrooveControlName)(GCL_SEMI_0 + n)];
+					if (led == 0)
+						led = 1;
+					else if (led== 1)
+						led =0;
+					_controlValue[(GrooveControlName)(GCL_SEMI_0 + n)] = led;
+					GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,GCL_RECORDING,led);
+					_interface->onGrooveEvent(ge);
+				}
+			}
+
+			break;
+		}
 	}
 	}
 }

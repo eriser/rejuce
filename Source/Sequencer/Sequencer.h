@@ -36,6 +36,8 @@ public:
 
 	bool event(HostEvent c);
 
+	Song* getSong();
+
 private:
 	void run();
 	int tick();

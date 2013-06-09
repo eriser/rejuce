@@ -70,9 +70,24 @@ void Song::pause()
 	_state = SONG_PAUSED;
 }
 
+int Song::getCurrentSection()
+{
+	return _currentSection;
+}
+
+int Song::getNextSection()
+{
+	return _nextSection;
+}
+
 void Song::togglePhraseMute(int i)
 {
 	_pCurrentSection->toggleMuteState(i);
+}
+
+bool Song::getPhraseMuteState(int i)
+{
+	return _pCurrentSection->getIsMuted(i);
 }
 
 void Song::setNextSection(int i)

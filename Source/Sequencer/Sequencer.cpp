@@ -39,6 +39,11 @@ Sequencer::~Sequencer()
 	stop();
 }
 
+Song* Sequencer::getSong()
+{
+	return &_song;
+}
+
 void Sequencer::init(MidiMessageCollector* collector,HostEventListener* pHostEventListener)
 {
 	_bpm = 120.0f;
@@ -138,7 +143,7 @@ void Sequencer::executeEvent(HostEvent* c)
 		commandTransport(c);
 		break;
 
-	case HC_PATTERN_SET_NEXT:
+	case HC_SECTION_SET_NEXT:
 		_song.setNextSection(c->argv[0]);
 		break;
 
