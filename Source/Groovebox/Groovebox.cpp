@@ -16,11 +16,14 @@ Groovebox::Groovebox(Host* pHost,GrooveboxInterface* pInterface) :GrooveEventLis
 
 	for (int i=0;i<GC_SIZE;i++) {_controlState[i]=GE_INVALID;_controlValue[i]=0;}
 
-
 	_transportState = TRANSPORT_STOPPED;
-	_currentChannel=0;
+	_currentTrack=0;
 	_transposeOffset=0;
+	_octaveOffset=0;
 	_keyboardMode = KEYBOARD_KB;
+
+	_shiftTrack = false;
+	_shiftTranspose = false;
 }
 
 Groovebox::~Groovebox()
@@ -40,6 +43,11 @@ void Groovebox::stop()
 
 void Groovebox::onGrooveEvent(GrooveEvent& event)
 {
+	// some keys are shift keys. when they are pressed we only allow the keys they operate
+	// on to be pressed as well, using a not particularly elegant mechanism
+
+	// TODO: device hopefully not terrible mechanism (for the above)
+
 	// always store the control's state
 	_controlState[event.control] = event.event;
 	_controlValue[event.control] = event.argv;
@@ -76,16 +84,16 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 					break;
 
 				case GC_BUTTON_OCTDOWN:
-					if (_transposeOffset-12 >= (0-24))
+					if (_octaveOffset-1 >= (0-3))
 					{
-						_transposeOffset-=12;
+						_octaveOffset--;
 						// TODO: send message back of transpose value
 					}
 					break;
 				case GC_BUTTON_OCTUP:
-					if (_transposeOffset+12 <= (24))
+					if (_octaveOffset+1 <= (3))
 					{
-						_transposeOffset+=12;
+						_octaveOffset++;
 						// TODO: send message back of transpose value
 					}
 					break;
@@ -93,6 +101,15 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 				case GC_BUTTON_MUTE:
 				case GC_BUTTON_SECTION:
 					handleKeboardModeButton(event.control);
+					break;
+
+				case GC_BUTTON_TRACK:
+				case GC_BUTTON_TRANSPOSE:
+					if (event.control == GC_BUTTON_TRACK)
+						_keyboardMode = KEYBOARD_TRACK;
+					else
+						_keyboardMode = KEYBOARD_TRANSPOSE;
+					handleTrackTransposeButton(true,event.control);
 					break;
 
 				default:
@@ -108,6 +125,10 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 		{
 			switch (event.control)
 			{
+			case GC_BUTTON_TRACK:
+			case GC_BUTTON_TRANSPOSE:
+				handleTrackTransposeButton(true,event.control);
+				break;
 			default:
 				handleKeyboardButton(false,event.control);
 				break;
@@ -139,7 +160,7 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 				if (val<0) val=0;
 				if (val>127) val=127;
 
-				MidiMessage m = MidiMessage::controllerEvent(_currentChannel+1,controller,val);
+				MidiMessage m = MidiMessage::controllerEvent(_currentTrack+1,controller,val);
 
 				m.setTimeStamp(Time::getMillisecondCounterHiRes()/1000.0f);
 				HostEvent h;
@@ -152,6 +173,32 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 		default:
 			break;
 
+	}
+}
+
+void Groovebox::handleTrackTransposeButton(bool bDown,GrooveControlName control)
+{
+	for (int i=0;i<16;i++)
+	{
+		int led = GE_LED_OFF;
+
+		if (bDown)
+		{
+			if (_keyboardMode == KEYBOARD_TRACK)
+			{
+				if (i == _currentTrack)
+					led = GE_LED_ON;
+			}
+			if (_keyboardMode == KEYBOARD_TRANSPOSE)
+			{
+				if (i == _transposeOffset+8)
+					led = GE_LED_ON;
+			}
+		}
+
+		_controlValue[(GrooveControlName)(GCL_SEMI_0 + i)]=led;
+		GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + i),led);
+		_interface->onGrooveEvent(ge);
 	}
 }
 
@@ -256,15 +303,15 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 
 		// 58 is midi note of lowest note on keyboard
 		// GC_BUTTON_WHITE0 is first key, and keys are in contiguous ascending order
-		note = 58 + _transposeOffset + control - GC_BUTTON_WHITE0;
+		note = 58 + _transposeOffset + (12*_octaveOffset) + control - GC_BUTTON_WHITE0;
 
 		if (bDown)
 		{
-			m = MidiMessage::noteOn(_currentChannel+1,note,(unsigned char)velocity);
+			m = MidiMessage::noteOn(_currentTrack+1,note,(unsigned char)velocity);
 		}
 		else
 		{
-			m = MidiMessage::noteOff(_currentChannel+1,note,(unsigned char)velocity);
+			m = MidiMessage::noteOff(_currentTrack+1,note,(unsigned char)velocity);
 		}
 
 		m.setTimeStamp(Time::getMillisecondCounterHiRes()/1000.0f);
@@ -274,6 +321,8 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 	}
 	case KEYBOARD_MUTE:
 	case KEYBOARD_SECTION:
+	case KEYBOARD_TRACK:
+	case KEYBOARD_TRANSPOSE:
 	{
 		if (bDown)
 		{
@@ -300,32 +349,62 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 
 			if (n>=0)
 			{
-				if (_keyboardMode==KEYBOARD_SECTION)
+				switch (_keyboardMode)
 				{
-					HostEvent h = HostEventFactory::event(HC_SECTION_SET_NEXT,n);
-					_host->event(h);
+					case KEYBOARD_SECTION:
+					{
+						HostEvent h = HostEventFactory::event(HC_SECTION_SET_NEXT,n);
+						_host->event(h);
 
-					// also set the led (to flash, until the section actually changes)
-					_controlValue[(GrooveControlName)(GCL_SEMI_0 + n)] = GE_LED_FLASH;
-					GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + n),GE_LED_FLASH);
-					_interface->onGrooveEvent(ge);
-				} else
-				if (_keyboardMode==KEYBOARD_MUTE)
-				{
-					HostEvent h = HostEventFactory::event(HC_PHRASE_MUTE_TOGGLE,n);
-					_host->event(h);
+						// also set the led (to flash, until the section actually changes)
+						_controlValue[(GrooveControlName)(GCL_SEMI_0 + n)] = GE_LED_FLASH;
+						GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + n),GE_LED_FLASH);
+						_interface->onGrooveEvent(ge);
+						break;
+					}
+					case KEYBOARD_MUTE:
+					{
+						HostEvent h = HostEventFactory::event(HC_PHRASE_MUTE_TOGGLE,n);
+						_host->event(h);
 
-					printf("set %d led\n",n);
+						printf("set %d led\n",n);
 
-					// also toggle the led
-					int led = _controlValue[(GrooveControlName)(GCL_SEMI_0 + n)];
-					if (led == 0)
-						led = 1;
-					else if (led== 1)
-						led =0;
-					_controlValue[(GrooveControlName)(GCL_SEMI_0 + n)] = led;
-					GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + n),led);
-					_interface->onGrooveEvent(ge);
+						// also toggle the led
+						int led = _controlValue[(GrooveControlName)(GCL_SEMI_0 + n)];
+						if (led == 0)
+							led = 1;
+						else if (led== 1)
+							led =0;
+						_controlValue[(GrooveControlName)(GCL_SEMI_0 + n)] = led;
+						GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + n),led);
+						_interface->onGrooveEvent(ge);
+						break;
+					}
+					case KEYBOARD_TRACK:
+					{
+						GrooveEvent ge;
+
+						// off old led
+						ge = GrooveEventFactory::event(GE_LEDSET,
+														(GrooveControlName)(GCL_SEMI_0 + _currentTrack),
+														GE_LED_OFF);
+						_interface->onGrooveEvent(ge);
+
+						// set value
+						_currentTrack = n;
+
+						// on new led
+						ge = GrooveEventFactory::event(GE_LEDSET,
+														(GrooveControlName)(GCL_SEMI_0 + _currentTrack),
+														GE_LED_ON);
+						_interface->onGrooveEvent(ge);
+						break;
+					}
+					case KEYBOARD_TRANSPOSE:
+					{
+						// TODO: fix this!!!
+						break;
+					}
 				}
 			}
 

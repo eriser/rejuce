@@ -11,13 +11,16 @@
 
 Host::Host()
 {
-	// TODO: at the moment there is only one synth!!!
-	AudioProcessor* gs = new TalCore();
-
 	_hostProcessor = new HostProcessor();
+	_hostEventListener = nullptr;
 
-	_hostProcessor->hostAddSynth(gs);
-
+	// make 8 noisemakers
+	for (int i=0;i<8;i++)
+	{
+		AudioProcessor* gs = new TalCore();
+		_hostProcessor->hostAddSynth(gs);
+		printf("added noisemaker %d\n",i);
+	}
 }
 
 Host::~Host()

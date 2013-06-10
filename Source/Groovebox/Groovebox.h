@@ -20,7 +20,9 @@ enum GrooveboxKeyboardMode
 {
 	KEYBOARD_KB=0,
 	KEYBOARD_MUTE,
-	KEYBOARD_SECTION
+	KEYBOARD_SECTION,
+	KEYBOARD_TRACK,
+	KEYBOARD_TRANSPOSE
 };
 
 class Groovebox : public GrooveEventListener, public HostEventListener {
@@ -41,6 +43,7 @@ private:
 	void setKeyboardLed(int led,int val);
 	void setTransportLeds();
 	void handleKeyboardButton(bool bDown,GrooveControlName control);
+	void handleTrackTransposeButton(bool bDown,GrooveControlName control);
 	void handleKeboardModeButton(GrooveControlName control);
 
 	GrooveboxInterface* _interface;
@@ -53,8 +56,12 @@ private:
 	GrooveEventName _controlState[GC_SIZE];
 	int _controlValue[GC_SIZE];
 
-	int _currentChannel;
+	int _currentTrack;
+	int _octaveOffset;
 	int _transposeOffset;
+
+	bool _shiftTrack;
+	bool _shiftTranspose;
 };
 
 #endif /* GROOVEBOX_H_ */
