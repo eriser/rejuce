@@ -324,7 +324,26 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 	case KEYBOARD_TRACK:
 	case KEYBOARD_TRANSPOSE:
 	{
-		if (bDown)
+		if (!bDown)
+		{
+			if (_keyboardMode == KEYBOARD_TRACK)
+			{
+				// turn off current track LED
+				GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,
+															(GrooveControlName)(GCL_SEMI_0 + _currentTrack),
+															GE_LED_OFF);
+				_interface->onGrooveEvent(ge);
+			} else
+			if (_keyboardMode == KEYBOARD_TRANSPOSE)
+			{
+				// turn off current transpose LED
+				GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,
+															(GrooveControlName)(GCL_SEMI_0 + _transposeOffset+8),
+															GE_LED_OFF);
+				_interface->onGrooveEvent(ge);
+			}
+		}
+		else
 		{
 			int n=-1;
 			switch (control)

@@ -98,6 +98,8 @@ td.center
 	width:52px;
 	height:31px;
 }
+
+.marked { background-color: yellow; border: 3px red solid; }
 </STYLE>
 
 <script type="text/javascript" src="jquery-1.9.1.js"></script>
@@ -297,13 +299,29 @@ $(function() {
   		console.log( index + ": " + $(this).context.name );
 	
 		var name = $(this).context.name;
+		$(this).context.sticky=false;
 		
-		$(this).mousedown(function() {
-			doSend("buttonDown",name,0);
+		$(this).mousedown(function(e) {
+			
+			if (!$(this).context.sticky)
+				doSend("buttonDown",name,0);
+			
+			if (e.ctrlKey) {
+				$(this).context.sticky = true;
+				$(this).addClass("marked");
+			}
 		});
 
-		$(this).mouseup(function() {
-  			doSend("buttonUp",name,0);
+		$(this).mouseup(function(e) {
+			
+			if (e.ctrlKey) {
+				$(this).context.sticky = false;
+				$(this).removeClass("marked");
+			}
+			
+			if (!$(this).context.sticky)
+  				doSend("buttonUp",name,0);
+  			
 		});
 		
 	});	
