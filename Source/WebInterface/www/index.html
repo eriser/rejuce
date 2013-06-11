@@ -259,6 +259,7 @@ function buttonRelease(button)
 }
 
 //////////////////////
+// setup knobs
 $(function() {
 	var knobs = $(".knob");
 	knobs.attr("data-width","62");
@@ -287,14 +288,33 @@ $(function() {
 		},*/
 	});
 });
+
+// setup buttons
+$(function() {
+	var buttons = $(":button");
+	
+	buttons.each(function( index ) {
+  		console.log( index + ": " + $(this).context.name );
+	
+		var name = $(this).context.name;
+		
+		$(this).mousedown(function() {
+			doSend("buttonDown",name,0);
+		});
+
+		$(this).mouseup(function() {
+  			doSend("buttonUp",name,0);
+		});
+		
+	});	
+});
 ////////////////////
 </script>	
 
 </head>
 <body>
 
-<a href='javascript:setLed("playing",3);'>test</a>
-
+<input type="button" class="buttonTest" name="test"/>
 <table>
 <tr>
 <td><input class="knob" id="knobFilterType"></td>
@@ -345,15 +365,15 @@ $(function() {
 </tr>
 <tr>
 <td>
-<input type="button" class="buttonTransportRecord" name="record" onmousedown="doSend('buttonDown','record',0)"/>
+<input type="button" class="buttonTransportRecord" name="record"/>
 </td><td>
-<input type="button" class="buttonTransporStop" name="stop" onmousedown="doSend('buttonDown','stop',0)"/>
+<input type="button" class="buttonTransporStop" name="stop"/>
 </td><td>
-<input type="button" class="buttonTransportBack" name="back" onmousedown="doSend('buttonDown','back',0)"/>
+<input type="button" class="buttonTransportBack" name="back"/>
 </td><td>
-<input type="button" class="buttonTransportPause" name="pause" onmousedown="doSend('buttonDown','pause',0)"/>
+<input type="button" class="buttonTransportPause" name="pause"/>
 </td><td>
-<input type="button" class="buttonTransportPlay" name="play" onmousedown="doSend('buttonDown','play',0)"/>
+<input type="button" class="buttonTransportPlay" name="play"/>
 </td>
 </tr>
 </table>
@@ -373,12 +393,12 @@ $(function() {
 <td><div class="ledRedOff" id="sectionLed">&nbsp;</div>section</td>
 </tr>
 <tr>
-<td><input type="button" class="buttonWhiteSmall" name="play" onmousedown="buttonPress('octDown')"/></td>
-<td><input type="button" class="buttonWhiteSmall" name="play" onmousedown="buttonPress('octUp')"/></td>
-<td><input type="button" class="buttonBlackSmall" name="play" onmousedown="buttonPress('track')"/></td>
-<td><input type="button" class="buttonBlackSmall" name="play" onmousedown="buttonPress('transpose')"/></td>
-<td><input type="button" class="buttonBlackSmall" name="play" onmousedown="buttonPress('mute')"/></td>
-<td><input type="button" class="buttonBlackSmall" name="play" onmousedown="buttonPress('section')"/></td>
+<td><input type="button" class="buttonWhiteSmall" name="octDown"/></td>
+<td><input type="button" class="buttonWhiteSmall" name="octUp"/></td>
+<td><input type="button" class="buttonBlackSmall" name="track"/></td>
+<td><input type="button" class="buttonBlackSmall" name="transpose"/></td>
+<td><input type="button" class="buttonBlackSmall" name="mute"/></td>
+<td><input type="button" class="buttonBlackSmall" name="section"/></td>
 </tr>
 </table>
 
@@ -392,21 +412,21 @@ $(function() {
 		<tr>
 		<table><tr>
 			<td width="90">&nbsp;</td>
-			<td><input class="buttonBlack" type="button" name="black0" onmouseup="buttonRelease('black0')" onmousedown="buttonPress('black0')"></td>
-			<td><input class="buttonBlack" type="button" name="black1" onmouseup="buttonRelease('black1')" onmousedown="buttonPress('black1')"></td>
-			<td><input class="buttonBlack" type="button" name="black2" onmouseup="buttonRelease('black2')" onmousedown="buttonPress('black2')"></td>
+			<td><input class="buttonBlack" type="button" name="black0"></td>
+			<td><input class="buttonBlack" type="button" name="black1"></td>
+			<td><input class="buttonBlack" type="button" name="black2"></td>
 			<td width="50">&nbsp;</td>
-			<td><input class="buttonBlack" type="button" name="black3" onmouseup="buttonRelease('black3')" onmousedown="buttonPress('black3')"></td>
-			<td><input class="buttonBlack" type="button" name="black4" onmouseup="buttonRelease('black4')" onmousedown="buttonPress('black4')"></td>
+			<td><input class="buttonBlack" type="button" name="black3"></td>
+			<td><input class="buttonBlack" type="button" name="black4"></td>
 			<td width="50">&nbsp;</td>
-			<td><input class="buttonBlack" type="button" name="black5" onmouseup="buttonRelease('black5')" onmousedown="buttonPress('black5')"></td>
-			<td><input class="buttonBlack" type="button" name="black6" onmouseup="buttonRelease('black6')" onmousedown="buttonPress('black6')"></td>
-			<td><input class="buttonBlack" type="button" name="black7" onmouseup="buttonRelease('black7')" onmousedown="buttonPress('black7')"></td>
+			<td><input class="buttonBlack" type="button" name="black5"></td>
+			<td><input class="buttonBlack" type="button" name="black6"></td>
+			<td><input class="buttonBlack" type="button" name="black7"></td>
 			<td width="50">&nbsp;</td>
-			<td><input class="buttonBlack" type="button" name="black8" onmouseup="buttonRelease('black8')" onmousedown="buttonPress('black8')"></td>
-			<td><input class="buttonBlack" type="button" name="black9" onmouseup="buttonRelease('black9')" onmousedown="buttonPress('black9')"></td>
+			<td><input class="buttonBlack" type="button" name="black8"></td>
+			<td><input class="buttonBlack" type="button" name="black9"></td>
 			<td width="50">&nbsp;</td>
-			<td><input class="buttonWhite" type="button" name="black10" onmouseup="buttonRelease('black10')" onmousedown="buttonPress('black10')"></td>
+			<td><input class="buttonWhite" type="button" name="black10"></td>
 			</tr></table>
 		</tr>
 		<tr>
@@ -429,22 +449,22 @@ $(function() {
 			<td class="center"><div class="ledRedOff" id="semi15">&nbsp;</div></td>
 			</tr>
 			<tr>
-			<td><input class="buttonWhite" type="button" name="white0" onmouseup="buttonRelease('white0')" onmousedown="buttonPress('white0')"></td>
-			<td><input class="buttonWhite" type="button" name="white1" onmouseup="buttonRelease('white1')" onmousedown="buttonPress('white1')"></td>
-			<td><input class="buttonWhite" type="button" name="white2" onmouseup="buttonRelease('white2')" onmousedown="buttonPress('white2')"></td>
-			<td><input class="buttonWhite" type="button" name="white3" onmouseup="buttonRelease('white3')" onmousedown="buttonPress('white3')"></td>
-			<td><input class="buttonWhite" type="button" name="white4" onmouseup="buttonRelease('white4')" onmousedown="buttonPress('white4')"></td>
-			<td><input class="buttonWhite" type="button" name="white5" onmouseup="buttonRelease('white5')" onmousedown="buttonPress('white5')"></td>
-			<td><input class="buttonWhite" type="button" name="white6" onmouseup="buttonRelease('white6')" onmousedown="buttonPress('white6')"></td>
-			<td><input class="buttonWhite" type="button" name="white7" onmouseup="buttonRelease('white7')" onmousedown="buttonPress('white7')"></td>
-			<td><input class="buttonWhite" type="button" name="white8" onmouseup="buttonRelease('white8')" onmousedown="buttonPress('white8')"></td>
-			<td><input class="buttonWhite" type="button" name="white9" onmouseup="buttonRelease('white9')" onmousedown="buttonPress('white9')"></td>
-			<td><input class="buttonWhite" type="button" name="white10" onmouseup="buttonRelease('white10')" onmousedown="buttonPress('white10')"></td>
-			<td><input class="buttonWhite" type="button" name="white11" onmouseup="buttonRelease('white11')" onmousedown="buttonPress('white11')"></td>
-			<td><input class="buttonWhite" type="button" name="white12" onmouseup="buttonRelease('white12')" onmousedown="buttonPress('white12')"></td>
-			<td><input class="buttonWhite" type="button" name="white13" onmouseup="buttonRelease('white13')" onmousedown="buttonPress('white13')"></td>
-			<td><input class="buttonWhite" type="button" name="white14" onmouseup="buttonRelease('white14')" onmousedown="buttonPress('white14')"></td>
-			<td><input class="buttonWhite" type="button" name="white15" onmouseup="buttonRelease('white15')" onmousedown="buttonPress('white15')"></td>
+			<td><input class="buttonWhite" type="button" name="white0"></td>
+			<td><input class="buttonWhite" type="button" name="white1"></td>
+			<td><input class="buttonWhite" type="button" name="white2"></td>
+			<td><input class="buttonWhite" type="button" name="white3"></td>
+			<td><input class="buttonWhite" type="button" name="white4"></td>
+			<td><input class="buttonWhite" type="button" name="white5"></td>
+			<td><input class="buttonWhite" type="button" name="white6"></td>
+			<td><input class="buttonWhite" type="button" name="white7"></td>
+			<td><input class="buttonWhite" type="button" name="white8"></td>
+			<td><input class="buttonWhite" type="button" name="white9"></td>
+			<td><input class="buttonWhite" type="button" name="white10"></td>
+			<td><input class="buttonWhite" type="button" name="white11"></td>
+			<td><input class="buttonWhite" type="button" name="white12"></td>
+			<td><input class="buttonWhite" type="button" name="white13"></td>
+			<td><input class="buttonWhite" type="button" name="white14"></td>
+			<td><input class="buttonWhite" type="button" name="white15"></td>
 			</tr></table>
 		</tr>
 		</table> 
