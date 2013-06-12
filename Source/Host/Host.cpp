@@ -120,10 +120,14 @@ bool Host::init(String audioDeviceType,String audioInterface,String midiInterfac
 		DBG("midi input disabled");
 	}
 
+	DBG("starting the collector and begin play\n");
+
 	// start things up
 	_app.setProcessor(_hostProcessor);
 	_app.getMidiMessageCollector().reset(sampleRate);
 	_adm.addAudioCallback(&_app);
+
+	DBG("initialise sequencer\n");
 
 	// sequencer initialisation
 	_sequencer.init(&_app.getMidiMessageCollector(),_hostEventListener);

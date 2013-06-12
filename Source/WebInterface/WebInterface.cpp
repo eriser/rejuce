@@ -40,6 +40,8 @@ void WebInterface::run()
 	// start webserver
 	initialiseWebserver();
 
+	DBG("webserver running\n");
+
 	// block here until stop running
 	while (!this->threadShouldExit())
 		Thread::sleep(1000);

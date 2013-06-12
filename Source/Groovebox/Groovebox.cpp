@@ -127,7 +127,8 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 			{
 			case GC_BUTTON_TRACK:
 			case GC_BUTTON_TRANSPOSE:
-				handleTrackTransposeButton(true,event.control);
+				handleTrackTransposeButton(false,event.control);
+				_keyboardMode = KEYBOARD_KB;
 				break;
 			default:
 				handleKeyboardButton(false,event.control);
@@ -182,23 +183,23 @@ void Groovebox::handleTrackTransposeButton(bool bDown,GrooveControlName control)
 	{
 		int led = GE_LED_OFF;
 
-		if (bDown)
+		if (_keyboardMode == KEYBOARD_TRACK)
 		{
-			if (_keyboardMode == KEYBOARD_TRACK)
-			{
-				if (i == _currentTrack)
-					led = GE_LED_ON;
-			}
-			if (_keyboardMode == KEYBOARD_TRANSPOSE)
-			{
-				if (i == _transposeOffset+8)
-					led = GE_LED_ON;
-			}
+			if (i == _currentTrack)
+				led = bDown ? GE_LED_ON : GE_LED_OFF;
+		}
+		if (_keyboardMode == KEYBOARD_TRANSPOSE)
+		{
+			if (i == _transposeOffset+8)
+				led = bDown ? GE_LED_ON : GE_LED_OFF;
 		}
 
-		_controlValue[(GrooveControlName)(GCL_SEMI_0 + i)]=led;
-		GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + i),led);
-		_interface->onGrooveEvent(ge);
+		if (_controlValue[(GrooveControlName)(GCL_SEMI_0 + i)]!=led)
+		{
+			_controlValue[(GrooveControlName)(GCL_SEMI_0 + i)]=led;
+			GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + i),led);
+			_interface->onGrooveEvent(ge);
+		}
 	}
 }
 
@@ -326,22 +327,7 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 	{
 		if (!bDown)
 		{
-			if (_keyboardMode == KEYBOARD_TRACK)
-			{
-				// turn off current track LED
-				GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,
-															(GrooveControlName)(GCL_SEMI_0 + _currentTrack),
-															GE_LED_OFF);
-				_interface->onGrooveEvent(ge);
-			} else
-			if (_keyboardMode == KEYBOARD_TRANSPOSE)
-			{
-				// turn off current transpose LED
-				GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,
-															(GrooveControlName)(GCL_SEMI_0 + _transposeOffset+8),
-															GE_LED_OFF);
-				_interface->onGrooveEvent(ge);
-			}
+			// no one cares
 		}
 		else
 		{
