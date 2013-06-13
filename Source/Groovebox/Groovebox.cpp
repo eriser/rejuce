@@ -127,8 +127,8 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 			{
 			case GC_BUTTON_TRACK:
 			case GC_BUTTON_TRANSPOSE:
-				handleTrackTransposeButton(false,event.control);
 				_keyboardMode = KEYBOARD_KB;
+				handleTrackTransposeButton(false,event.control);
 				break;
 			default:
 				handleKeyboardButton(false,event.control);
@@ -399,6 +399,7 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 						_currentTrack = n;
 
 						// on new led
+						_controlValue[(GrooveControlName)(GCL_SEMI_0 + _currentTrack)]=GE_LED_ON;
 						ge = GrooveEventFactory::event(GE_LEDSET,
 														(GrooveControlName)(GCL_SEMI_0 + _currentTrack),
 														GE_LED_ON);
