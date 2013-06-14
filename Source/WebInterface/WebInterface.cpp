@@ -8,6 +8,7 @@
 #include "WebInterface.h"
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include <arpa/inet.h>
+#include "../Groovebox/GrooveEvent.h"
 #include "cJSON.h"
 
 WebInterface::WebInterface() : Thread ("WebInterface")
@@ -215,14 +216,15 @@ void WebInterface::parseCommand(char* szCommand)
 	if (!pJson)
 		return;
 
-	GrooveEvent event;
-	memset(&event,0,sizeof(GrooveEvent));
+	GrooveEventName name=GE_INVALID;
+	GrooveControlName control;
+	int value;
 
 	// event
 	pj = cJSON_GetObjectItem(pJson,"event");
 	if (bOk && pj && pj->type==cJSON_String && pj->valuestring && _eventMap.contains(pj->valuestring))
 	{
-		event.event = _eventMap[pj->valuestring];
+		name = _eventMap[pj->valuestring];
 	}
 	else bOk = false;
 
@@ -230,18 +232,19 @@ void WebInterface::parseCommand(char* szCommand)
 	pj = cJSON_GetObjectItem(pJson,"control");
 	if (bOk && pj && pj->type==cJSON_String && pj->valuestring && _controlMap.contains(pj->valuestring))
 	{
-		event.control = _controlMap[pj->valuestring];
+		control = _controlMap[pj->valuestring];
 	}
 	else bOk = false;
 
 	pj = cJSON_GetObjectItem(pJson,"argv");
 	if (bOk && pj && pj->type==cJSON_Number)
 	{
-		event.argv = pj->valueint;
+		value = pj->valueint;
 	}
 
-	if (bOk && event.event!=GE_INVALID)
+	if (bOk && name!=GE_INVALID)
 	{
+		GrooveEvent event = GrooveEvent(name,control,value);
 		_pOutListener->onGrooveEvent(event);
 	}
 }
@@ -254,14 +257,17 @@ void WebInterface::onGrooveEvent(GrooveEvent& event)
 	cJSON* pJson = cJSON_CreateObject();
 
 	const char* eventName = nullptr;
-	eventName = GrooveEvent_getNameString(event.event);
+	eventName = GrooveEvent_getNameString(event.getEvent());
 	cJSON_AddItemToObject(pJson,"event",cJSON_CreateString(eventName));
 
 	const char* controlName = nullptr;
-	controlName = GrooveControl_getNameString(event.control);
+	controlName = GrooveControl_getNameString(event.getControl());
 	cJSON_AddItemToObject(pJson,"control",cJSON_CreateString(controlName));
 
-	cJSON_AddItemToObject(pJson,"argv",cJSON_CreateNumber(event.argv));
+	if (event.isInt())
+		cJSON_AddItemToObject(pJson,"argv",cJSON_CreateNumber(event.getAsInt()));
+	else
+		cJSON_AddItemToObject(pJson,"argv",cJSON_CreateString(event.getAsString()));
 
 	char* c = cJSON_PrintUnformatted(pJson);
 

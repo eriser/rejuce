@@ -43,21 +43,28 @@ void Groovebox::stop()
 
 void Groovebox::onGrooveEvent(GrooveEvent& event)
 {
+	// we are not handling strings coming in! (we only put them out)
+	if (event.isString())
+	{
+		return;
+	}
+
+
 	// some keys are shift keys. when they are pressed we only allow the keys they operate
 	// on to be pressed as well, using a not particularly elegant mechanism
 
 	// TODO: device hopefully not terrible mechanism (for the above)
 
 	// always store the control's state
-	_controlState[event.control] = event.event;
-	_controlValue[event.control] = event.argv;
+	_controlState[event.getControl()] = event.getEvent();
+	_controlValue[event.getControl()] = event.isInt()?event.getAsInt():0;
 
 	// events coming in from interface. update local state or fire host event
-	switch (event.event)
+	switch (event.getEvent())
 	{
 		case GE_BUTTON_DOWN:
 		{
-			switch (event.control)
+			switch (event.getControl())
 			{
 				case GC_BUTTON_STOP:
 					_host->event(HostEventFactory::event(HC_TRANSPORT_STOP));
@@ -100,22 +107,22 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 
 				case GC_BUTTON_MUTE:
 				case GC_BUTTON_SECTION:
-					handleKeboardModeButton(event.control);
+					handleKeboardModeButton(event.getControl());
 					break;
 
 				case GC_BUTTON_TRACK:
 				case GC_BUTTON_TRANSPOSE:
-					if (event.control == GC_BUTTON_TRACK)
+					if (event.getControl() == GC_BUTTON_TRACK)
 						_keyboardMode = KEYBOARD_TRACK;
 					else
 						_keyboardMode = KEYBOARD_TRANSPOSE;
-					handleTrackTransposeButton(true,event.control);
+					handleTrackTransposeButton(true,event.getControl());
 					break;
 
 				default:
 					// notes
-					if (event.control>=GC_BUTTON_WHITE0 && event.control<=GC_BUTTON_WHITE15)
-						handleKeyboardButton(true,event.control);
+					if (event.getControl()>=GC_BUTTON_WHITE0 && event.getControl()<=GC_BUTTON_WHITE15)
+						handleKeyboardButton(true,event.getControl());
 					break;
 			}
 			break;
@@ -123,15 +130,15 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 
 		case GE_BUTTON_UP:
 		{
-			switch (event.control)
+			switch (event.getControl())
 			{
 			case GC_BUTTON_TRACK:
 			case GC_BUTTON_TRANSPOSE:
 				_keyboardMode = KEYBOARD_KB;
-				handleTrackTransposeButton(false,event.control);
+				handleTrackTransposeButton(false,event.getControl());
 				break;
 			default:
-				handleKeyboardButton(false,event.control);
+				handleKeyboardButton(false,event.getControl());
 				break;
 			}
 			break;
@@ -141,7 +148,7 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 		{
 			int controller = 0;
 
-			switch (event.control)
+			switch (event.getControl())
 			{
 			case GCK_FILTER_TYPE:		controller = FILTERTYPE;	break;
 			case GCK_FILTER_CUTOFF:		controller = CUTOFF;		break;
@@ -157,7 +164,7 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 
 			if (controller)
 			{
-				int val = event.argv;
+				int val = event.getAsInt();
 				if (val<0) val=0;
 				if (val>127) val=127;
 
@@ -197,7 +204,7 @@ void Groovebox::handleTrackTransposeButton(bool bDown,GrooveControlName control)
 		if (_controlValue[(GrooveControlName)(GCL_SEMI_0 + i)]!=led)
 		{
 			_controlValue[(GrooveControlName)(GCL_SEMI_0 + i)]=led;
-			GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + i),led);
+			GrooveEvent ge = GrooveEvent(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + i),led);
 			_interface->onGrooveEvent(ge);
 		}
 	}
@@ -250,12 +257,12 @@ void Groovebox::handleKeboardModeButton(GrooveControlName control)
 	// if values are different, output values
 	if (oldLedStateMute != _controlValue[GCL_MUTE])
 	{
-		GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,GCL_MUTE,_controlValue[GCL_MUTE]);
+		GrooveEvent ge = GrooveEvent(GE_LEDSET,GCL_MUTE,_controlValue[GCL_MUTE]);
 		_interface->onGrooveEvent(ge);
 	}
 	if (oldLedStateSection != _controlValue[GCL_SECTION])
 	{
-		GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,GCL_SECTION,_controlValue[GCL_SECTION]);
+		GrooveEvent ge = GrooveEvent(GE_LEDSET,GCL_SECTION,_controlValue[GCL_SECTION]);
 		_interface->onGrooveEvent(ge);
 	}
 
@@ -287,7 +294,7 @@ void Groovebox::handleKeboardModeButton(GrooveControlName control)
 		}
 
 		_controlValue[(GrooveControlName)(GCL_SEMI_0 + i)]=led;
-		GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + i),led);
+		GrooveEvent ge = GrooveEvent(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + i),led);
 		_interface->onGrooveEvent(ge);
 	}
 }
@@ -363,7 +370,7 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 
 						// also set the led (to flash, until the section actually changes)
 						_controlValue[(GrooveControlName)(GCL_SEMI_0 + n)] = GE_LED_FLASH;
-						GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + n),GE_LED_FLASH);
+						GrooveEvent ge = GrooveEvent(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + n),GE_LED_FLASH);
 						_interface->onGrooveEvent(ge);
 						break;
 					}
@@ -381,7 +388,7 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 						else if (led== 1)
 							led =0;
 						_controlValue[(GrooveControlName)(GCL_SEMI_0 + n)] = led;
-						GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + n),led);
+						GrooveEvent ge = GrooveEvent(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + n),led);
 						_interface->onGrooveEvent(ge);
 						break;
 					}
@@ -390,7 +397,7 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 						GrooveEvent ge;
 
 						// off old led
-						ge = GrooveEventFactory::event(GE_LEDSET,
+						ge = GrooveEvent(GE_LEDSET,
 														(GrooveControlName)(GCL_SEMI_0 + _currentTrack),
 														GE_LED_OFF);
 						_interface->onGrooveEvent(ge);
@@ -400,7 +407,7 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 
 						// on new led
 						_controlValue[(GrooveControlName)(GCL_SEMI_0 + _currentTrack)]=GE_LED_ON;
-						ge = GrooveEventFactory::event(GE_LEDSET,
+						ge = GrooveEvent(GE_LEDSET,
 														(GrooveControlName)(GCL_SEMI_0 + _currentTrack),
 														GE_LED_ON);
 						_interface->onGrooveEvent(ge);
@@ -447,12 +454,12 @@ void Groovebox::setTransportLeds()
 	// only send message if changed state
 	if (oldPlayLedState!=_controlValue[GCL_PLAYING])
 	{
-		ge = GrooveEventFactory::event(GE_LEDSET,GCL_PLAYING,_controlValue[GCL_PLAYING]);
+		ge = GrooveEvent(GE_LEDSET,GCL_PLAYING,_controlValue[GCL_PLAYING]);
 		_interface->onGrooveEvent(ge);
 	}
 	if (oldRecordLedState!=_controlValue[GCL_RECORDING])
 	{
-		ge = GrooveEventFactory::event(GE_LEDSET,GCL_RECORDING,_controlValue[GCL_RECORDING]);
+		ge = GrooveEvent(GE_LEDSET,GCL_RECORDING,_controlValue[GCL_RECORDING]);
 		_interface->onGrooveEvent(ge);
 	}
 }
@@ -464,7 +471,7 @@ void Groovebox::onHostEvent(HostEvent& event)
 		case HC_OUT_BEAT:
 		{
 			_controlValue[GCL_PLAYING] = GE_LED_PULSE;
-			GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,GCL_PLAYING,GE_LED_PULSE);
+			GrooveEvent ge = GrooveEvent(GE_LEDSET,GCL_PLAYING,GE_LED_PULSE);
 			_interface->onGrooveEvent(ge);
 			break;
 		}
@@ -495,7 +502,7 @@ void Groovebox::onHostEvent(HostEvent& event)
 					if (_controlValue[(GrooveControlName)(GCL_SEMI_0 + i)] != led)
 					{
 						_controlValue[(GrooveControlName)(GCL_SEMI_0 + i)]=led;
-						GrooveEvent ge = GrooveEventFactory::event(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + i),led);
+						GrooveEvent ge = GrooveEvent(GE_LEDSET,(GrooveControlName)(GCL_SEMI_0 + i),led);
 						_interface->onGrooveEvent(ge);
 					}
 				}

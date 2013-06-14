@@ -14,10 +14,11 @@ Host::Host()
 	_hostProcessor = new HostProcessor();
 	_hostEventListener = nullptr;
 
-	// make 8 noisemakers
-	for (int i=0;i<8;i++)
+	// make noisemakers
+	for (int i=0;i<16;i++)
 	{
-		AudioProcessor* gs = new TalCore();
+		TalCore* gs = new TalCore();
+		gs->setCurrentProgram(i);
 		_hostProcessor->hostAddSynth(gs);
 		printf("added noisemaker %d\n",i);
 	}
@@ -156,7 +157,7 @@ bool Host::event(HostEvent c)
 	// a beat message (useful for lighting up led)
 	if (!bConsumed && c.name == HC_OUT_BEAT)
 	{
-		GrooveEvent g = GrooveEventFactory::event(GE_LEDSET,GCL_PLAYING,2);
+		GrooveEvent g = GrooveEvent(GE_LEDSET,GCL_PLAYING,2);
 		_grooveEventListener->onGrooveEvent(g);
 		bConsumed = true;
 	}

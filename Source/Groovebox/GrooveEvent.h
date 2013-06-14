@@ -122,20 +122,29 @@ typedef enum {
 const char* GrooveEvent_getNameString(GrooveEventName name);
 const char* GrooveControl_getNameString(GrooveControlName name);
 
-struct GrooveEvent
+class GrooveEvent
 {
-	GrooveEventName event;
-	GrooveControlName control;
-	int argv;
-};
-
-class GrooveEventFactory {
 public:
-	static GrooveEvent event(GrooveEvent* c);
-	static GrooveEvent event(GrooveEventName event,GrooveControlName control,int argv);
+	GrooveEvent();
+	GrooveEvent(GrooveEventName event,GrooveControlName control,int value);
+	GrooveEvent(GrooveEventName event,GrooveControlName control,char* value);
+	GrooveEvent(GrooveEventName event,GrooveControlName control,String &value);
+	~GrooveEvent();
+
+	GrooveEventName getEvent();
+	GrooveControlName getControl();
+
+	bool isString();
+	bool isInt();
+
+	int getAsInt();
+	char* getAsString();
 
 private:
-
+	GrooveEventName _event;
+	GrooveControlName _control;
+	bool _isString;
+	char _value[32];
 };
 
 #endif /* HOSTCOMMAND_H_ */
