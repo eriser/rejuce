@@ -9,36 +9,24 @@
 
 GrooveEvent::GrooveEvent()
 {
-	_isString=false;
 	_event=GE_INVALID;
 	_control=GC_INVALID;
-	_value[0]=0;
-	_value[1]=0;
-	_value[2]=0;
-	_value[3]=0;
+	_value=0;
+	_string[0]=0;
 }
 GrooveEvent::GrooveEvent(GrooveEventName event,GrooveControlName control,int value)
 {
 	_event=event;
 	_control=control;
-	_isString=false;
-	memcpy(_value,&value,4);
+	_value=value;
+	_string[0]=0;
 }
-GrooveEvent::GrooveEvent(GrooveEventName event,GrooveControlName control,char* value)
+GrooveEvent::GrooveEvent(GrooveEventName event,GrooveControlName control,int value,char* string)
 {
 	_event=event;
 	_control=control;
-	_isString=true;
-	strncpy(_value,value,31);
-	_value[31]=0;
-}
-GrooveEvent::GrooveEvent(GrooveEventName event,GrooveControlName control,String &value)
-{
-	_event=event;
-	_control=control;
-	_isString=true;
-	strncpy(_value,value.getCharPointer(),31);
-	_value[31]=0;
+	_value=value;
+	strncpy(_string,string,31);
 }
 GrooveEvent::~GrooveEvent()
 {
@@ -52,23 +40,13 @@ GrooveEvent::~GrooveEvent()
 {
 	return _control;
 }
- bool GrooveEvent::isString()
-{
-	return _isString;
-}
- bool GrooveEvent::isInt()
-{
-	return !_isString;
-}
- int GrooveEvent::getAsInt()
-{
-	int i;
-	memcpy(&i,_value,4);
-	return i;
-}
- char* GrooveEvent::getAsString()
+int GrooveEvent::getInt()
 {
 	return _value;
+}
+ char* GrooveEvent::getString()
+{
+	return _string;
 }
 
 const char* GrooveEvent_getNameString(GrooveEventName name)

@@ -264,10 +264,8 @@ void WebInterface::onGrooveEvent(GrooveEvent& event)
 	controlName = GrooveControl_getNameString(event.getControl());
 	cJSON_AddItemToObject(pJson,"control",cJSON_CreateString(controlName));
 
-	if (event.isInt())
-		cJSON_AddItemToObject(pJson,"argv",cJSON_CreateNumber(event.getAsInt()));
-	else
-		cJSON_AddItemToObject(pJson,"argv",cJSON_CreateString(event.getAsString()));
+	cJSON_AddItemToObject(pJson,"argv",cJSON_CreateNumber(event.getInt()));
+	cJSON_AddItemToObject(pJson,"string",cJSON_CreateString(event.getString()));
 
 	char* c = cJSON_PrintUnformatted(pJson);
 

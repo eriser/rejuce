@@ -8,12 +8,14 @@
 
 
  #define X_GROOVEEVENTS \
-    X(GE_INVALID, 		"invalid") \
-    X(GE_BUTTON_DOWN,   "buttonDown") \
-    X(GE_BUTTON_UP, 	"buttonUp") \
-    X(GE_KNOB, 			"knob") \
-    X(GE_LEDSET,		"led") \
-	X(GE_SIZE,		 	"size")
+    X(GE_INVALID, 				"invalid") \
+    X(GE_BUTTON_DOWN,  			"buttonDown") \
+    X(GE_BUTTON_UP, 			"buttonUp") \
+    X(GE_KNOB, 					"knob") \
+    X(GE_LEDSET,				"led") \
+	X(GE_SIZE,				 	"size") \
+	X(GE_REQUESTCONTROLVALUE,	"requestControlValue") \
+	X(GE_REQUESTCONTROLSTATE,	"requestControlState")
 
 typedef enum
 {
@@ -127,24 +129,20 @@ class GrooveEvent
 public:
 	GrooveEvent();
 	GrooveEvent(GrooveEventName event,GrooveControlName control,int value);
-	GrooveEvent(GrooveEventName event,GrooveControlName control,char* value);
-	GrooveEvent(GrooveEventName event,GrooveControlName control,String &value);
+	GrooveEvent(GrooveEventName event,GrooveControlName control,int value,char* string);
 	~GrooveEvent();
 
 	GrooveEventName getEvent();
 	GrooveControlName getControl();
 
-	bool isString();
-	bool isInt();
-
-	int getAsInt();
-	char* getAsString();
+	int getInt();
+	char* getString();
 
 private:
 	GrooveEventName _event;
 	GrooveControlName _control;
-	bool _isString;
-	char _value[32];
+	int _value;
+	char _string[32];
 };
 
 #endif /* HOSTCOMMAND_H_ */

@@ -327,12 +327,29 @@ $(function() {
 	});	
 });
 ////////////////////
+
+
+
+//////////////////////////
+// screen
+/////////////////////////////
+
+$(function() {
+	$(".screen").each(function()
+	{
+   		//this.style.backgroundColor = "red";
+	});
+});
+
+
+
 </script>	
 
 </head>
 <body>
 
-<input type="button" class="buttonTest" name="test"/>
+<table><tr><td>
+	
 <table>
 <tr>
 <td><input class="knob" id="knobFilterType"></td>
@@ -364,7 +381,16 @@ $(function() {
 </tr>
 </table>
 
+</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 
+<td>
+
+
+<!-- screen -->
+
+<div class="screen" id="screen" style="overflow:auto; height: 300px; width: 300px; background-color: #dddddd;">Some really long text</div>
+
+</td></tr></table>
 <!-- transport -->
 
 <table>

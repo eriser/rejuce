@@ -43,25 +43,37 @@ void Groovebox::stop()
 
 void Groovebox::onGrooveEvent(GrooveEvent& event)
 {
-	// we are not handling strings coming in! (we only put them out)
-	if (event.isString())
-	{
-		return;
-	}
-
-
 	// some keys are shift keys. when they are pressed we only allow the keys they operate
 	// on to be pressed as well, using a not particularly elegant mechanism
 
 	// TODO: device hopefully not terrible mechanism (for the above)
 
-	// always store the control's state
-	_controlState[event.getControl()] = event.getEvent();
-	_controlValue[event.getControl()] = event.isInt()?event.getAsInt():0;
+	// if we are being asked to store something
+	if (event.getEvent()!= GE_REQUESTCONTROLSTATE &&
+		event.getEvent()!= GE_REQUESTCONTROLVALUE )
+	{
+		// store the control's state
+		_controlState[event.getControl()] = event.getEvent();
+		_controlValue[event.getControl()] = event.getInt();
+	}
 
 	// events coming in from interface. update local state or fire host event
 	switch (event.getEvent())
 	{
+		case GE_REQUESTCONTROLSTATE:
+		{
+			_controlState[event.getControl()];
+			GrooveEvent ge = GrooveEvent(GE_REQUESTCONTROLSTATE,event.getControl(),_controlState[event.getControl()]);
+			_interface->onGrooveEvent(ge);
+			break;
+		}
+		case GE_REQUESTCONTROLVALUE:
+		{
+			_controlState[event.getControl()];
+			GrooveEvent ge = GrooveEvent(GE_REQUESTCONTROLSTATE,event.getControl(),_controlValue[event.getControl()]);
+			_interface->onGrooveEvent(ge);
+			break;
+		}
 		case GE_BUTTON_DOWN:
 		{
 			switch (event.getControl())
@@ -164,7 +176,7 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 
 			if (controller)
 			{
-				int val = event.getAsInt();
+				int val = event.getInt();
 				if (val<0) val=0;
 				if (val>127) val=127;
 
