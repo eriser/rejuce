@@ -32,6 +32,10 @@ void WebInterface::start()
 
 void WebInterface::stop()
 {
+	char outbuf[128];
+	outbuf[0] = 0;
+	mg_write(_conn, outbuf, 1);
+
 	signalThreadShouldExit();
 	waitForThreadToExit(-1);
 }

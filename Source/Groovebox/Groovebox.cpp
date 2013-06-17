@@ -62,22 +62,43 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 	{
 		case GE_REQUESTCONTROLSTATE:
 		{
-			_controlState[event.getControl()];
 			GrooveEvent ge = GrooveEvent(GE_REQUESTCONTROLSTATE,event.getControl(),_controlState[event.getControl()]);
 			_interface->onGrooveEvent(ge);
 			break;
 		}
 		case GE_REQUESTCONTROLVALUE:
 		{
-			_controlState[event.getControl()];
 			GrooveEvent ge = GrooveEvent(GE_REQUESTCONTROLSTATE,event.getControl(),_controlValue[event.getControl()]);
 			_interface->onGrooveEvent(ge);
+			break;
+		}
+		case GE_PARAM:
+		{
+			switch (event.getControl())
+			{
+				case GCP_REC_METRONOME:
+					_host->event(HostEventFactory::event(HC_REC_METRONOME));
+					break;
+				case GCP_REC_AUTOQUANT:
+					_host->event(HostEventFactory::event(HC_REC_AUTOQUANT));
+					break;
+				case GCP_PHRASE_LENGTH:
+					_host->event(HostEventFactory::event(HC_PHRASE_LENGTH));
+					break;
+				case GCP_PHASE_QUANTISE:
+					_host->event(HostEventFactory::event(HC_PHASE_QUANTISEDIVS));
+				default:
+					break;
+			}
 			break;
 		}
 		case GE_BUTTON_DOWN:
 		{
 			switch (event.getControl())
 			{
+				case GCB_PHASE_QUANTISE:
+					_host->event(HostEventFactory::event(HC_PHASE_QUANTISE));
+					break;
 				case GC_BUTTON_STOP:
 					_host->event(HostEventFactory::event(HC_TRANSPORT_STOP));
 					_transportState = TRANSPORT_STOPPED;

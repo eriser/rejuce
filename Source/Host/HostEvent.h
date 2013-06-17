@@ -22,12 +22,19 @@ enum HostEventName
 	HC_TRANSPORT_REWIND,
 	HC_TRANSPORT_RECORD,
 
+	HC_PHASE_QUANTISE,		// <-- TODO!
+
 	HC_OUT_BEAT,											//	fired once per beat
 
 	// 1 args, 101-200
 	HC_SECTION_SET_NEXT	= HOSTEVENT_1_ARGS,					//	[int next pattern]
 	HC_OUT_SECTION_CHANGE,
 	HC_PHRASE_MUTE_TOGGLE,
+
+	HC_REC_METRONOME,		// <-- TODO!
+	HC_REC_AUTOQUANT,		// <-- TODO!
+	HC_PHRASE_LENGTH,		// <-- TODO!
+	HC_PHASE_QUANTISEDIVS,	// <-- TODO!
 
 	// 2 args, 201-300
 	HC_MIDI_EVENT = HOSTEVENT_2_ARGS,		//	[float timestamp] [int rawmidi]

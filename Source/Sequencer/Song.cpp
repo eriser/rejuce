@@ -80,6 +80,16 @@ int Song::getNextSection()
 	return _nextSection;
 }
 
+Section* Song::getSection(int i)
+{
+	return _sections[i];
+}
+
+Section* Song::getCurrentSectionPointer()
+{
+	return _pCurrentSection;
+}
+
 void Song::togglePhraseMute(int i)
 {
 	_pCurrentSection->toggleMuteState(i);

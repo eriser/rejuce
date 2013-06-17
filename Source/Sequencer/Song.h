@@ -43,6 +43,8 @@ public:
 	void setNextSection(int i);
 	int getCurrentSection();
 	int getNextSection();
+	Section* getSection(int i);
+	Section* getCurrentSectionPointer();
 
 	void togglePhraseMute(int i);
 	bool getPhraseMuteState(int i);

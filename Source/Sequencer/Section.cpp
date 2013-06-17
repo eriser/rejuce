@@ -193,3 +193,8 @@ void Section::toggleMuteState(int i)
 	_mutes[i]=!_mutes[i];
 }
 
+Phrase* Section::getPhrase(int i)
+{
+	return _phrases[i];
+}
+

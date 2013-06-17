@@ -12,6 +12,7 @@
     X(GE_BUTTON_DOWN,  			"buttonDown") \
     X(GE_BUTTON_UP, 			"buttonUp") \
     X(GE_KNOB, 					"knob") \
+    X(GE_PARAM, 				"param") \
     X(GE_LEDSET,				"led") \
 	X(GE_SIZE,				 	"size") \
 	X(GE_REQUESTCONTROLVALUE,	"requestControlValue") \
@@ -101,6 +102,19 @@ typedef enum {
    X(GCL_SEMI_14, 		"semi14") \
    X(GCL_SEMI_15, 		"semi15") \
    \
+   /* recording */ \
+   X(GCP_REC_METRONOME,		"paramRecMetronome") /* 0=none, then number is bar count-in */ \
+   X(GCP_REC_AUTOQUANT,		"paramRecAutoQuant")	/* auto quantise 0=off 1=on */ \
+   \
+   /* playback */ \
+   \
+   /* phrase */ \
+   \
+   X(GCP_PHRASE_LENGTH,		"paramPhraseLength") 	/* length in bars */ \
+   X(GCP_PHASE_QUANTISE,	"paramPhraseQuantise") 	/* divisions per note */ \
+   X(GCB_PHASE_QUANTISE,	"buttonPhraseQuantise") /* do quantise */ \
+   \
+   /* voice */ \
    \
    X(GCK_FILTER_TYPE,		"knobFilterType") \
    X(GCK_FILTER_CUTOFF, 	"knobFilterCutoff") \

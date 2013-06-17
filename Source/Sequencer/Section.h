@@ -47,6 +47,7 @@ public:
 	int tick(MidiMessageCollector* pCollector);
 
 	void setActivePhrase(int i);
+	Phrase* getPhrase(int i);
 
 	// checkout active phrase to do phrase operations, only allowed when stopped
 	Phrase* checkoutActivePhrase();

@@ -70,7 +70,7 @@ int main (int argc, char* argv[])
 		std::cout <<"stop Groovebox\n";
 
 		groovebox.stop();
-
+		interface.stop();
 	}
 
 //	CoUninitialize();
