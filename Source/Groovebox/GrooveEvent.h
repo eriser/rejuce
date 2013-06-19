@@ -104,6 +104,7 @@ typedef enum {
    \
    /* recording */ \
    X(GCP_REC_METRONOME,		"paramRecMetronome") /* 0=none, then number is bar count-in */ \
+   X(GCP_REC_METSTATE,		"paramRecMetronomeState") /* 0=off, 1=record, 2 = play */ \
    X(GCP_REC_AUTOQUANT,		"paramRecAutoQuant")	/* auto quantise 0=off 1=on */ \
    \
    /* playback */ \

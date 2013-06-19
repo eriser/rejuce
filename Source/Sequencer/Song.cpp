@@ -31,6 +31,9 @@ void Song::init(HostEventListener* pHostEventListener)
 	_nextSection=0;
 	_clock=0;
 	_metronomeState=METRONOME_RECORD;
+	_countInClockMax=0;
+	_countInClockPos=0;
+	_metronomeBars=0;
 
 	setNextSection(0);
 }
@@ -45,12 +48,16 @@ Song::~Song()
 
 void Song::record()
 {
+	_countInClockMax=(_pCurrentSection->getLengthClocks()/_pCurrentSection->getLengthBars())*_metronomeBars;
+	_countInClockPos=0;
 	_pCurrentSection->play();
 	_state = SONG_RECORDING;
 }
 
 void Song::play()
 {
+	_countInClockMax=(_pCurrentSection->getLengthClocks()/_pCurrentSection->getLengthBars())*_metronomeBars;
+	_countInClockPos=0;
 	_pCurrentSection->play();
 	_state = SONG_PLAYING;
 }
@@ -122,8 +129,14 @@ void Song::setNextSection(int i)
 	}
 }
 
+void Song::setMetronomeBars(int bars)
+{
+	_metronomeBars = bars;
+}
+
 void Song::setMetronomeState(MetronomeState s)
 {
+	printf("set metronome state %d\n",s);
 	_metronomeState = s;
 }
 
@@ -145,13 +158,40 @@ int Song::tick(MidiMessageCollector* pCollector)
 	if (_state==SONG_PLAYING ||
 		_state==SONG_RECORDING)
 	{
-		_pCurrentSection->tick(pCollector);
+		// only pass on ticks if we are not in 'countdown' mode
+		bool bTick = false;
+		if (_state==SONG_PLAYING)
+		{
+			bTick = true;
+		}
+		else if (_state==SONG_RECORDING)
+		{
+			if (_metronomeBars!=0)
+			{
+				if (_countInClockPos > _countInClockMax)
+				{
+					bTick=true;
+				}
+				else
+				{
+					printf("pos %d\n",_countInClockPos);
+					_countInClockPos++;
+				}
+			}
+			else
+			{
+				bTick=true;
+			}
+		}
+
+		if (bTick)
+			_pCurrentSection->tick(pCollector);
 
 		ret = _clock;
 
 		// metronome
 		if (_metronomeState!=METRONOME_OFF &&
-				( (_metronomeState==METRONOME_RECORD) ? _state==SONG_RECORDING : _state==SONG_PLAYING))
+				( (_state==SONG_RECORDING) || (_state==SONG_PLAYING && _metronomeState==METRONOME_PLAY) ) )
 		{
 			if (_clock % PHRASE_CLOCKS == 0)
 			{

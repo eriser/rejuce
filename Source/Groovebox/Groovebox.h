@@ -62,6 +62,8 @@ private:
 
 	bool _shiftTrack;
 	bool _shiftTranspose;
+
+	bool _autoQuantise;
 };
 
 #endif /* GROOVEBOX_H_ */

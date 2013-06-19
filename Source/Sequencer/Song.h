@@ -49,6 +49,7 @@ public:
 	void togglePhraseMute(int i);
 	bool getPhraseMuteState(int i);
 	void setMetronomeState(MetronomeState s);
+	void setMetronomeBars(int bars);
 
 	void setBpm(float bpm);
 	float getBpm();
@@ -70,10 +71,13 @@ private:
 
 	SongState _state;
 	MetronomeState _metronomeState;
+	int _metronomeBars;
 
 	HostEventListener* _pHostEventListener;
 
 	int _currentPatternLengthClocks;
+	int _countInClockPos;
+	int _countInClockMax;
 };
 
 #endif /* SONG_H_ */

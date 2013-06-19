@@ -290,6 +290,31 @@ $(function() {
 		},*/
 	});
 });
+$(function() {
+	var knobs = $(".param");
+	knobs.attr("data-width","48");
+	knobs.attr("data-height","48");
+	knobs.attr("data-cursor","true");
+	knobs.attr("data-thickness","0.3");
+	knobs.attr("data-fgColor","#222222");
+	knobs.attr("data-step","1");
+	knobs.attr("data-angleOffset","-125");
+	knobs.attr("data-angleArc","250");
+
+	$(".param").knob({
+		change : function (value) {
+			
+			doSend('param',this.$.context.id,value);
+		    //console.log("change : " + value);
+		},
+		/*release : function (value) {
+		    console.log("release : " + value);
+		},
+		cancel : function () {
+		    console.log("cancel : " + this.value);
+		},*/
+	});
+});
 
 // setup buttons
 $(function() {
@@ -388,7 +413,26 @@ $(function() {
 
 <!-- screen -->
 
-<div class="screen" id="screen" style="overflow:auto; height: 300px; width: 300px; background-color: #dddddd;">Some really long text</div>
+<div class="screen" id="screen" style="background-color: #dddddd;">
+<p>playback</p>
+
+
+<hr/>
+<p>recording</p>
+<input class="param" id="paramRecMetronomeState" data-max="2" data-min="0" value="1">metronome state<br>
+<input class="param" id="paramRecMetronome" data-max="4" data-min="0" value="1">metronome bars<br>
+<input class="param" id="paramRecAutoQuant" data-max="1" data-min="0" value="0">auto quantise<br>
+
+<hr/>
+<p>phrase</p>
+<p>
+<input class="param" id="paramPhraseLength" data-max="32" data-min="1" value="1">phrase length<br>
+<input class="param" id="paramPhraseQuantise" data-max="16" data-min="1" value="4">phrase quant<br>
+</p>
+<input type="button" class="buttonWhiteSmall" name="buttonPhraseQuantise"/> quantise<br>
+	
+
+</div>
 
 </td></tr></table>
 <!-- transport -->

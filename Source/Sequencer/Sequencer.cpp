@@ -141,6 +141,8 @@ void Sequencer::executeEvent(HostEvent* c)
 	case HC_TRANSPORT_REWIND:
 	case HC_TRANSPORT_STOP:
 		commandTransport(c);
+
+
 		break;
 
 	case HC_SECTION_SET_NEXT:
@@ -155,6 +157,24 @@ void Sequencer::executeEvent(HostEvent* c)
 		_song.togglePhraseMute(c->argv[0]);
 		break;
 
+	case HC_REC_METSTATE:
+		_song.setMetronomeState((MetronomeState)c->argv[0]);
+		break;
+	case HC_REC_METRONOME:
+		_song.setMetronomeBars(c->argv[0]);
+		break;
+	case HC_PHRASE_LENGTH:
+	{
+		Section* section = _song.getCurrentSectionPointer();
+		Phrase* phrase = section ? section->checkoutActivePhrase() : nullptr;
+		if (phrase)
+		{
+			phrase->setLengthBars(c->argv[0]);
+			section->checkinActivePhrase();
+		}
+		break;
+	}
+	case HC_PHASE_QUANTISE:
 		break;
 
 	default:
