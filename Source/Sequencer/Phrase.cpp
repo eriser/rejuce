@@ -36,7 +36,7 @@ void Phrase::setLengthBars(int bars)
 	int beatsPerBar = _timeSigNumerator;
 	int clocksPerBeat = ( _timeSigDenominator / 4.0f ) * PHRASE_CLOCKS;
 
-	_lengthClocks = beatsPerBar * clocksPerBeat;
+	_lengthClocks = beatsPerBar * clocksPerBeat * _lengthBars;
 
 	_scratch.ensureSize(_lengthClocks*sizeof(int));
 	_seq.ensureSize(_lengthClocks*sizeof(int));
@@ -46,6 +46,8 @@ void Phrase::setLengthBars(int bars)
 		delete _pseqIter;
 	}
 	_pseqIter = new MidiBuffer::Iterator(_seq);
+
+	printf("set length %d=%d\n",_lengthBars,_lengthClocks);
 }
 
 int Phrase::getLengthBars()

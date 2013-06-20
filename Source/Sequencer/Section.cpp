@@ -180,6 +180,8 @@ void Section::checkinActivePhrase()
 	_lengthBars = maxLengthBars;
 	_lengthClocks = maxLengthClocks;
 
+	printf("new phrase length is %d, section length %d\n",phrase->getLengthBars(),_lengthClocks);
+
 	_checkedOutPhrase = -1;
 }
 
