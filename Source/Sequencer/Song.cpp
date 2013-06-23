@@ -33,7 +33,7 @@ void Song::init(HostEventListener* pHostEventListener)
 	_metronomeState=METRONOME_RECORD;
 	_countInClockMax=0;
 	_countInClockPos=0;
-	_metronomeBars=0;
+	_metronomeBars=1;
 
 	setNextSection(0);
 }
@@ -274,6 +274,22 @@ void Song::clear()
 int Song::getCurrentPatternLengthClocks()
 {
 	return _currentPatternLengthClocks;
+}
+
+void Song::setQuantiseDivs(int divs)
+{
+	_quantiseDivs = divs;
+}
+
+void Song::setAutoQuant(bool quant)
+{
+	_autoQuant=quant;
+}
+
+void Song::quantisePhrase(int phrase)
+{
+	Phrase* p = _pCurrentSection->getPhrase(phrase);
+	p->Quantise(_quantiseDivs);
 }
 
 

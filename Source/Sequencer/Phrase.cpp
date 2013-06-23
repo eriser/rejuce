@@ -48,6 +48,21 @@ void Phrase::setLengthBars(int bars)
 	_pseqIter = new MidiBuffer::Iterator(_seq);
 
 	printf("set length %d=%d\n",_lengthBars,_lengthClocks);
+
+	// TODO: add some beats
+/*	_seq.clear();
+	int note=80;
+	for (int beat=0;beat<beatsPerBar*_lengthBars;beat++)
+	{
+		MidiMessage on = MidiMessage::noteOn(1,note,0.8f);
+		MidiMessage off = MidiMessage::noteOff(1,note,0.8f);
+
+		_seq.addEvent(on,beat*clocksPerBeat);
+		_seq.addEvent(off,(beat*clocksPerBeat)+4);
+
+		note+=2;
+	}*/
+
 }
 
 int Phrase::getLengthBars()
@@ -195,6 +210,7 @@ void Phrase::stop()
 	_clock =0;
 	_haveEvent = false;
 	_curMessageClock =0;
+	_pseqIter->setNextSamplePosition(0);
 
 
 	MergeScratchBuffer();
@@ -222,3 +238,9 @@ void Phrase::clear()
 		_seq.clear();
 	}
 }
+
+void Phrase::Quantise(int divs)
+{
+// TODO: this
+}
+

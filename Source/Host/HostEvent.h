@@ -31,11 +31,11 @@ enum HostEventName
 	HC_OUT_SECTION_CHANGE,
 	HC_PHRASE_MUTE_TOGGLE,
 
-	HC_REC_METSTATE,		// <-- TODO!
-	HC_REC_METRONOME,		// <-- TODO!
-	HC_REC_AUTOQUANT,		// <-- TODO!
-	HC_PHRASE_LENGTH,		// <-- TODO!
-	HC_PHASE_QUANTISEDIVS,	// <-- TODO!
+	HC_REC_METSTATE,
+	HC_REC_METRONOME,
+	HC_PHRASE_LENGTH,
+	HC_SONG_QUANTISEDIVS,									// [int divs per beat]
+	HC_SONG_AUTOQUANTISE,									// [int 0 = false 1 = true]
 
 	// 2 args, 201-300
 	HC_MIDI_EVENT = HOSTEVENT_2_ARGS,		//	[float timestamp] [int rawmidi]

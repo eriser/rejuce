@@ -24,7 +24,6 @@ Groovebox::Groovebox(Host* pHost,GrooveboxInterface* pInterface) :GrooveEventLis
 
 	_shiftTrack = false;
 	_shiftTranspose = false;
-	_autoQuantise = false;
 }
 
 Groovebox::~Groovebox()
@@ -84,13 +83,13 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 					_host->event(HostEventFactory::event(HC_REC_METRONOME,event.getInt()));
 					break;
 				case GCP_REC_AUTOQUANT:
-					_autoQuantise=event.getInt()?true:false;
+					_host->event(HostEventFactory::event(HC_SONG_AUTOQUANTISE,event.getInt()));
 					break;
 				case GCP_PHRASE_LENGTH:
 					_host->event(HostEventFactory::event(HC_PHRASE_LENGTH,event.getInt()));
 					break;
 				case GCP_PHASE_QUANTISE:
-					_host->event(HostEventFactory::event(HC_PHASE_QUANTISEDIVS,event.getInt()));
+					_host->event(HostEventFactory::event(HC_SONG_QUANTISEDIVS,event.getInt()));
 				default:
 					break;
 			}

@@ -144,7 +144,12 @@ void Sequencer::executeEvent(HostEvent* c)
 
 
 		break;
-
+	case HC_SONG_QUANTISEDIVS:
+		_song.setQuantiseDivs(c->argv[0]);
+		break;
+	case HC_SONG_AUTOQUANTISE:
+		_song.setAutoQuant(c->argv[0]==0?false:true);
+		break;
 	case HC_SECTION_SET_NEXT:
 		_song.setNextSection(c->argv[0]);
 		break;

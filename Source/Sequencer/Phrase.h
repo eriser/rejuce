@@ -40,6 +40,8 @@ public:
 	void clear();
 	void debug();
 
+	void Quantise(int divs);
+
 protected:
 	void play();
 	void stop();

@@ -61,6 +61,9 @@ public:
 
 	int getCurrentPatternLengthClocks();
 
+	void setQuantiseDivs(int divs);
+	void setAutoQuant(bool quant);
+
 private:
 	Section* _sections[16];
 	int _currentSection;
@@ -78,6 +81,9 @@ private:
 	int _currentPatternLengthClocks;
 	int _countInClockPos;
 	int _countInClockMax;
+
+	int _quantiseDivs;
+	bool _autoQuant;
 };
 
 #endif /* SONG_H_ */
