@@ -244,5 +244,15 @@ void Phrase::clear()
 void Phrase::Quantise(int divs)
 {
 	printf("quantise divs=%d\n",divs);
+
+	_scratch.clear();
+	MidiBuffer::Iterator iter(_seq);
+	MidiMessage message;
+	int pos;
+	while (iter.getNextEvent(message,pos))
+	{
+
+	}
+
 }
 
