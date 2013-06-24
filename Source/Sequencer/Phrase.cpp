@@ -177,6 +177,8 @@ int Phrase::tick(MidiMessageCollector* pCollector)
 			_curMessageClock=0;
 			_haveEvent=false;
 			_pseqIter->setNextSamplePosition(0);
+
+			MergeScratchBuffer();
 		}
 
 	}// state==playing
@@ -241,6 +243,6 @@ void Phrase::clear()
 
 void Phrase::Quantise(int divs)
 {
-// TODO: this
+	printf("quantise divs=%d\n",divs);
 }
 

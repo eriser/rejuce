@@ -440,6 +440,8 @@ void Groovebox::handleKeyboardButton(bool bDown,GrooveControlName control)
 
 						// set value
 						_currentTrack = n;
+						HostEvent h = HostEventFactory::event(HC_CURRENT_PHRASE,n);
+						_host->event(h);
 
 						// on new led
 						_controlValue[(GrooveControlName)(GCL_SEMI_0 + _currentTrack)]=GE_LED_ON;

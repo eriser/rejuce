@@ -37,6 +37,8 @@ enum HostEventName
 	HC_SONG_QUANTISEDIVS,									// [int divs per beat]
 	HC_SONG_AUTOQUANTISE,									// [int 0 = false 1 = true]
 
+	HC_CURRENT_PHRASE,										// [int phrase]
+
 	// 2 args, 201-300
 	HC_MIDI_EVENT = HOSTEVENT_2_ARGS,		//	[float timestamp] [int rawmidi]
 };

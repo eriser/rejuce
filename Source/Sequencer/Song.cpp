@@ -34,6 +34,8 @@ void Song::init(HostEventListener* pHostEventListener)
 	_countInClockMax=0;
 	_countInClockPos=0;
 	_metronomeBars=1;
+	_currentPhrase=0;
+	_quantiseDivs=4;
 
 	setNextSection(0);
 }
@@ -286,9 +288,14 @@ void Song::setAutoQuant(bool quant)
 	_autoQuant=quant;
 }
 
-void Song::quantisePhrase(int phrase)
+void Song::setCurrentPhrase(int phrase)
 {
-	Phrase* p = _pCurrentSection->getPhrase(phrase);
+	_currentPhrase = phrase;
+}
+
+void Song::quantisePhrase()
+{
+	Phrase* p = _pCurrentSection->getPhrase(_currentPhrase);
 	p->Quantise(_quantiseDivs);
 }
 

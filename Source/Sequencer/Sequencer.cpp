@@ -179,7 +179,11 @@ void Sequencer::executeEvent(HostEvent* c)
 		}
 		break;
 	}
+	case HC_CURRENT_PHRASE:
+		_song.setCurrentPhrase(c->argv[0]);
+		break;
 	case HC_PHASE_QUANTISE:
+		_song.quantisePhrase();
 		break;
 
 	default:

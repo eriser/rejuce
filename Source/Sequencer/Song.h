@@ -63,6 +63,8 @@ public:
 
 	void setQuantiseDivs(int divs);
 	void setAutoQuant(bool quant);
+	void quantisePhrase();
+	void setCurrentPhrase(int phrase);
 
 private:
 	Section* _sections[16];
@@ -71,6 +73,7 @@ private:
 	int _nextSection;
 	int _clock;
 	float _bpm;
+	int _currentPhrase;
 
 	SongState _state;
 	MetronomeState _metronomeState;
