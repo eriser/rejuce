@@ -35,7 +35,8 @@ void Song::init(HostEventListener* pHostEventListener)
 	_countInClockPos=0;
 	_metronomeBars=1;
 	_currentPhrase=0;
-	_quantiseDivs=4;
+	_quantiseNumerator=4;
+	_quantiseDenominator=4;
 
 	setNextSection(0);
 }
@@ -280,7 +281,7 @@ int Song::getCurrentPatternLengthClocks()
 
 void Song::setQuantiseDivs(int divs)
 {
-	_quantiseDivs = divs;
+	_quantiseNumerator = divs;
 }
 
 void Song::setAutoQuant(bool quant)
@@ -295,8 +296,9 @@ void Song::setCurrentPhrase(int phrase)
 
 void Song::quantisePhrase()
 {
-	Phrase* p = _pCurrentSection->getPhrase(_currentPhrase);
-	p->Quantise(_quantiseDivs);
+	printf("#### song quantise phrase\n");
+	Phrase* p = _pCurrentSection ? _pCurrentSection->getPhrase(_currentPhrase) : NULL;
+	p->Quantise(_quantiseNumerator,_quantiseDenominator);
 }
 
 

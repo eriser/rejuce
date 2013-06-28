@@ -85,7 +85,8 @@ private:
 	int _countInClockPos;
 	int _countInClockMax;
 
-	int _quantiseDivs;
+	int _quantiseNumerator;
+	int _quantiseDenominator;
 	bool _autoQuant;
 };
 

@@ -241,9 +241,12 @@ void Phrase::clear()
 	}
 }
 
-void Phrase::Quantise(int divs)
+void Phrase::Quantise(int numerator,int divisor)
 {
-	printf("quantise divs=%d\n",divs);
+	//int divs = numerator * PHRASE_CLOCKS / divisor==0?1:divisor;
+	int divs = numerator * ( ( divisor / 4.0f ) * PHRASE_CLOCKS);
+
+	printf("quantise %d / %d  [%d]\n",numerator,divisor,divs);
 
 	_scratch.clear();
 	MidiBuffer::Iterator iter(_seq);
@@ -251,8 +254,18 @@ void Phrase::Quantise(int divs)
 	int pos;
 	while (iter.getNextEvent(message,pos))
 	{
+		int posInBar = pos%divs;
+		int newPos = pos - posInBar;
 
+		if (posInBar > divs/2)
+			newPos += divs;
+
+		_scratch.addEvent(message,newPos);
 	}
+
+	_seq.clear();
+	_seq.addEvents(_scratch,0,-1,0);
+	_scratch.clear();
 
 }
 

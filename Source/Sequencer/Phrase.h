@@ -40,7 +40,7 @@ public:
 	void clear();
 	void debug();
 
-	void Quantise(int divs);
+	void Quantise(int numerator,int divisor);
 
 protected:
 	void play();
