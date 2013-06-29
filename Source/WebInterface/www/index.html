@@ -119,7 +119,7 @@ function init()
 	
 	// flasher timer. flashes leds that are in the flashing led list.
 	// its old fashioned but better than a bazillion anonymous timers and handles.
-	setInterval(function() { 
+	setInterval(function() { 	
 		for ( var control in flashList ) {
 			
 			var led = $('#' + control);
@@ -131,6 +131,13 @@ function init()
 				led.attr("class", cname.replace("Off","On"));
 		}
 	}, 300);	// flash rate is arbitrary. 
+
+	setInterval(function() { 	
+		trace("keepalive"); 
+		websocket.send("keepalive");
+	}, 3000);	 
+
+
 
 }
 

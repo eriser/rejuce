@@ -244,7 +244,9 @@ void Phrase::clear()
 void Phrase::Quantise(int numerator,int divisor)
 {
 	//int divs = numerator * PHRASE_CLOCKS / divisor==0?1:divisor;
-	int divs = numerator * ( ( divisor / 4.0f ) * PHRASE_CLOCKS);
+
+	int clocksPerBeat = (divisor/4.0f ) * PHRASE_CLOCKS;
+	int divs = (int)(((float)numerator/(float)divisor)*(float)clocksPerBeat);
 
 	printf("quantise %d / %d  [%d]\n",numerator,divisor,divs);
 
@@ -260,8 +262,23 @@ void Phrase::Quantise(int numerator,int divisor)
 		if (posInBar > divs/2)
 			newPos += divs;
 
+		char s[16];
+		if (!message.isNoteOn() && !message.isNoteOff())
+			sprintf(s,"event ");
+		else
+			sprintf(s,"note ");
+
+		if (message.isNoteOn())
+			strcat(s," on");
+		if (message.isNoteOff())
+			strcat(s," off");
+
+		printf("note [%s] %d -> %d\n",s,pos,newPos);
+
 		_scratch.addEvent(message,newPos);
 	}
+
+	printf("---------------------\n");
 
 	_seq.clear();
 	_seq.addEvents(_scratch,0,-1,0);

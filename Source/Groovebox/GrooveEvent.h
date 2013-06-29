@@ -9,7 +9,7 @@
 
  #define X_GROOVEEVENTS \
     X(GE_INVALID, 				"invalid") \
-    X(GE_BUTTON_DOWN,  			"buttonDown") \
+	X(GE_BUTTON_DOWN,  			"buttonDown") \
     X(GE_BUTTON_UP, 			"buttonUp") \
     X(GE_KNOB, 					"knob") \
     X(GE_PARAM, 				"param") \
