@@ -254,28 +254,62 @@ void Phrase::Quantise(int numerator,int divisor)
 	MidiBuffer::Iterator iter(_seq);
 	MidiMessage message;
 	int pos;
+
+	// create a list of notes (on/off pairs)
+	MidiMessageSequence notes;
 	while (iter.getNextEvent(message,pos))
 	{
-		int posInBar = pos%divs;
-		int newPos = pos - posInBar;
-
-		if (posInBar > divs/2)
-			newPos += divs;
-
-		char s[16];
-		if (!message.isNoteOn() && !message.isNoteOff())
-			sprintf(s,"event ");
+		if (message.isNoteOnOrOff())
+		{
+			// add notes to the note sequence
+			message.setTimeStamp(pos);
+			notes.addEvent(message,0);
+		}
 		else
-			sprintf(s,"note ");
+		{
+			// add all other messages to the scratch buffer
+			_scratch.addEvent(message,pos);
+		}
+	}
+	notes.updateMatchedPairs();
 
-		if (message.isNoteOn())
-			strcat(s," on");
-		if (message.isNoteOff())
-			strcat(s," off");
+	// loop over note events
+	for (int i=0;i<notes.getNumEvents();i++)
+	{
+		MidiMessageSequence::MidiEventHolder* holder = notes.getEventPointer(i);
 
-		printf("note [%s] %d -> %d\n",s,pos,newPos);
+		if (holder->message.isNoteOn() && holder->noteOffObject!=nullptr)
+		{
+			MidiMessage noteOn = holder->message;
+			MidiMessage noteOff = holder->noteOffObject->message;
+			int duration = (int)(noteOff.getTimeStamp() - noteOn.getTimeStamp());
+			int pos = (int)noteOn.getTimeStamp();
 
-		_scratch.addEvent(message,newPos);
+			// quantize the note timestamp
+			int posInBar = pos%divs;
+			int newPos = pos - posInBar;
+
+			if (posInBar > divs/2)
+				newPos += divs;
+			if (newPos >= _lengthClocks)
+				newPos=0;
+
+			// quantize the note duration
+			int dpos = duration%divs;
+			int newDuration = duration - dpos;
+
+			if (dpos > divs/2)
+				newDuration += divs;
+
+			printf("noteOn at %d(%d) -> %d(%d)\n",pos,duration,newPos,newDuration);
+
+			// only add notes that have not been quantized to length 0
+			if (newDuration!=0)
+			{
+				_scratch.addEvent(noteOn,newPos);
+				_scratch.addEvent(noteOff,newPos+newDuration);
+			}
+		}
 	}
 
 	printf("---------------------\n");
