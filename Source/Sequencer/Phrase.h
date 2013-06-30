@@ -54,6 +54,8 @@ protected:
 
 private:
 	void MergeScratchBuffer();
+	void updateHeldCounts(MidiMessage &m);
+	void cancelAllHeld(MidiMessageCollector* pCollector);
 
 private:
 	int _channel;
@@ -74,6 +76,7 @@ private:
     volatile int _clock;
     int _lengthClocks;
 
+    int _noteHeldCount[256];
 };
 
 #endif /* PHRASE_H_ */

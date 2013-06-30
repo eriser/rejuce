@@ -88,8 +88,10 @@ void Groovebox::onGrooveEvent(GrooveEvent& event)
 				case GCP_PHRASE_LENGTH:
 					_host->event(HostEventFactory::event(HC_PHRASE_LENGTH,event.getInt()));
 					break;
-				case GCP_PHASE_QUANTISE:
-					_host->event(HostEventFactory::event(HC_SONG_QUANTISEDIVS,event.getInt()));
+				case GCP_PHASE_QUANTISENUM:
+					_host->event(HostEventFactory::event(HC_SONG_QUANTISENUMERATOR,event.getInt()));
+				case GCP_PHASE_QUANTISEDIV:
+					_host->event(HostEventFactory::event(HC_SONG_QUANTISEDIVISOR,event.getInt()));
 				default:
 					break;
 			}

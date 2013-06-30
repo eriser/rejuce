@@ -112,7 +112,8 @@ typedef enum {
    /* phrase */ \
    \
    X(GCP_PHRASE_LENGTH,		"paramPhraseLength") 	/* length in bars */ \
-   X(GCP_PHASE_QUANTISE,	"paramPhraseQuantise") 	/* divisions per note */ \
+   X(GCP_PHASE_QUANTISENUM,	"paramPhraseQuantiseNum") 	/* numerator */ \
+   X(GCP_PHASE_QUANTISEDIV,	"paramPhraseQuantiseDiv") 	/* divisor */ \
    X(GCB_PHASE_QUANTISE,	"buttonPhraseQuantise") /* do quantise */ \
    \
    /* voice */ \

@@ -143,7 +143,7 @@ void HostProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMes
 		{
 			if (message.getChannel() == channel+1)
 			{
-				printf("c=%d %d %d %d at %d\n",message.getChannel(),message.getRawData()[0],message.getRawData()[1],message.getRawData()[2],pos);
+			//	printf("c=%d %d %d %d at %d\n",message.getChannel(),message.getRawData()[0],message.getRawData()[1],message.getRawData()[2],pos);
 				channelBuffer.addEvent(message,pos);
 			}
 		}

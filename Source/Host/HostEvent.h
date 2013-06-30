@@ -34,7 +34,8 @@ enum HostEventName
 	HC_REC_METSTATE,
 	HC_REC_METRONOME,
 	HC_PHRASE_LENGTH,
-	HC_SONG_QUANTISEDIVS,									// [int divs per beat]
+	HC_SONG_QUANTISENUMERATOR,								// [int numerator, default 4]
+	HC_SONG_QUANTISEDIVISOR,								// [int divisor, default 8]
 	HC_SONG_AUTOQUANTISE,									// [int 0 = false 1 = true]
 
 	HC_CURRENT_PHRASE,										// [int phrase]

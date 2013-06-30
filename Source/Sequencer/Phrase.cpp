@@ -27,6 +27,9 @@ void Phrase::init(int channel)
 
 	setTimeSignature(4,4);
 	setLengthBars(1);
+
+	for (int i=0;i<256;i++)
+		_noteHeldCount[i]=0;
 }
 
 void Phrase::setLengthBars(int bars)
@@ -115,12 +118,45 @@ void Phrase::debug()
 
 }
 
+void Phrase::updateHeldCounts(MidiMessage &m)
+{
+	if (m.isNoteOn())
+	{
+		_noteHeldCount[m.getNoteNumber()]++;
+	}
+	else if (m.isNoteOff())
+	{
+		_noteHeldCount[m.getNoteNumber()]--;
+	}
+}
+
+void Phrase::cancelAllHeld(MidiMessageCollector* pCollector)
+{
+	for (int i=0;i<256;i++)
+	{
+		while (_noteHeldCount[i]>0)
+		{
+			MidiMessage m = MidiMessage::noteOff(_channel+1,_noteHeldCount[i],0x88);
+			m.setTimeStamp(Time::getMillisecondCounterHiRes()/1000.0f);
+			pCollector->addMessageToQueue(m);
+
+			_noteHeldCount[i]--;
+		}
+	}
+}
+
 int Phrase::tick(MidiMessageCollector* pCollector)
 {
 	int ret = _clock;
 
 	if (_state == PHRASE_PLAYING)
 	{
+		// all notes off at 0 beat
+		if (_clock==0)
+		{
+			cancelAllHeld(pCollector);
+		}
+
 		// at least some events?
 		if (!_seq.isEmpty())
 		{
@@ -133,6 +169,7 @@ int Phrase::tick(MidiMessageCollector* pCollector)
 					// get it in the queue
 					MidiMessage m(_curMessage);
 					pCollector->addMessageToQueue(m);
+					updateHeldCounts(m);
 					_haveEvent = false;
 
 					_DebugEvent(_clock,m);
@@ -158,6 +195,7 @@ int Phrase::tick(MidiMessageCollector* pCollector)
 						// its not in the future, so get it in the queue
 						MidiMessage m(_curMessage);
 						pCollector->addMessageToQueue(m);
+						updateHeldCounts(m);
 						_haveEvent = false;
 
 						_DebugEvent(_clock,m);
@@ -248,7 +286,8 @@ void Phrase::Quantise(int numerator,int divisor)
 	int clocksPerBeat = (divisor/4.0f ) * PHRASE_CLOCKS;
 	int divs = (int)(((float)numerator/(float)divisor)*(float)clocksPerBeat);
 
-	printf("quantise %d / %d  [%d]\n",numerator,divisor,divs);
+	printf("---------------------\n");
+	printf("quantise track %d (%d events): %d / %d  [%d]\n",_channel,_seq.getNumEvents(),numerator,divisor,divs);
 
 	_scratch.clear();
 	MidiBuffer::Iterator iter(_seq);

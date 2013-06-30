@@ -61,7 +61,8 @@ public:
 
 	int getCurrentPatternLengthClocks();
 
-	void setQuantiseDivs(int divs);
+	void setQuantiseNumerator(int num);
+	void setQuantiseDivisor(int div);
 	void setAutoQuant(bool quant);
 	void quantisePhrase();
 	void setCurrentPhrase(int phrase);
