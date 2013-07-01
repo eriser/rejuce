@@ -95,7 +95,11 @@ void Section::addEvent(MidiMessage m)
 {
 	if (_state==PATTERN_PLAYING)
 	{
-		_phrases[_activePhrase]->addEvent(m);
+		//_phrases[_activePhrase]->addEvent(m);
+		if ((m.getChannel()))
+		{
+			_phrases[m.getChannel()-1]->addEvent(m);
+		}
 	}
 }
 
