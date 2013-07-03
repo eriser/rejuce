@@ -303,6 +303,8 @@ void Song::setAutoQuant(bool quant)
 void Song::setCurrentPhrase(int phrase)
 {
 	_currentPhrase = phrase;
+	if (_pCurrentSection)
+		_pCurrentSection->setActivePhrase(phrase);
 }
 
 void Song::quantisePhrase()

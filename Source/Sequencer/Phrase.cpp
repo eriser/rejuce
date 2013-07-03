@@ -30,6 +30,9 @@ void Phrase::init(int channel)
 
 	for (int i=0;i<256;i++)
 		_noteHeldCount[i]=0;
+
+	_muted = false;
+	_oldMuteState = false;
 }
 
 void Phrase::setLengthBars(int bars)
@@ -157,8 +160,16 @@ int Phrase::tick(MidiMessageCollector* pCollector)
 			cancelAllHeld(pCollector);
 		}
 
+		// has the mute state been changed?
+		if (_muted != _oldMuteState)
+		{
+			if (_muted==true)
+				cancelAllHeld(pCollector);
+			_oldMuteState = _muted;
+		}
+
 		// at least some events?
-		if (!_seq.isEmpty())
+		if (!_muted && !_seq.isEmpty())
 		{
 			//do we have an event leftover from last time?
 			if (_haveEvent)
@@ -334,11 +345,12 @@ void Phrase::Quantise(int numerator,int divisor)
 				newPos=0;
 
 			// quantize the note duration
-			int dpos = duration%divs;
-			int newDuration = duration - dpos;
-
-			if (dpos > divs/2)
-				newDuration += divs;
+			int newDuration = duration;
+//			int dpos = duration%divs;
+//			int newDuration = duration - dpos;
+//
+//			if (dpos > divs/2)
+//				newDuration += divs;
 
 			printf("noteOn at %d(%d) -> %d(%d)\n",pos,duration,newPos,newDuration);
 
@@ -356,6 +368,12 @@ void Phrase::Quantise(int numerator,int divisor)
 	_seq.clear();
 	_seq.addEvents(_scratch,0,-1,0);
 	_scratch.clear();
+
+}
+
+void Phrase::setMute(bool muted)
+{
+	_muted = muted;
 
 }
 

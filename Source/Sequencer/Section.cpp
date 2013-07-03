@@ -147,6 +147,8 @@ void Section::setActivePhrase(int i)
 	{
 		_activePhrase = i;
 	}
+
+	printf("set active phrase %d  (%d)\n",_activePhrase,_checkedOutPhrase);
 }
 
 // checkout active phrase to do phrase operations, only allowed when stopped
@@ -156,6 +158,8 @@ Phrase* Section::checkoutActivePhrase()
 		return nullptr;
 
 	_checkedOutPhrase = _activePhrase;
+
+	printf("checkout active phrase %d\n",_activePhrase);
 
 	// return the phrase so the caller can dick with it
 	return _phrases[_activePhrase];
@@ -197,6 +201,7 @@ bool Section::getIsMuted(int i)
 void Section::toggleMuteState(int i)
 {
 	_mutes[i]=!_mutes[i];
+	_phrases[i]->setMute(_mutes[i]);
 }
 
 Phrase* Section::getPhrase(int i)

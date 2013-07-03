@@ -41,6 +41,7 @@ public:
 	void debug();
 
 	void Quantise(int numerator,int divisor);
+	void setMute(bool muted);
 
 protected:
 	void play();
@@ -77,6 +78,9 @@ private:
     int _lengthClocks;
 
     int _noteHeldCount[256];
+
+    bool _muted;
+    bool _oldMuteState;
 };
 
 #endif /* PHRASE_H_ */
