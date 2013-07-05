@@ -143,7 +143,8 @@ int Section::tick(MidiMessageCollector* pCollector)
 void Section::setActivePhrase(int i)
 {
 	// only allowed if we are stopped, and no phrase is checked out
-	if (_state==PATTERN_STOPPED && _checkedOutPhrase==-1)
+	// CHANGE: allow when we are playing. cant remember reason for only when stopped
+	if ( _checkedOutPhrase==-1)
 	{
 		_activePhrase = i;
 	}
