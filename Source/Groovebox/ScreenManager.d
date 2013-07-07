@@ -1,5 +1,6 @@
-../../Source/Groovebox/Groovebox.o: ../../Source/Groovebox/Groovebox.cpp \
- ../../Source/Groovebox/Groovebox.h \
+../../Source/Groovebox/ScreenManager.o: \
+ ../../Source/Groovebox/ScreenManager.cpp \
+ ../../Source/Groovebox/ScreenManager.h \
  ../../Source/Groovebox/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/Groovebox/../../JuceLibraryCode/AppConfig.h \
  ../../Source/Groovebox/../../JuceLibraryCode/modules/juce_audio_basics/juce_audio_basics.h \
@@ -309,27 +310,4 @@
  ../../Source/Groovebox/../../JuceLibraryCode/modules/juce_data_structures/app_properties/juce_ApplicationProperties.h \
  ../../Source/Groovebox/../../JuceLibraryCode/modules/juce_data_structures/app_properties/juce_PropertiesFile.h \
  ../../Source/Groovebox/../../JuceLibraryCode/modules/juce_events/juce_events.h \
- ../../Source/Groovebox/../Host/Host.h \
- ../../Source/Groovebox/../Host/../../JuceLibraryCode/JuceHeader.h \
- ../../Source/Groovebox/../Host/HostEvent.h \
- ../../Source/Groovebox/../Host/HostProcessor.h \
- ../../Source/Groovebox/../Host/../Metronome/MetronomeProcessor.h \
- ../../Source/Groovebox/../Host/../Metronome/../../JuceLibraryCode/JuceHeader.h \
- ../../Source/Groovebox/../Host/HostEventListener.h \
- ../../Source/Groovebox/../Host/../Groovebox/GrooveEventListener.h \
- ../../Source/Groovebox/../Host/../Groovebox/GrooveEvent.h \
- ../../Source/Groovebox/../Host/../Groovebox/../../JuceLibraryCode/JuceHeader.h \
- ../../Source/Groovebox/../Host/../Sequencer/Sequencer.h \
- ../../Source/Groovebox/../Host/../Sequencer/../../JuceLibraryCode/JuceHeader.h \
- ../../Source/Groovebox/../Host/../Sequencer/Phrase.h \
- ../../Source/Groovebox/../Host/../Sequencer/Section.h \
- ../../Source/Groovebox/../Host/../Sequencer/../Host/HostEvent.h \
- ../../Source/Groovebox/../Host/../Sequencer/../Host/HostEventListener.h \
- ../../Source/Groovebox/../Host/../Sequencer/Song.h \
- ../../Source/Groovebox/../Host/HostEventListener.h \
- ../../Source/Groovebox/GrooveEventListener.h \
- ../../Source/Groovebox/GrooveboxInterface.h \
- ../../Source/Groovebox/GrooveEvent.h \
- ../../Source/Groovebox/../Sequencer/Sequencer.h \
- ../../Source/Groovebox/ScreenManager.h \
- ../../Source/Groovebox/../Noisemaker/Engine/Params.h
+ ../../Source/Groovebox/GrooveEvent.h

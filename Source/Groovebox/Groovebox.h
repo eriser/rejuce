@@ -14,6 +14,7 @@
 #include "GrooveEventListener.h"
 #include "GrooveboxInterface.h"
 #include "../Sequencer/Sequencer.h"
+#include "ScreenManager.h"
 
 
 enum GrooveboxKeyboardMode
@@ -62,6 +63,8 @@ private:
 
 	bool _shiftTrack;
 	bool _shiftTranspose;
+
+	ScreenManager _screenManager;
 };
 
 #endif /* GROOVEBOX_H_ */

@@ -334,6 +334,7 @@
  ../../Source/WebInterface/../Groovebox/GrooveboxInterface.h \
  ../../Source/WebInterface/../Groovebox/GrooveEvent.h \
  ../../Source/WebInterface/../Groovebox/../Sequencer/Sequencer.h \
+ ../../Source/WebInterface/../Groovebox/ScreenManager.h \
  ../../Source/WebInterface/../Groovebox/GrooveEvent.h \
  ../../Source/WebInterface/../../JuceLibraryCode/JuceHeader.h \
  ../../Source/WebInterface/cJSON.h
