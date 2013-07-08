@@ -24,16 +24,21 @@ public:
 	void setCurrentScreen(int screen);
 	int getCurrentScreen();
 	String getCurrentScreenName();
+	int getScreenCount();
 
 	void setCurrentPage(int page);
 	int getCurrentPage();
+	int getPageCount();
+
+	int getControlCount();
+	GrooveControlName getControl(int c);
 
 
 private:
 	void addScreen(String name,GrooveControlName controls[]);
 
 	int _currentScreen;
-	int _currentScreenName;
+	String _currentScreenName;
 	int _currentPage;
 
 	// a map of arrays of parameters

@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 #include "../Groovebox/GrooveEvent.h"
 #include "cJSON.h"
+#include "mongoose.h"
 
 WebInterface::WebInterface() : Thread ("WebInterface")
 {
@@ -70,6 +71,8 @@ void WebInterface::initialiseWebserver()
 	memset(&callbacks, 0, sizeof(callbacks));
 	callbacks.websocket_ready = WebInterface_websocket_ready_handler;
 	callbacks.websocket_data = WebInterface_websocket_data_handler;
+	callbacks.open_file = WebInterface_open_file;
+
 	_ctx = mg_start(&callbacks,this, options);
 }
 
@@ -83,6 +86,16 @@ void WebInterface::setConnection(struct mg_connection* conn)
 	_conn = conn;
 }
 
+int WebInterface::getScreenJsonSize()
+{
+	return _screenJson.length();
+}
+
+char* WebInterface::getScreenJson()
+{
+	return (char*)_screenJson.getCharPointer().getAddress();
+}
+
 void WebInterface_websocket_ready_handler(struct mg_connection *conn)
 {
 	WebInterface* pThis = (WebInterface*)mg_get_user_info(conn);
@@ -91,6 +104,18 @@ void WebInterface_websocket_ready_handler(struct mg_connection *conn)
 //	buf[0] = 0x81;
 //	buf[1] = snprintf((char *) buf + 2, sizeof(buf) - 2, "%s", "GNUVEb0x");
 //	mg_write(conn, buf, 2 + buf[1]);
+}
+
+static const char* WebInterface_open_file(const struct mg_connection *conn,const char *path, size_t *size)
+{
+	WebInterface* pThis = (WebInterface*) mg_get_user_info((struct mg_connection *)conn);
+
+	if (!strcmp(path, "./screens.json"))
+	{
+		*size = pThis->getScreenJsonSize();
+		return pThis->getScreenJson();
+	}
+	return NULL;
 }
 
 int WebInterface_websocket_data_handler(struct mg_connection *conn)
@@ -283,3 +308,54 @@ void WebInterface::onGrooveEvent(GrooveEvent& event)
 	cJSON_Delete(pJson);
 }
 
+void WebInterface::setScreenManager(ScreenManager* manager)
+{
+	_screenManager = manager;
+
+	generateScreenJson();
+}
+
+void WebInterface::generateScreenJson()
+{
+	cJSON* jScreens = cJSON_CreateArray();
+
+	for (int nScreen=0;nScreen<_screenManager->getScreenCount();nScreen++)
+	{
+		// set current screen
+		_screenManager->setCurrentScreen(nScreen);
+
+		// create screen object and add it
+		cJSON* jScreen = cJSON_CreateObject();
+		cJSON_AddItemToArray(jScreens,jScreen);
+		cJSON_AddStringToObject(jScreen,"name",_screenManager->getCurrentScreenName().getCharPointer());
+
+		// create pages object and add it to screen
+		cJSON* jPages = cJSON_CreateArray();
+		cJSON_AddItemToObject(jScreen,"pages",jPages);
+
+		for (int nPage=0;nPage<_screenManager->getPageCount();nPage++)
+		{
+			// set current page
+			_screenManager->setCurrentPage(nPage);
+
+			// create the page object and add it to pages
+			cJSON* jPage = cJSON_CreateArray();
+			cJSON_AddItemToObject(jPages,"pages",jPage);
+
+			for (int nControl=0;nControl<_screenManager->getControlCount();nControl++)
+			{
+				// create the control object and add it to page
+				cJSON* jControl = cJSON_CreateObject();
+				cJSON_AddStringToObject(jControl,"name",GrooveControl_getNameString(_screenManager->getControl(nControl)));
+				cJSON_AddNumberToObject(jControl,"id",_screenManager->getControl(nControl));
+				cJSON_AddItemToArray(jPage,jControl);
+			}
+		}
+
+	}
+
+	_screenManager->setCurrentScreen(0);
+
+	_screenJson = cJSON_PrintUnformatted(jScreens);
+	cJSON_Delete(jScreens);
+}

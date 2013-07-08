@@ -11,3 +11,8 @@ void GrooveboxInterface::setOutListener(GrooveEventListener* pOutListener)
 {
 	_pOutListener = pOutListener;
 }
+
+void GrooveboxInterface::setScreenManager(ScreenManager* pScreenmanager)
+{
+	_screenManager = pScreenmanager;
+}

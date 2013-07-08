@@ -311,4 +311,5 @@
  ../../Source/Groovebox/../../JuceLibraryCode/modules/juce_data_structures/app_properties/juce_ApplicationProperties.h \
  ../../Source/Groovebox/../../JuceLibraryCode/modules/juce_data_structures/app_properties/juce_PropertiesFile.h \
  ../../Source/Groovebox/../../JuceLibraryCode/modules/juce_events/juce_events.h \
- ../../Source/Groovebox/GrooveEventListener.h
+ ../../Source/Groovebox/GrooveEventListener.h \
+ ../../Source/Groovebox/ScreenManager.h

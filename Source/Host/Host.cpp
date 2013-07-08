@@ -14,6 +14,7 @@ Host::Host()
 	_hostProcessor = new HostProcessor();
 	_hostEventListener = nullptr;
 
+#ifndef DEBUG
 	// make noisemakers
 	for (int i=0;i<16;i++)
 	{
@@ -22,6 +23,8 @@ Host::Host()
 		_hostProcessor->hostAddSynth(gs);
 		printf("added noisemaker %d\n",i);
 	}
+#endif
+
 }
 
 Host::~Host()

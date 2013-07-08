@@ -330,6 +330,6 @@
  ../../Source/Groovebox/GrooveEventListener.h \
  ../../Source/Groovebox/GrooveboxInterface.h \
  ../../Source/Groovebox/GrooveEvent.h \
- ../../Source/Groovebox/../Sequencer/Sequencer.h \
  ../../Source/Groovebox/ScreenManager.h \
+ ../../Source/Groovebox/../Sequencer/Sequencer.h \
  ../../Source/Groovebox/../Noisemaker/Engine/Params.h

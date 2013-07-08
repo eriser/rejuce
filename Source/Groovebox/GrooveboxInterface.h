@@ -10,6 +10,7 @@
 
 #include "GrooveEvent.h"
 #include "GrooveEventListener.h"
+#include "ScreenManager.h"
 
 class GrooveboxInterface : public GrooveEventListener
 {
@@ -18,10 +19,12 @@ public:
 	virtual void start() =0;
 	virtual void stop() =0;
 
-	void setOutListener(GrooveEventListener* pOutListener);
+	virtual void setOutListener(GrooveEventListener* pOutListener);
+	virtual void setScreenManager(ScreenManager* pScreenManager);
 
 protected:
 	GrooveEventListener* _pOutListener;
+	ScreenManager* _screenManager;
 
 };
 

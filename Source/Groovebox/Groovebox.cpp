@@ -13,6 +13,7 @@ Groovebox::Groovebox(Host* pHost,GrooveboxInterface* pInterface) :GrooveEventLis
 	_host = pHost;
 	_interface = pInterface;
 	_host->setHostEventListener(this);
+	_interface->setScreenManager(&_screenManager);
 
 	for (int i=0;i<GC_SIZE;i++) {_controlState[i]=GE_INVALID;_controlValue[i]=0;}
 
